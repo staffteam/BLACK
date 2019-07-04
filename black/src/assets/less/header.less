@@ -1,4 +1,51 @@
-.el-row.black-head{
-    width:800px;
-    margin:0 auto;
+body {
+  min-width: 1200px;
+}
+
+#headers {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 70px;
+  z-index: 9999;
+  padding: 14px 0;
+
+  .el-row.black-head {
+    max-width: 1125px;
+    margin: 0 auto;
+
+    .logo {
+      width: 330px;
+      height: 70px;
+      float: left;
+    }
+
+    ul.nav {
+      overflow: hidden;
+      float:left;
+      margin-left:75px;
+      margin-top:20px;
+      li {
+        float: left;
+        margin-right:40px;
+        &:last-child{margin-right:0;}
+        text-align: center;
+        a {
+          color: white;
+
+          h2 {
+            font-size: 18px;
+            line-height: 25px;
+            font-weight: 500;
+          }
+
+          p {
+            font-size: 14px;
+            line-height: 20px;
+          }
+        }
+      }
+    }
+  }
 }
