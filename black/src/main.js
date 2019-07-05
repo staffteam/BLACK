@@ -8,14 +8,28 @@ import router from './router'
 import ElementUI from 'element-ui'
 Vue.config.productionTip = false
 
-Vue.use(ElementUI, { size: 'small', zIndex: 3000 })
+Vue.use(ElementUI, {
+  size: 'small',
+  zIndex: 3000
+})
 
 Vue.component('black-head', Header)
 Vue.component('black-footer', Footer)
+
+router.beforeEach((to, from, next) => {
+  /* 路由发生变化修改页面title */
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
+  next()
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>'
 })
