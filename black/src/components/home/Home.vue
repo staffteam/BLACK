@@ -10,13 +10,13 @@
         </div>
       </div>
       <!-- 如果需要分页器 -->
-      <div class="swiper-pagination"></div>
+      <div class="swiper-pagination a"></div>
       <!-- 如果需要导航按钮 -->
       <div class="swiper-button-content">
-        <div class="swiper-button-prev">
+        <div class="swiper-button-prev a">
           <el-button icon="el-icon-arrow-left" circle></el-button>
         </div>
-        <div class="swiper-button-next">
+        <div class="swiper-button-next a">
           <el-button icon="el-icon-arrow-right" circle></el-button>
         </div>
       </div>
@@ -80,130 +80,83 @@
       <div class="content">
         <h2>{{homeList3.title}}</h2>
         <div class="describe" v-html="homeList3.describe">{{homeList3.describe}}</div>
-        <el-carousel class="list3banner" indicator-position="none" arrow="always" :interval="5000" type="card" height="400px">
-          <el-carousel-item v-for="(item,index) in homeList3.datalist" :key="index">
-            <el-image :src="item.imgUrl" fit="scale-down"></el-image>
-          </el-carousel-item>
-        </el-carousel>
+        <div class="swiper-container" id="list3banner">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="(item,index) in homeList3.datalist" :key="index">
+              <p>
+                <img :src="item.imgUrl" :alt="item.title" />
+              </p>
+            </div>
+          </div>
+          <!-- 如果需要导航按钮 -->
+          <div class="swiper-button-content">
+            <div class="swiper-button-prev b">
+              <el-button icon="el-icon-arrow-left" circle></el-button>
+            </div>
+            <div class="swiper-button-next b">
+              <el-button icon="el-icon-arrow-right" circle></el-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="newContent">
+      <div class="content">
+        <h2>{{newTitle}}</h2>
+        <div class="new">
+          <div class="l">
+            <div class="swiper-container" id="newBanner">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide" v-for="(item,index) in newBannerData" :key="index">
+                  <p>
+                    <img :src="item.imgUrl" :alt="item.title" />
+                  </p>
+                </div>
+              </div>
+              <!-- 如果需要导航按钮 -->
+              <div class="swiper-button-content">
+                <div class="swiper-button-prev c">
+                  <el-button icon="el-icon-arrow-left" circle></el-button>
+                </div>
+                <div class="swiper-button-next c">
+                  <el-button icon="el-icon-arrow-right" circle></el-button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="r">
+              <ul>
+                <li v-for="item in newDataList" :key="item.id" >
+                  <a :href="`/product.html?id=${item.id}`">
+                    <h2>{{item.title}}</h2>
+                    <div>{{item.describe}}</div>
+                  </a>
+                </li>
+              </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import banner from "../../../src/assets/js/home/homebanner";
+import datas from "../../../src/assets/js/home/datas";
 export default {
   name: "Home",
   data() {
     return {
-      bannerData: [
-        { title: "1", url: require("@/assets/images/home_banner.png") },
-        { title: "2", url: require("@/assets/images/home_banner.png") },
-        { title: "3", url: require("@/assets/images/home_banner.png") }
-      ],
-      searchData: [
-        { title: "脱发", url: "1" },
-        { title: "生发", url: "2" },
-        { title: "头发", url: "3" },
-        { title: "乐喜力丝", url: "4" },
-        { title: "基因育发", url: "5" }
-      ],
-      homeList1: {
-        title: "开启基因育发新时代",
-        describe:
-          "乐喜力丝是基因技术在生发领域的最新突破，采用国际浓缩小分子工艺，不仅能改善头皮血液循环，赋活强健毛囊，提升发根活性，有助于秀发生长，同时还能修复细弱发质，令秀发饱满强韧、丰盈闪亮。",
-        datalist: [
-          {
-            title: "基因科技",
-            imgUrl: require("@/assets/images/home_list_1_1.png"),
-            id: "001",
-            describe: "特含的FGF-5S生发酶促进新生毛发的生长"
-          },
-          {
-            title: "小分子工艺",
-            imgUrl: require("@/assets/images/home_list_1_2.png"),
-            id: "002",
-            describe: "特含的FGF-5S生发酶促进新生毛发的生长"
-          },
-          {
-            title: "天然提取",
-            imgUrl: require("@/assets/images/home_list_1_3.png"),
-            id: "003",
-            describe: "特含的FGF-5S生发酶促进新生毛发的生长"
-          }
-        ]
-      },
-      homeList2: {
-        title: "乐喜力丝全系列呈现",
-        describe: "「止脱&nbsp;&nbsp;&nbsp;固发&nbsp;&nbsp;&nbsp;生发」",
-        datalist: [
-          {
-            title: "止脱生发 强发固发",
-            imgUrl: require("@/assets/images/home_list_2_1.png"),
-            id: "001",
-            describe: "乐喜力丝洗发水"
-          },
-          {
-            title: "止脱生发 强发固发",
-            imgUrl: require("@/assets/images/home_list_2_2.png"),
-            id: "002",
-            describe: "乐喜力丝洗发水"
-          },
-          {
-            title: "止脱生发 强发固发",
-            imgUrl: require("@/assets/images/home_list_2_3.png"),
-            id: "003",
-            describe: "乐喜力丝洗发水"
-          }
-        ]
-      },
-      homeList3: {
-        title: "专利证书",
-        describe:
-          "这是防脱生发领域公认的一次革命性的重大突破，已经获得美国、欧盟、中国等多个国家的多项国际专利。",
-        datalist: [
-          {
-            title: "止脱生发 强发固发",
-            imgUrl: require("@/assets/images/home_list_3_1.png"),
-            id: "001"
-          },
-          {
-            title: "止脱生发 强发固发",
-            imgUrl: require("@/assets/images/home_list_3_1.png"),
-            id: "002"
-          },
-          {
-            title: "止脱生发 强发固发",
-            imgUrl: require("@/assets/images/home_list_3_1.png"),
-            id: "003"
-          }
-        ]
-      }
+      ...datas
     };
   },
-  methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
-    }
-  },
+  methods: {},
   mounted() {
-    var indexbanner = new Swiper("#homeBanner", {
-      loop: true, // 循环模式选项
-      autoplay: {
-        delay: 5000,
-        stopOnLastSlide: false,
-        disableOnInteraction: true
-      },
-      // 如果需要分页器
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true
-      },
-
-      // 如果需要前进后退按钮
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev"
-      }
-    });
+    //顶部轮播
+    banner.homebanner();
+    //专利证书
+    banner.homebanner2();
+    //新闻轮播
+    banner.homebanner3();
   }
 };
 </script>

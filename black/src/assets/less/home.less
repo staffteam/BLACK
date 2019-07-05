@@ -324,14 +324,41 @@
             text-align: center;
         }
 
-        div.list3banner {
+        div.swiper-container {
             margin-top: 43px;
-
-            div.el-image {
-                margin: 0 auto;
-                .area(@w: 315px, @h: 100%);
-                display: block;
+            .swiper-button-content {
+              margin: 0 auto;
+              position: absolute;
+              top:50%;
+              left:50%;
+              width:95%;
+              transform: translateX(-50%);
+              z-index: 9;
+              div {
+                  .back(image, none);
+                  button {
+                      .back(color;
+                      #333333);
+                      border: 0px;
+                      .cover(43px);
+                      .size(25px);
+                      color: white;
+                  }
+              }
+          }
+          .swiper-slide{
+            .area(@w: 315px, @h: 100%);
+            p {
+              margin: 0 auto;
+              .area(@w: 315px, @h: 100%);
+              display: block;
+        
+                img {
+                    width: 100%;
+                }
             }
+          }
+            
         }
 
     }
