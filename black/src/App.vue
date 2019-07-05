@@ -11,5 +11,4 @@ export default {
   name: 'App'
 }
 </script>
-
 <style src="../src/assets/style/style.css" ></style>
