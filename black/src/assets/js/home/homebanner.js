@@ -83,5 +83,28 @@ export default {
         prevEl: '.swiper-button-prev.c'
       }
     })
+  },
+  homebanner4 (e) {
+    let len=0;
+    if(window.innerWidth < 800){
+      len = e.newBannerData2.length>2?2:e.newBannerData2.length;
+    }else{
+      len = e.newBannerData2.length>4?4:e.newBannerData2.length;
+    }
+    return new Swiper('#newBanner2', {
+      loop: true, // 循环模式选项
+      autoplay: {
+        delay: 5000,
+        stopOnLastSlide: false,
+        disableOnInteraction: true
+      },
+      slidesPerView : len,
+      slidesPerView : len,
+      // 如果需要前进后退按钮
+      navigation: {
+        nextEl: '.swiper-button-next.d',
+        prevEl: '.swiper-button-prev.d'
+      }
+    })
   }
 }

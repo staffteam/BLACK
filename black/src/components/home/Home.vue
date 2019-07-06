@@ -113,6 +113,8 @@
                   </p>
                 </div>
               </div>
+              <!-- 如果需要分页器 -->
+              <div class="swiper-pagination c"></div>
               <!-- 如果需要导航按钮 -->
               <div class="swiper-button-content">
                 <div class="swiper-button-prev c">
@@ -125,15 +127,110 @@
             </div>
           </div>
           <div class="r">
-              <ul>
-                <li v-for="item in newDataList" :key="item.id" >
-                  <a :href="`/product.html?id=${item.id}`">
+            <ul>
+              <li v-for="(item,index) in newDataList" :key="item.id">
+                <a :href="`/new.html?id=${item.id}`" v-if="index==0" class="top">
+                  <h2>{{item.title}}</h2>
+                  <div class="describe">{{item.describe}}</div>
+                  <div class="bottom">
+                    <span>{{item.time}}</span>
+                    <p>
+                      <i class="el-icon-view"></i>
+                      {{item.browse}}
+                    </p>
+                  </div>
+                </a>
+                <a :href="`/new.html?id=${item.id}`" v-if="index!=0" class="list">
+                  <div>
                     <h2>{{item.title}}</h2>
-                    <div>{{item.describe}}</div>
-                  </a>
-                </li>
-              </ul>
+                    <span>{{item.time}}</span>
+                  </div>
+                </a>
+              </li>
+            </ul>
+            <a href="http://" target="_blank">查看更多>></a>
           </div>
+        </div>
+      </div>
+    </div>
+    <div id="newContent2">
+      <div class="content">
+        <h2>{{newTitle2}}</h2>
+        <div class="new2">
+          <div class="swiper-container" id="newBanner2">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide" v-for="(item,index) in newBannerData2" :key="index">
+                <p>
+                  <img :src="item.imgUrl" :alt="item.title" />
+                </p>
+                <h2>{{item.title}}</h2>
+                <div>{{item.describe}}</div>
+              </div>
+            </div>
+          </div>
+          <!-- 如果需要导航按钮 -->
+          <div class="swiper-button-content">
+            <div class="swiper-button-prev d">
+              <el-button icon="el-icon-arrow-left" circle></el-button>
+            </div>
+            <div class="swiper-button-next d">
+              <el-button icon="el-icon-arrow-right" circle></el-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="guide">
+      <div class="content">
+        <ul>
+          <li>
+            <h2>脱发指南</h2>
+            <div class="list" v-for="(item,index) in guideData1" :key="item.id">
+              <a :href="`/new.html?id=${item.id}`" target="_blank">
+                <p v-if="index==0">
+                  <img :src="item.imgUrl" :alt="item.title" />
+                </p>
+                <h2>
+                  <i class="el-icon-arrow-right"></i>
+                  {{item.title}}
+                </h2>
+                <div class="describe">{{item.describe}}</div>
+              </a>
+            </div>
+            <a href="http://" target="_blank">查看更多>></a>
+          </li>
+          <li>
+            <h2>基因育发</h2>
+            <div class="list" v-for="(item,index) in guideData2" :key="item.id">
+              <a :href="`/new.html?id=${item.id}`" target="_blank">
+                <p v-if="index==0">
+                  <img :src="item.imgUrl" :alt="item.title" />
+                </p>
+                <h2>
+                  <i class="el-icon-arrow-right"></i>
+                  {{item.title}}
+                </h2>
+                <div class="describe">{{item.describe}}</div>
+              </a>
+            </div>
+            <a href="http://" target="_blank">查看更多>></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="faq">
+      <div class="content">
+        <div class="r">
+          <h2>常见问题</h2>
+          <ul>
+            <li v-for="(item,index) in faqData" :key="index">
+              <a :href="`/new.html?id=${item.id}`" target="_blank">
+                <h2>{{item.title}}</h2>
+                <div>{{item.describe}}</div>
+              </a>
+            </li>
+          </ul>
+          <a href="http://" target="_blank">更多热门问题>></a>
         </div>
       </div>
     </div>
@@ -157,6 +254,8 @@ export default {
     banner.homebanner2();
     //新闻轮播
     banner.homebanner3();
+    //新闻报道轮播
+    banner.homebanner4(this);
   }
 };
 </script>
@@ -176,5 +275,19 @@ div.el-carousel__mask {
 }
 .el-carousel--horizontal {
   overflow: hidden;
+}
+.swiper-pagination.c .swiper-pagination-bullet {
+  width: 6px;
+  height: 6px;
+}
+@media (max-width: 799px) {
+  #homeBanner .swiper-button-content {
+    display: none;
+  }
+
+  #homeBanner .swiper-pagination-bullet {
+    width: 6px;
+    height: 6px;
+  }
 }
 </style>

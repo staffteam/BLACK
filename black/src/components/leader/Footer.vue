@@ -3,7 +3,24 @@
     <el-row>
       <el-col :span="24">
         <div class="grid-content bg-purple-dark">
-            {{msg}}
+          <div class="content">
+            <div class="l">
+              <el-image class="logo" :src="logoUrl" fit="scale-down"></el-image>
+            </div>
+            <div class="c">
+              <p>{{wordSize}}</p>
+              <p>
+                <a :href="`tel:${tel}`">热线电话：{{tel}}</a>
+              </p>
+              <p>
+                <a :href="`mailto:${email}`">邮 箱：{{email}}</a>
+              </p>
+            </div>
+            <div class="r">
+              <el-image class="wechart" :src="wechart" fit="scale-down"></el-image>
+              <h2>扫一扫更精彩！</h2>
+            </div>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -15,7 +32,12 @@ export default {
   name: "footers",
   data() {
     return {
-        msg:'test'
+      logoUrl: require("@/assets/images/logo.png"),
+      wechart: require("@/assets/images/code.png"),
+      wordSize:
+        "Copyright &#169 2014-2018 健洛公司版权所有丨 冀ICP备17027272号",
+      tel: "400-880-1612",
+      email: "lexilisi@sina.com"
     };
   },
   methods: {},
