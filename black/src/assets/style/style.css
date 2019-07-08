@@ -404,3 +404,43 @@ input::-webkit-search-cancel-button {
 input[type=search]::-ms-clear {
   display: none;
 }
+
+
+div.productBody {
+  font-size: 18px;
+  font-weight: 500;
+  color: rgba(51, 51, 51, 1);
+  line-height: 25px;
+}
+
+div.productBody>div {
+  overflow: hidden;
+  margin:10px 0;
+  line-height: 1.5;
+}
+
+div.productBody>div h2 {
+  display: inline-block;
+  font-size: 18px;
+}
+
+div.productBody>div div {
+  display: inline-block;
+  font-size: 18px;
+}
+
+div.productBody>div.multi h2 {
+  display: block;
+}
+
+div.productBody>div.multi div {
+  display: block;
+  margin-top:10px;
+}
+
+.details div.bottom div.r div.content p{
+  margin:5px 0;
+}
+.details div.bottom div.r div.content img{
+  width:100%;
+}

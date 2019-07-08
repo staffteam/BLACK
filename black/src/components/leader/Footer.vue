@@ -1,29 +1,28 @@
 <template>
   <div id="footers">
-    <el-row>
-      <el-col :span="24">
-        <div class="grid-content bg-purple-dark">
-          <div class="content">
-            <div class="l">
-              <el-image class="logo" :src="logoUrl" fit="scale-down"></el-image>
-            </div>
-            <div class="c">
-              <p>{{wordSize}}</p>
-              <p>
-                <a :href="`tel:${tel}`">热线电话：{{tel}}</a>
-              </p>
-              <p>
-                <a :href="`mailto:${email}`">邮 箱：{{email}}</a>
-              </p>
-            </div>
-            <div class="r">
-              <el-image class="wechart" :src="wechart" fit="scale-down"></el-image>
-              <h2>扫一扫更精彩！</h2>
-            </div>
-          </div>
+    <div class="grid-content bg-purple-dark">
+      <div class="content">
+        <div class="l">
+          <el-image class="logo" :src="logoUrl" fit="scale-down"></el-image>
         </div>
-      </el-col>
-    </el-row>
+        <div class="c">
+          <p>{{wordSize}}</p>
+          <p>
+            <a :href="`tel:${tel}`">热线电话：{{tel}}</a>
+          </p>
+          <p>
+            <a :href="`mailto:${email}`">邮 箱：{{email}}</a>
+          </p>
+        </div>
+        <div class="r">
+          <el-image class="wechart" :src="wechart" fit="scale-down"></el-image>
+          <h2>扫一扫更精彩！</h2>
+        </div>
+      </div>
+    </div>
+    <el-backtop >
+       <el-image class="topImg" :src="topUrl" fit="scale-down"></el-image>
+    </el-backtop>
   </div>
 </template>
 
@@ -32,6 +31,7 @@ export default {
   name: "footers",
   data() {
     return {
+      topUrl: require("@/assets/images/icon_top.png"),
       logoUrl: require("@/assets/images/logo.png"),
       wechart: require("@/assets/images/code.png"),
       wordSize:
