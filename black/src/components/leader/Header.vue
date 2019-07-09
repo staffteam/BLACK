@@ -40,7 +40,7 @@ export default {
         { cntitle: "首页", entitle: "HOME", url: "/index.html" },
         { cntitle: "产品介绍", entitle: "PRODUCT", url: "/product.html" },
         { cntitle: "品牌动态", entitle: "BRAND", url: "/article.html" },
-        { cntitle: "基因育发", entitle: "HAIR GENE", url: "/hairgene.html" },
+        { cntitle: "基因育发", entitle: "HAIR GENE", url: "/hairgeme.html" },
         { cntitle: "脱发指南", entitle: "GUIDE", url: "/guide.html" },
         { cntitle: "粉丝福利", entitle: "WELFAFE", url: "/welfafe.html" },
         { cntitle: "关于我们", entitle: "ABOUT US", url: "/aboutus.html" }

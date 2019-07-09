@@ -6,6 +6,14 @@ import Product from '@/components/product/Product'
 import ProductDetails from '@/components/product/ProductDetails'
 import Article from '@/components/Article/Article'
 import ArticleDetails from '@/components/Article/ArticleDetails'
+import About from '@/components/about/About'
+import Searchs from '@/components/searchs/Searchs'
+import Faq from '@/components/faq/Faq'
+import FaqSearch from '@/components/faq/FaqSearch'
+import Hairgeme from '@/components/hairgeme/Hairgeme'
+import Guide from '@/components/guide/Guide'
+import Welfafe from '@/components/welfafe/Welfafe'
+
 Vue.use(Router)
 
 export default new Router({
@@ -60,6 +68,55 @@ export default new Router({
       component: ArticleDetails,
       meta: {
         title: '品牌动态'
+      }
+    }, {
+      path: '/aboutus.html',
+      name: 'Aboutus',
+      component: About,
+      meta: {
+        title: '关于我们'
+      }
+    }, {
+      path: '/search.html',
+      name: 'Searchs',
+      component: Searchs,
+      meta: {
+        title: '搜索'
+      }
+    }, {
+      path: '/faq.html',
+      name: 'Faq',
+      component: Faq,
+      meta: {
+        title: '常见问题'
+      }
+    }, {
+      path: '/hairgeme.html',
+      name: 'Hairgeme',
+      component: Hairgeme,
+      meta: {
+        title: '基因育发'
+      }
+    }, {
+      path: '/guide.html',
+      name: 'Guide',
+      component: Guide,
+      meta: {
+        title: '脱发指南'
+      }
+    }, {
+      path: '/welfafe.html',
+      name: 'Welfafe',
+      component: Welfafe,
+      meta: {
+        title: '粉丝福利'
+      }
+    }, {
+      path: '/faqSearch.html',
+      name: 'FaqSearch',
+      component: FaqSearch,
+      meta: {
+        title: '常见问题搜索结果'
       }
     }
   ]
