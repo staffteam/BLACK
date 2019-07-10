@@ -275,9 +275,10 @@
               .size(14px);
               .weight(400);
               color: rgba(51, 51, 51, 1);
-              line-height: 20px;
               text-align: center;
               .margin(@t: 4px);
+              .lines();
+              line-height: 20px;
             }
 
             &>span {
@@ -359,11 +360,15 @@
 
         p {
           margin: 0 auto;
-          .area(@w: 315px, @h: 100%);
+          .area(@w: 315px, @h: 350px);
           display: block;
+          overflow: hidden;
 
           img {
-            width: 100%;
+            height: 100%;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
           }
         }
       }
@@ -1211,7 +1216,8 @@
         div.r {
           margin-left: 0;
           float: none;
-          margin-top:10px;
+          margin-top: 10px;
+
           ul {
             li {
               a {
@@ -1331,7 +1337,8 @@
     height: auto;
     .back(url;
       url('../images/home_back_new2.png') no-repeat left);
-    padding:20px 0;
+    padding: 20px 0;
+
     .content {
       .widths();
       position: relative;
@@ -1447,6 +1454,7 @@
           margin-left: 0;
           float: none;
           overflow: hidden;
+
           &>h2 {
             .size(18px);
             .weight(600);
@@ -1524,18 +1532,21 @@
     height: auto;
     .back(url;
       url('../images/home_list_back_7.png') no-repeat left);
-      background-size: auto 115%;
-      background-position-y: -50px;
+    background-size: auto 115%;
+    background-position-y: -50px;
+
     .content {
       .widths();
       position: relative;
-      padding-top:20px;
-      padding-bottom:10px;
+      padding-top: 20px;
+      padding-bottom: 10px;
+
       div.r {
         float: none;
         width: 100%;
         margin-top: 0;
         overflow: hidden;
+
         &>h2 {
           .size(18px);
           .weight(600);
@@ -1552,6 +1563,7 @@
             width: 100%;
             margin-right: 0;
             margin-top: 15px;
+
             h2 {
               .size(15px);
               .weight(600);

@@ -6,6 +6,10 @@ import Header from '@/components/leader/Header'
 import Footer from '@/components/leader/Footer'
 import router from './router'
 import ElementUI from 'element-ui'
+import axios from 'axios';
+Vue.prototype.$axios = axios;
+import QS from 'qs'
+Vue.prototype.qs = QS;
 Vue.config.productionTip = false
 
 Vue.use(ElementUI, {

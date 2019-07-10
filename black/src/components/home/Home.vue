@@ -5,7 +5,7 @@
       <div class="swiper-wrapper">
         <div class="swiper-slide" v-for="(item,index) in bannerData" :key="index">
           <p>
-            <img :src="item.url" :alt="item.title" />
+            <img :src="item.img_url" />
           </p>
         </div>
       </div>
@@ -35,21 +35,21 @@
       </div>
     </div>
     <!-- 首页列表1 -->
-    <div id="homeList1">
+    <div id="homeList1" :style="`background: url(${homeList1.imgurl}) no-repeat center;`">
       <div class="content">
         <div class="r">
-          <h2>{{homeList1.title}}</h2>
-          <div>{{homeList1.describe}}</div>
+          <h2>{{homeList1.name}}</h2>
+          <div>{{homeList1.desc}}</div>
           <ul>
-            <li v-for="item in homeList1.datalist" :key="item.id">
-              <a :href="`/product.html?id=${item.id}`">
+            <li v-for="(item,index) in homeList1.imgs" :key="index">
+              <a href="javascript:">
                 <div>
                   <div class="img">
-                    <img :src="item.imgUrl" />
+                    <img :src="item.img_url" />
                   </div>
                   <p>{{item.title}}</p>
                 </div>
-                <h2>{{item.describe}}</h2>
+                <h2>{{item.desc}}</h2>
               </a>
             </li>
           </ul>
@@ -62,13 +62,13 @@
           <h2>{{homeList2.title}}</h2>
           <div v-html="homeList2.describe">{{homeList2.describe}}</div>
           <ul>
-            <li v-for="item in homeList2.datalist" :key="item.id">
-              <a :href="`/product.html?id=${item.id}`">
+            <li v-for="item in homeList2.datalist" :key="item.product_id">
+              <a :href="`/product.html?id=${item.product_id}`">
                 <div class="img">
-                  <img :src="item.imgUrl" />
+                  <img :src="item.img_url" />
                 </div>
-                <p>{{item.title}}</p>
-                <h2>{{item.describe}}</h2>
+                <p>{{item.name}}</p>
+                <h2>{{item.function}}</h2>
                 <span>查看详情</span>
               </a>
             </li>
@@ -84,7 +84,7 @@
           <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="(item,index) in homeList3.datalist" :key="index">
               <p>
-                <img :src="item.imgUrl" :alt="item.title" />
+                <img :src="item.img_url" :alt="item.title" />
               </p>
             </div>
           </div>
@@ -108,9 +108,11 @@
             <div class="swiper-container" id="newBanner">
               <div class="swiper-wrapper">
                 <div class="swiper-slide" v-for="(item,index) in newBannerData" :key="index">
-                  <p>
-                    <img :src="item.imgUrl" :alt="item.title" />
-                  </p>
+                  <a :href="`/article.html?id=${item.article_id}`">
+                    <p>
+                      <img :src="item.img_url" :alt="item.title" />
+                    </p>
+                  </a>
                 </div>
               </div>
               <!-- 如果需要分页器 -->
@@ -129,26 +131,26 @@
           <div class="r">
             <ul>
               <li v-for="(item,index) in newDataList" :key="item.id">
-                <a :href="`/new.html?id=${item.id}`" v-if="index==0" class="top">
+                <a :href="`/article.html?id=${item.article_id}`" v-if="index==0" class="top">
                   <h2>{{item.title}}</h2>
-                  <div class="describe">{{item.describe}}</div>
+                  <div class="describe">{{item.desc}}</div>
                   <div class="bottom">
-                    <span>{{item.time}}</span>
+                    <span>{{item.date}}</span>
                     <p>
                       <i class="el-icon-view"></i>
-                      {{item.browse}}
+                      {{item.stat}}
                     </p>
                   </div>
                 </a>
-                <a :href="`/new.html?id=${item.id}`" v-if="index!=0" class="list">
+                <a :href="`/article.html?id=${item.article_id}`" v-if="index!=0" class="list">
                   <div>
                     <h2>{{item.title}}</h2>
-                    <span>{{item.time}}</span>
+                    <span>{{item.date}}</span>
                   </div>
                 </a>
               </li>
             </ul>
-            <a href="http://" target="_blank">查看更多>></a>
+            <a href="/article.html  " target="_blank">查看更多>></a>
           </div>
         </div>
       </div>
@@ -160,11 +162,13 @@
           <div class="swiper-container" id="newBanner2">
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="(item,index) in newBannerData2" :key="index">
-                <p>
-                  <img :src="item.imgUrl" :alt="item.title" />
-                </p>
-                <h2>{{item.title}}</h2>
-                <div>{{item.describe}}</div>
+                <a :href="`/article.html?id=${item.article_id}`">
+                  <p>
+                    <img :src="item.img_url" :alt="item.title" />
+                  </p>
+                  <h2>{{item.title}}</h2>
+                  <div>{{item.desc}}</div>
+                </a>
               </div>
             </div>
           </div>
@@ -186,34 +190,34 @@
           <li>
             <h2>脱发指南</h2>
             <div class="list" v-for="(item,index) in guideData1" :key="item.id">
-              <a :href="`/new.html?id=${item.id}`" target="_blank">
+              <a :href="`/new.html?id=${item.article_id}`" target="_blank">
                 <p v-if="index==0">
-                  <img :src="item.imgUrl" :alt="item.title" />
+                  <img :src="item.img_url" :alt="item.title" />
                 </p>
                 <h2>
                   <i class="el-icon-arrow-right"></i>
                   {{item.title}}
                 </h2>
-                <div class="describe">{{item.describe}}</div>
+                <div class="describe">{{item.desc}}</div>
               </a>
             </div>
-            <a href="http://" target="_blank">查看更多>></a>
+            <a href="/guide.html" target="_blank">查看更多>></a>
           </li>
           <li>
             <h2>基因育发</h2>
             <div class="list" v-for="(item,index) in guideData2" :key="item.id">
-              <a :href="`/new.html?id=${item.id}`" target="_blank">
+              <a :href="`/new.html?id=${item.article_id}`" target="_blank">
                 <p v-if="index==0">
-                  <img :src="item.imgUrl" :alt="item.title" />
+                  <img :src="item.img_url" :alt="item.title" />
                 </p>
                 <h2>
                   <i class="el-icon-arrow-right"></i>
                   {{item.title}}
                 </h2>
-                <div class="describe">{{item.describe}}</div>
+                <div class="describe">{{item.desc}}</div>
               </a>
             </div>
-            <a href="http://" target="_blank">查看更多>></a>
+            <a href="/hairgeme.html" target="_blank">查看更多>></a>
           </li>
         </ul>
       </div>
@@ -224,13 +228,13 @@
           <h2>常见问题</h2>
           <ul>
             <li v-for="(item,index) in faqData" :key="index">
-              <a :href="`/new.html?id=${item.id}`" target="_blank">
+              <a :href="`/faq.html?id=${item.article_id}`" target="_blank">
                 <h2>{{item.title}}</h2>
-                <div>{{item.describe}}</div>
+                <div>{{item.desc}}</div>
               </a>
             </li>
           </ul>
-          <a href="http://" target="_blank">更多热门问题>></a>
+          <a href="/faq.html" target="_blank">更多热门问题>></a>
         </div>
       </div>
     </div>
@@ -239,6 +243,7 @@
 <script>
 import banner from "../../../src/assets/js/home/homebanner";
 import datas from "../../../src/assets/js/home/datas";
+import http from "@/http.js";
 export default {
   name: "Home",
   data() {
@@ -248,14 +253,222 @@ export default {
   },
   methods: {},
   mounted() {
-    //顶部轮播
-    banner.homebanner();
+    let the = this;
+    http
+      .fetchGet("/api/Home/IndexBanner", {
+        args: {
+          start: 0,
+          limit: 1, //每页记录数
+          sort: "sortorder asc,articleid", //排序字段
+          dir: "desc", //升序or降序
+          navcode: "banner" //内容编码
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map(value => {
+            value.img_url = http.path + "/" + value.img_url;
+            return value;
+          });
+          the.bannerData = [...datas.result];
+          //顶部轮播
+          banner.homebanner();
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    //产品介绍
+    http
+      .fetchGet("/api/Home/IndexProductDesc")
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.imgurl = http.path + "/" + datas.result.imgurl;
+          datas.result.imgs.map(obj => {
+            obj.img_url = http.path + "/" + obj.img_url;
+          });
+          the.homeList1 = datas.result;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    //产品列表
+    http
+      .fetchGet("/api/Home/IndexProducts")
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map(obj => {
+            obj.img_url = http.path + "/" + obj.img_url;
+          });
+          the.homeList2.datalist = datas.result;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
     //专利证书
-    banner.homebanner2();
-    //新闻轮播
-    banner.homebanner3();
-    //新闻报道轮播
-    banner.homebanner4(this);
+    http
+      .fetchGet("/api/Home/IndexCertificates")
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map((obj, index) => {
+            obj.img_url =
+              obj.img_url != null ? http.path + "/" + obj.img_url : "";
+            if (the.homeList3.datalist.length <= 11 && obj.img_url != "") {
+              the.homeList3.datalist.push(obj);
+            }
+          });
+          setTimeout(function() {
+            //专利证书
+            banner.homebanner2();
+          }, 100);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    //资讯中心
+    http
+      .fetchGet("/api/Home/IndexNews", {
+        args: {
+          start: 0,
+          limit: 1,
+          sort: "sortorder asc,releasetime",
+          dir: "desc",
+          NavCode: "News",
+          IsIndexShow: true,
+          IsRelease: true
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map((obj, index) => {
+            obj.img_url =
+              obj.img_url != null ? http.path + "/" + obj.img_url : "";
+            if (index <= 2) {
+              the.newBannerData.push(obj);
+            } else {
+              the.newDataList.push(obj);
+            }
+          });
+          //新闻轮播
+          setTimeout(function() {
+            banner.homebanner3();
+          }, 100);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    //新闻报道
+    http
+      .fetchGet("/api/Home/IndexMedia", {
+        args: { sort: "sortorder asc,articleid", dir: "desc", NavCode: "Media" }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map((obj, index) => {
+            obj.img_url =
+              obj.img_url != null ? http.path + "/" + obj.img_url : "";
+            if (the.newBannerData2.length <= 12 && obj.img_url != "") {
+              the.newBannerData2.push(obj);
+            }
+          });
+          setTimeout(function() {
+            //新闻报道轮播
+            banner.homebanner4(the);
+          }, 100);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    //脱发指南 and 基因育发
+    http
+      .fetchGet("/api/Home/IndexGuideOrHair", {
+        args: {
+          start: 0,
+          limit: 1,
+          sort: "sortorder asc,releasetime",
+          dir: "desc",
+          NavCode: "Guide",
+          IsIndexShow: true,
+          IsRelease: true
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map((obj, index) => {
+            obj.img_url =
+              obj.img_url != null ? http.path + "/" + obj.img_url : "";
+            if (the.guideData1.length <= 1 && obj.img_url != "") {
+              the.guideData1.push(obj);
+            }
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    http
+      .fetchGet("/api/Home/IndexGuideOrHair", {
+        args: {
+          start: 0,
+          limit: 1,
+          sort: "sortorder asc,releasetime",
+          dir: "desc",
+          NavCode: "Hair",
+          IsIndexShow: true,
+          IsRelease: true
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map((obj, index) => {
+            obj.img_url =
+              obj.img_url != null ? http.path + "/" + obj.img_url : "";
+            if (the.guideData2.length <= 1 && obj.img_url != "") {
+              the.guideData2.push(obj);
+            }
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    http
+      .fetchGet("/api/Home/IndexFaq", {
+        args: {
+          sort: "sortorder asc,releasetime ",
+          dir: "desc",
+          NavCode: "Faq",
+          IsRelease: true
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map((obj, index) => {
+            obj.desc = obj.desc=='' || obj.desc==null?'暂无回答':obj.desc;
+            if (the.faqData.length <= 3) {
+              the.faqData.push(obj);
+            }
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>
@@ -280,6 +493,13 @@ div.el-carousel__mask {
   width: 6px;
   height: 6px;
 }
+#homeBanner .swiper-button-content div button i,
+#homeList3 .content div.swiper-container .swiper-button-content div button i,
+#newContent .content div.new div.l .swiper-button-content > div button i,
+#newContent2 .content div.new2 .swiper-button-content > div button i {
+  font-size: 25px;
+}
+
 @media (max-width: 799px) {
   #homeBanner .swiper-button-content {
     display: none;

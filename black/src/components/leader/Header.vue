@@ -2,7 +2,9 @@
   <div>
     <div id="headers" :class="isNav?'on':'off'">
       <el-row class="black-head">
-        <el-image class="logo" :src="logoUrl" fit="scale-down"></el-image>
+        <p class="logo">
+          <img :src="logoUrl" alt />
+        </p>
         <div v-if="isWap" id="wapBtn" :class="isNav?'on':'off'" @click="wapNavBtn">
           <p class="on">
             <i class="el-icon-minus"></i>
@@ -13,13 +15,13 @@
             <i class="el-icon-close"></i>
           </p>
         </div>
-        <div class="wapnav" :class="isNav?'on':'off'" >
+        <div class="wapnav" :class="isNav?'on':'off'">
           <el-image class="navLogo" v-if="isWap" :src="logoUrl" fit="scale-down"></el-image>
           <ul class="nav">
             <li v-for="(item,index) in navData" :key="index">
-              <a :href="item.url">
-                <h2>{{item.cntitle}}</h2>
-                <p>{{item.entitle}}</p>
+              <a :href="navList[item.menu_id]" :data-id="item.menu_id">
+                <h2>{{item.name}}</h2>
+                <p>{{item.name_en}}</p>
               </a>
             </li>
           </ul>
@@ -31,20 +33,25 @@
 </template>
 
 <script>
+import http from "@/http.js";
+
 export default {
   name: "headers",
   data() {
     return {
       logoUrl: require("@/assets/images/logo.png"),
-      navData: [
-        { cntitle: "首页", entitle: "HOME", url: "/index.html" },
-        { cntitle: "产品介绍", entitle: "PRODUCT", url: "/product.html" },
-        { cntitle: "品牌动态", entitle: "BRAND", url: "/article.html" },
-        { cntitle: "基因育发", entitle: "HAIR GENE", url: "/hairgeme.html" },
-        { cntitle: "脱发指南", entitle: "GUIDE", url: "/guide.html" },
-        { cntitle: "粉丝福利", entitle: "WELFAFE", url: "/welfafe.html" },
-        { cntitle: "关于我们", entitle: "ABOUT US", url: "/aboutus.html" }
-      ],
+      navData: [],
+      navList: {
+        0: "/index.html",
+        64: "/product.html",
+        84: "/article.html",
+        81: "/hairgeme.html",
+        82: "/guide.html",
+        80: "/welfafe.html",
+        50: "/aboutus.html",
+        143: "/media.html",
+        144: "/faq.html"
+      },
       isWap: false,
       isNav: true
     };
@@ -59,7 +66,9 @@ export default {
     },
     wapNavBtn(e) {
       this.isNav = !this.isNav;
-      document.getElementsByTagName("body")[0].style.left=!this.isNav?'-150px':'0';
+      document.getElementsByTagName("body")[0].style.left = !this.isNav
+        ? "-150px"
+        : "0";
     }
   },
   mounted() {
@@ -69,6 +78,21 @@ export default {
     window.onresize = () => {
       the.windowResize();
     };
+    http
+      .fetchGet("/api/Home/Menu")
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.logoUrl = http.path + "/" + JSON.parse(data.data).result.logo_url;
+          the.navData = [
+            { menu_id: 0, name: "首页", name_en: "HOME" },
+            ...JSON.parse(data.data).result.menus
+          ];
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>

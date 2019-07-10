@@ -23,11 +23,10 @@ export default {
   homebanner2 () {
     return new Swiper('#list3banner', {
       watchSlidesProgress: true,
-      slidesPerView: 'auto',
+      slidesPerView: 3,
       centeredSlides: true,
-      loop: true,
       loopedSlides: 3,
-      autoplay: true,
+      loop:true,
       navigation: {
         nextEl: '.swiper-button-next.b',
         prevEl: '.swiper-button-prev.b'
@@ -93,11 +92,6 @@ export default {
     }
     return new Swiper('#newBanner2', {
       loop: true, // 循环模式选项
-      autoplay: {
-        delay: 5000,
-        stopOnLastSlide: false,
-        disableOnInteraction: true
-      },
       slidesPerView : len,
       slidesPerView : len,
       // 如果需要前进后退按钮
