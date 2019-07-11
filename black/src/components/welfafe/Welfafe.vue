@@ -5,7 +5,7 @@
     <div id="homeSearch">
       <div class="l">
         <span>热门搜索关键词：</span>
-        <a :href="item.url" v-for="(item,index) in searchData" :key="index">{{item.title}}</a>
+        <a :href="`/searchs.html?value=${item.name}`" v-for="(item,index) in searchData" :key="index" target="_blank">{{item.name}}</a>
       </div>
       <div class="r">
         <p>
@@ -17,32 +17,41 @@
     <div class="articlelist">
       <div class="l">
         <ul>
-          <li v-for="item in articleData" :key="item.id">
-            <a :href="`/articleDetails.html?id=${item.id}`" target="_blank">
-              <el-image class="listImg" :src="item.imgUrl" fit="scale-down"></el-image>
+          <li v-for="item in articleData" :key="item.article_id">
+            <a
+              :href="`/articleDetails.html?parentid=${parentid}&id=${item.article_id}`"
+              target="_blank"
+            >
+              <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
               <div class="listContent">
                 <h2>{{item.title}}</h2>
                 <p>
                   <span>
                     <i class="el-icon-time"></i>
-                    {{item.time}}
+                    {{item.date}}
                   </span>
                   <span>
                     <i class="el-icon-view"></i>
-                    {{item.view}}
+                    {{item.stat}}
                   </span>
                 </p>
               </div>
             </a>
           </li>
         </ul>
+        <el-pagination background layout="prev, pager, next" :total="10" :current-page="4"></el-pagination>
       </div>
       <div class="r">
         <div class="list">
           <ul>
-            <li v-for="item in articleNavData" :key="item.id" :class="`${item.on}`">
-              <a :href="`/articleDetails.html?id=${item.id}`">
-                <h2>{{item.title}}</h2>
+            <li
+              v-for="item in articleNavData"
+              :key="item.menu_id"
+              :data-key="item.menu_id"
+              :class="`${item.on}`"
+            >
+              <a :href="articleNav[item.menu_id]">
+                <h2>{{item.name}}</h2>
               </a>
             </li>
           </ul>
@@ -50,10 +59,13 @@
         <div class="recommen">
           <div class="title">推荐搭配</div>
           <ul>
-            <li v-for="item in recommenData" :key="item.id">
-              <a :href="`/articleDetails.html?id=${item.id}`" target="_blank">
+            <li v-for="item in recommenData" :key="item.article_id">
+              <a
+                :href="`/articleDetails.html?parentid=${parentid}&id=${item.article_id}`"
+                target="_blank"
+              >
                 <h2>{{item.title}}</h2>
-                <p>{{item.time}}</p>
+                <p>{{item.date}}</p>
               </a>
             </li>
           </ul>
@@ -64,123 +76,128 @@
 </template>
 
 <script>
+import http from "@/http.js";
 export default {
   name: "articles",
   data() {
     return {
+      parentid: "",
       streamerUrl: require("@/assets/images/streamer_article.png"),
-      searchData: [
-        {
-          title: "脱发",
-          url: "1"
-        },
-        {
-          title: "生发",
-          url: "2"
-        },
-        {
-          title: "头发",
-          url: "3"
-        },
-        {
-          title: "乐喜力丝",
-          url: "4"
-        },
-        {
-          title: "基因育发",
-          url: "5"
-        }
-      ],
-      articleData: [
-        {
-          title: "乐喜力丝育发液",
-          id: 0,
-          time: "2019-05-20",
-          view: "11",
-          imgUrl: require("@/assets/images/article_list_1.png")
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 1,
-          time: "2019-05-20",
-          view: "11",
-          imgUrl: require("@/assets/images/article_list_1.png")
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 2,
-          time: "2019-05-20",
-          view: "11",
-          imgUrl: require("@/assets/images/article_list_1.png")
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 3,
-          time: "2019-05-20",
-          view: "11",
-          imgUrl: require("@/assets/images/article_list_1.png")
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 4,
-          time: "2019-05-20",
-          view: "11",
-          imgUrl: require("@/assets/images/article_list_1.png")
-        }
-      ],
-      articleNavData: [
-        {
-          title: "品牌动态",
-          id: 0,
-          on: "on"
-        },
-        {
-          title: "基因育发",
-          id: 1,
-          on: ""
-        },
-        {
-          title: "脱发指南",
-          id: 2,
-          on: ""
-        },
-        {
-          title: "粉丝福利",
-          id: 3,
-          on: ""
-        }
-      ],
-      recommenData: [
-        {
-          title: "乐喜力丝育发液",
-          id: 0,
-          time: "2019-05-20 14:15:16"
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 1,
-          time: "2019-05-20 14:15:16"
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 2,
-          time: "2019-05-20 14:15:16"
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 3,
-          time: "2019-05-20 14:15:16"
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 4,
-          time: "2019-05-20 14:15:16"
-        }
-      ]
+      searchData: [],
+      articleData: [],
+      articleNavData: [],
+      articleNav: {
+        0: "/index.html",
+        64: "/product.html",
+        84: "/article.html",
+        81: "/hairgeme.html",
+        82: "/guide.html",
+        80: "/welfafe.html",
+        50: "/aboutus.html",
+        143: "/media.html",
+        144: "/faq.html"
+      },
+      recommenData: []
     };
   },
   methods: {},
-  mounted() {}
+  mounted() {
+    let the = this;
+    //文章列表
+    http
+      .fetchGet("/api/Article/Articles", {
+        args: {
+          start: 0,
+          limit: 10,
+          sort: "sortorder asc,releasetime",
+          dir: "desc",
+          IsRelease: true,
+          NavCode: "Welfare"
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map(obj => {
+            obj.img_url = http.path + "/" + obj.img_url;
+          });
+          the.articleData = datas.result;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    //推荐搭配
+    http
+      .fetchGet("/api/Article/Articles", {
+        args: {
+          start: 0,
+          limit: 5,
+          sort: "sortorder asc,releasetime",
+          dir: "desc",
+          IsRelease: true,
+          NavCode: "Welfare"
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map(obj => {
+            obj.img_url = http.path + "/" + obj.img_url;
+          });
+          the.recommenData = datas.result;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    //导航分类
+    http
+      .fetchGet("/api/Article/MenuArticle")
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map((obj, index) => {
+            if (the.$route.query.id == obj.menu_id) {
+              obj.on = "on";
+              the.parentid = the.$route.query.id;
+            }
+            if (!the.$route.query.id && obj.menu_id == 80) {
+              obj.on = "on";
+              the.parentid = obj.menu_id;
+            } else {
+              obj.on = "";
+            }
+          });
+          the.articleNavData = datas.result;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+      //搜索关键词
+    http
+      .fetchGet("/api/Article/Labels", {
+        args: {
+          start: 0,
+          limit: 5,
+          sort: "sortorder asc,hotsearchtime",
+          dir: "desc",
+          TypeCode: "Label",
+          IsHotSearch: true
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.searchData = datas.result;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 };
 </script>
 

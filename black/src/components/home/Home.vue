@@ -25,7 +25,7 @@
     <div id="homeSearch">
       <div class="l">
         <span>热门搜索关键词：</span>
-        <a :href="item.url" v-for="(item,index) in searchData" :key="index">{{item.title}}</a>
+        <a :href="`/searchs.html?value=${item.name}`" v-for="(item,index) in searchData" :key="index" target="_blank">{{item.name}}</a>
       </div>
       <div class="r">
         <p>
@@ -464,6 +464,27 @@ export default {
               the.faqData.push(obj);
             }
           });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+      //搜索关键词
+    http
+      .fetchGet("/api/Article/Labels", {
+        args: {
+          start: 0,
+          limit: 5,
+          sort: "sortorder asc,hotsearchtime",
+          dir: "desc",
+          TypeCode: "Label",
+          IsHotSearch: true
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.searchData = datas.result;
         }
       })
       .catch(err => {

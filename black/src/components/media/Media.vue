@@ -88,28 +88,7 @@ export default {
     return {
       parentid: "",
       streamerUrl: require("@/assets/images/streamer_article.png"),
-      searchData: [
-        {
-          title: "脱发",
-          url: "1"
-        },
-        {
-          title: "生发",
-          url: "2"
-        },
-        {
-          title: "头发",
-          url: "3"
-        },
-        {
-          title: "乐喜力丝",
-          url: "4"
-        },
-        {
-          title: "基因育发",
-          url: "5"
-        }
-      ],
+      searchData: [],
       articleData: [],
       articleNavData: [],
       articleNav: {
@@ -138,7 +117,7 @@ export default {
           sort: "sortorder asc,releasetime",
           dir: "desc",
           IsRelease: true,
-          NavCode: "News"
+          NavCode: "Media"
         }
       })
       .then(data => {
@@ -162,7 +141,7 @@ export default {
           sort: "sortorder asc,releasetime",
           dir: "desc",
           IsRelease: true,
-          NavCode: "News"
+          NavCode: "Media"
         }
       })
       .then(data => {
@@ -189,7 +168,7 @@ export default {
               obj.on = "on";
               the.parentid = the.$route.query.id;
             }
-            if (!the.$route.query.id && obj.menu_id == 84) {
+            if (!the.$route.query.id && obj.menu_id == 143) {
               obj.on = "on";
               the.parentid = obj.menu_id;
             } else {

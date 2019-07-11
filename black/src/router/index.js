@@ -13,7 +13,7 @@ import FaqSearch from '@/components/faq/FaqSearch'
 import Hairgeme from '@/components/hairgeme/Hairgeme'
 import Guide from '@/components/guide/Guide'
 import Welfafe from '@/components/welfafe/Welfafe'
-
+import Media from '@/components/media/Media'
 Vue.use(Router)
 
 export default new Router({
@@ -117,6 +117,13 @@ export default new Router({
       component: FaqSearch,
       meta: {
         title: '常见问题搜索结果'
+      }
+    }, {
+      path: '/media.html',
+      name: 'Media',
+      component: Media,
+      meta: {
+        title: '媒体报道'
       }
     }
   ]

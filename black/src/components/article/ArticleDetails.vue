@@ -5,7 +5,7 @@
     <div id="homeSearch">
       <div class="l">
         <span>热门搜索关键词：</span>
-        <a :href="item.url" v-for="(item,index) in searchData" :key="index">{{item.title}}</a>
+        <a :href="`/searchs.html?value=${item.name}`" v-for="(item,index) in searchData" :key="index" target="_blank">{{item.name}}</a>
       </div>
       <div class="r">
         <p>
@@ -18,31 +18,42 @@
       <div class="l">
         <div class="content">
           <div class="title">
-            <h2>为什么脱发后别人能够生发成功，而你就不行？</h2>
+            <h2>{{detailsData.title}}</h2>
             <p>
               <span>
                 <i class="el-icon-time"></i>
-                2019-06-12
+                {{detailsData.date}}
               </span>
               <span>
                 <i class="el-icon-view"></i>
-                7
+                {{detailsData.stat}}
               </span>
             </p>
           </div>
-          <div class="detailsBody" v-html="detailsBody">{{detailsBody}}</div>
+          <div class="detailsBody" v-html="detailsData.content">{{detailsData.content}}</div>
           <div class="detailsNext">
-            <a href="javascript:" class="not" target="_blank">上一页：没有了</a>
-            <a href="http://" target="_blank">下一页：我要为乐喜力丝育发液实名打CALL！</a>
+            <a
+              :href="`/articleDetails.html?parentid=${parentid}&id=${detailsData.prev_article!=null?detailsData.prev_article.article_id:'javascript:'}`"
+              :class="detailsData.prev_article!=null?'':'not'"
+            >上一页：{{detailsData.prev_article!=null?detailsData.prev_article.title:'没有了'}}</a>
+            <a
+              :href="`/articleDetails.html?parentid=${parentid}&id=${detailsData.next_article!=null?detailsData.next_article.article_id:'javascript:'}`"
+              :class="detailsData.next_article!=null?'':'not'"
+            >上一页：{{detailsData.next_article!=null?detailsData.next_article.title:'没有了'}}</a>
           </div>
         </div>
       </div>
       <div class="r">
         <div class="list">
           <ul>
-            <li v-for="item in articleNavData" :key="item.id" :class="`${item.on}`">
-              <a :href="`/articleDetails.html?id=${item.id}`">
-                <h2>{{item.title}}</h2>
+            <li
+              v-for="item in articleNavData"
+              :key="item.menu_id"
+              :data-key="item.menu_id"
+              :class="`${item.on}`"
+            >
+              <a :href="articleNav[item.menu_id]">
+                <h2>{{item.name}}</h2>
               </a>
             </li>
           </ul>
@@ -50,10 +61,10 @@
         <div class="recommen">
           <div class="title">推荐搭配</div>
           <ul>
-            <li v-for="item in recommenData" :key="item.id">
-              <a :href="`/articleDetails.html?id=${item.id}`" target="_blank">
+            <li v-for="item in recommenData" :key="item.article_id">
+              <a :href="`/articleDetails.html?id=${item.article_id}`" target="_blank">
                 <h2>{{item.title}}</h2>
-                <p>{{item.time}}</p>
+                <p>{{item.date}}</p>
               </a>
             </li>
           </ul>
@@ -62,8 +73,8 @@
           <div class="title">热门标签</div>
           <ul class="labelContent">
             <li v-for="item in labelData" :key="item.id">
-              <a :href="`/articleDetails.html?id=${item.id}`" target="_blank">
-                <h2>{{item.title}}</h2>
+              <a :href="`/searchs.html?value=${item.name}`" target="_blank">
+                <h2>{{item.name}}</h2>
               </a>
             </li>
           </ul>
@@ -73,15 +84,17 @@
     <div class="bottomRecommen">
       <h2>热门推荐</h2>
       <ul>
-        <li v-for="item in articleData" :key="item.id">
-          <a :href="`/articleDetails.html?id=${item.id}`" target="_blank">
-            <p class="listImg"><img :src="item.imgUrl"></p>
+        <li v-for="item in articleData" :key="item.article_id">
+          <a :href="`/articleDetails.html?id=${item.article_id}`" target="_blank">
+            <p class="listImg">
+              <img :src="item.img_url" />
+            </p>
             <div class="listContent">
               <h2>{{item.title}}</h2>
               <p>
                 <span>
                   <i class="el-icon-time"></i>
-                  {{item.time}}
+                  {{item.date}}
                 </span>
               </p>
             </div>
@@ -93,143 +106,172 @@
 </template>
 
 <script>
+import http from "@/http.js";
 export default {
   name: "articles",
   data() {
     return {
       streamerUrl: require("@/assets/images/streamer_article.png"),
-      searchData: [
-        {
-          title: "脱发",
-          url: "1"
-        },
-        {
-          title: "生发",
-          url: "2"
-        },
-        {
-          title: "头发",
-          url: "3"
-        },
-        {
-          title: "乐喜力丝",
-          url: "4"
-        },
-        {
-          title: "基因育发",
-          url: "5"
-        }
-      ],
-      articleData: [
-        {
-          title: "乐喜力丝育发液",
-          id: 1,
-          time: "2019-05-20",
-          view: "11",
-          imgUrl: require("@/assets/images/article_list_1.png")
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 2,
-          time: "2019-05-20",
-          view: "11",
-          imgUrl: require("@/assets/images/article_list_1.png")
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 3,
-          time: "2019-05-20",
-          view: "11",
-          imgUrl: require("@/assets/images/article_list_1.png")
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 4,
-          time: "2019-05-20",
-          view: "11",
-          imgUrl: require("@/assets/images/article_list_1.png")
-        }
-      ],
-      articleNavData: [
-        {
-          title: "品牌动态",
-          id: 0,
-          on: "on"
-        },
-        {
-          title: "基因育发",
-          id: 1,
-          on: ""
-        },
-        {
-          title: "脱发指南",
-          id: 2,
-          on: ""
-        },
-        {
-          title: "粉丝福利",
-          id: 3,
-          on: ""
-        }
-      ],
-      recommenData: [
-        {
-          title: "乐喜力丝育发液",
-          id: 0,
-          time: "2019-05-20 14:15:16"
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 1,
-          time: "2019-05-20 14:15:16"
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 2,
-          time: "2019-05-20 14:15:16"
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 3,
-          time: "2019-05-20 14:15:16"
-        },
-        {
-          title: "乐喜力丝育发液",
-          id: 4,
-          time: "2019-05-20 14:15:16"
-        }
-      ],
-      detailsBody: ` <p style="font-size:16px; text-indent:20px;"  >有了脱发问题，让人非常困扰，但是最让发友接受不了的却是，眼看着别人的脱发问题逐渐都有所改善，可自己的脱发问题却迟迟没有好转的现象，这让一众发友忧心忡忡，就好像在考场上，看着别人一个个的提前交卷，而自己却还没有答完考题一样，心理惴惴不安。 其实有这种疑问的发友不在少数，想要搞清楚其中原因，我们首先要清楚一件事，那就是不同发友的脱发类型不尽相同，适合他人的办法并不一定适合自己，发友需要做到稳定的、有针对性的去改善自己的脱发问题，这并不是一场比赛，而是自己完善进步的一个过程。 很多发友在生发过程中，会出现以下问题。</p>`,
-      labelData: [
-        {
-          id: 0,
-          title: "鸡蛋生发"
-        },
-        {
-          id: 1,
-          title: "鸡蛋生发"
-        },
-        {
-          id: 2,
-          title: "鸡蛋生发"
-        },
-        {
-          id: 3,
-          title: "鸡蛋生发"
-        },
-        {
-          id: 4,
-          title: "鸡蛋生发"
-        },
-        {
-          id: 5,
-          title: "鸡蛋生发"
-        }
-      ]
+      searchData: [],
+      parentid: "",
+      detailsData: [],
+      articleData: [],
+      articleNavData: [],
+      articleNav: {
+        0: "/index.html",
+        64: "/product.html",
+        84: "/article.html",
+        81: "/hairgeme.html",
+        82: "/guide.html",
+        80: "/welfafe.html",
+        50: "/aboutus.html",
+        143: "/media.html",
+        144: "/faq.html"
+      },
+      navcodes: {
+        "80": "Welfare",
+        "81": "Hair",
+        "82": "Guide",
+        "84": "News",
+        "143": "Media"
+      },
+      recommenData: [],
+      detailsBody: "",
+      labelData: []
     };
   },
   methods: {},
-  mounted() {}
+  mounted() {
+    let the = this;
+    the.parentid = the.$route.query.parentid;
+    //文章列表
+    http
+      .fetchGet("/api/Article/ArticleDetail", {
+        id: the.$route.query.id
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.detailsData = datas.result;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    //推荐搭配
+    http
+      .fetchGet("/api/Article/Articles", {
+        args: {
+          start: 0,
+          limit: 5,
+          sort: "sortorder asc,releasetime",
+          dir: "desc",
+          IsRelease: true,
+          NavCode: the.navcodes[the.$route.query.parentid]
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map(obj => {
+            obj.img_url = http.path + "/" + obj.img_url;
+          });
+          the.recommenData = datas.result;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+      //热门推荐
+    http
+      .fetchGet("/api/Article/Articles", {
+        args: {
+          start: 0,
+          limit: 4,
+          sort: "sortorder asc,Hottime",
+          dir: "desc",
+          IsRelease: true,
+          NavCode: the.navcodes[the.$route.query.parentid],
+          IsHotRecommend:true
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map(obj => {
+            obj.img_url = http.path + "/" + obj.img_url;
+          });
+          the.articleData = datas.result;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    //热门标签
+    http
+      .fetchGet("/api/Article/Labels", {
+        args: {
+          start: 0,
+          limit: 12,
+          sort: "sortorder asc,typeid",
+          dir: "desc",
+          TypeCode: "Label"
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map(obj => {
+            obj.img_url = http.path + "/" + obj.img_url;
+          });
+          the.labelData = datas.result;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    //搜索关键词
+    http
+      .fetchGet("/api/Article/Labels", {
+        args: {
+          start: 0,
+          limit: 5,
+          sort: "sortorder asc,hotsearchtime",
+          dir: "desc",
+          TypeCode: "Label",
+          IsHotSearch: true
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.searchData = datas.result;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    //导航分类
+    http
+      .fetchGet("/api/Article/MenuArticle")
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map((obj, index) => {
+            if (the.$route.query.parentid == obj.menu_id) {
+              obj.on = "on";
+            }
+            if (!the.$route.query.parentid) {
+              obj.on = index == 0 ? "on" : "";
+            }
+          });
+          the.articleNavData = datas.result;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 };
 </script>
 
