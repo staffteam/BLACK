@@ -46,24 +46,28 @@
             </li>
           </ul>
         </div>
-        <div class="searchContent" v-if="faqTitle==''">
-          <ul>
-            <li v-for="(item,index) in faqListData" :key="index">
-              <a :href="`faqDetails.html?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.article_id}`">
-                <h2 v-html="item.title">{{item.title}}</h2>
-                <div>{{item.desc}}</div>
-              </a>
-            </li>
-          </ul>
-          <el-pagination
-            background
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page.sync="indexNum"
-            :page-size="pageSize"
-            layout="prev, pager, next"
-            :total="totalNum"
-          ></el-pagination>
+        <div class="r">
+          <div class="top">
+            <h2>{{faqTitle}}</h2>
+            <p>
+              <span>{{faqDate}}</span>
+              <span>
+                <i class="el-icon-view"></i>
+                {{faqStat}}
+              </span>
+            </p>
+          </div>
+          <div class="bottom" v-html="faqContent">{{faqContent}}</div>
+          <div class="like" v-if="linkData.length>0">
+            <h2>猜你感兴趣的问题</h2>
+            <ul>
+              <li v-for="(item,index) in linkData" :key="index">
+                <a :href="`faqDetails.html?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.article_id}`">
+                  <h2>· {{item.title}}</h2>
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -89,24 +93,10 @@ export default {
       faqSearchValue: "",
       searchValue: "",
       faqId: "",
-      faqTheId: "",
-      totalNum: 0,
-      indexNum: 0,
-      pageSize: 6,
-      faqListId: "",
-      faqListPId: "",
-      faqListData:[],
+      faqTheId: ""
     };
   },
   methods: {
-    handleCurrentChange(e) {
-      let the = this;
-      the.faqPage(e);
-    },
-    handleSizeChange(e) {
-      let the = this;
-      the.faqPage(e);
-    },
     faqNavClick(e) {
       let the = this;
       let id = e.currentTarget.dataset.id;
@@ -137,8 +127,6 @@ export default {
         }
         return value;
       });
-      the.faqListId = id;
-      the.faqListPId = parentId;
       //文章详情
       http
         .fetchGet("/api/Article/Faqs", {
@@ -154,8 +142,41 @@ export default {
         .then(data => {
           let datas = JSON.parse(data.data);
           if (datas.errcode) {
-            the.faqListData = datas.result.products;
-            the.totalNum = datas.result.total_count;
+            let article_id = "";
+            datas.result.products.forEach(function(value) {
+              if (value.article_id == the.$route.query.articleid) {
+                the.faqTitle = value.title;
+                the.faqContent = value.desc;
+                the.faqDate = value.date;
+                the.faqStat = value.stat;
+                article_id = value.article_id;
+              }
+            });
+            //猜你喜欢
+            http
+              .fetchGet("/api/Article/Faqs", {
+                args: {
+                  sort: "sortorder asc,releasetime",
+                  dir: "desc",
+                  NavCode: "Faq",
+                  IsRelease: true,
+                  ParentTypeID: parentId
+                }
+              })
+              .then(data => {
+                let datas = JSON.parse(data.data);
+                if (datas.errcode) {
+                  the.linkData = [];
+                  datas.result.products.forEach(function(value) {
+                    if (value.article_id != article_id) {
+                      the.linkData.push(value);
+                    }
+                  });
+                }
+              })
+              .catch(err => {
+                console.log(err);
+              });
           }
         })
         .catch(err => {
@@ -239,10 +260,41 @@ export default {
             .then(data => {
               let datas = JSON.parse(data.data);
               if (datas.errcode) {
-                the.faqListId = ids || _id;
-                the.faqListPId = pids || _id;
-                the.faqListData = datas.result.products;
-                the.totalNum = datas.result.total_count;
+                let article_id = "";
+                datas.result.products.forEach(function(value) {
+                  if (value.article_id == the.$route.query.articleid) {
+                    the.faqTitle = value.title;
+                    the.faqContent = value.desc;
+                    the.faqDate = value.date;
+                    the.faqStat = value.stat;
+                    article_id = value.article_id;
+                  }
+                });
+                //猜你喜欢
+                http
+                  .fetchGet("/api/Article/Faqs", {
+                    args: {
+                      sort: "sortorder asc,releasetime",
+                      dir: "desc",
+                      NavCode: "Faq",
+                      IsRelease: true,
+                      ParentTypeID: pids || _id
+                    }
+                  })
+                  .then(data => {
+                    let datas = JSON.parse(data.data);
+                    if (datas.errcode) {
+                      the.linkData = [];
+                      datas.result.products.forEach(function(value) {
+                        if (value.article_id != article_id) {
+                          the.linkData.push(value);
+                        }
+                      });
+                    }
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
               }
             })
             .catch(err => {

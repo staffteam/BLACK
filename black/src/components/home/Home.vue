@@ -25,12 +25,17 @@
     <div id="homeSearch">
       <div class="l">
         <span>热门搜索关键词：</span>
-        <a :href="`/searchs.html?value=${item.name}`" v-for="(item,index) in searchData" :key="index" target="_blank">{{item.name}}</a>
+        <a
+          :href="`/search.html?value=${item.name}`"
+          v-for="(item,index) in searchData"
+          :key="index"
+          
+        >{{item.name}}</a>
       </div>
       <div class="r">
         <p>
-          <input type="search" />
-          <i class="el-icon-search"></i>
+          <input type="search" v-model="searchValue" />
+          <i class="el-icon-search" @click="searchAll"></i>
         </p>
       </div>
     </div>
@@ -63,7 +68,7 @@
           <div v-html="homeList2.describe">{{homeList2.describe}}</div>
           <ul>
             <li v-for="item in homeList2.datalist" :key="item.product_id">
-              <a :href="`/product.html?id=${item.product_id}`">
+              <a :href="`/productDetails.html?id=${item.product_id}`">
                 <div class="img">
                   <img :src="item.img_url" />
                 </div>
@@ -150,7 +155,7 @@
                 </a>
               </li>
             </ul>
-            <a href="/article.html  " target="_blank">查看更多>></a>
+            <a href="/article.html  " >查看更多>></a>
           </div>
         </div>
       </div>
@@ -162,7 +167,7 @@
           <div class="swiper-container" id="newBanner2">
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="(item,index) in newBannerData2" :key="index">
-                <a :href="`/article.html?id=${item.article_id}`">
+                <a href="javascript:">
                   <p>
                     <img :src="item.img_url" :alt="item.title" />
                   </p>
@@ -190,7 +195,7 @@
           <li>
             <h2>脱发指南</h2>
             <div class="list" v-for="(item,index) in guideData1" :key="item.id">
-              <a :href="`/new.html?id=${item.article_id}`" target="_blank">
+              <a :href="`/new.html?id=${item.article_id}`" >
                 <p v-if="index==0">
                   <img :src="item.img_url" :alt="item.title" />
                 </p>
@@ -201,12 +206,12 @@
                 <div class="describe">{{item.desc}}</div>
               </a>
             </div>
-            <a href="/guide.html" target="_blank">查看更多>></a>
+            <a href="/guide.html" >查看更多>></a>
           </li>
           <li>
             <h2>基因育发</h2>
             <div class="list" v-for="(item,index) in guideData2" :key="item.id">
-              <a :href="`/new.html?id=${item.article_id}`" target="_blank">
+              <a :href="`/new.html?id=${item.article_id}`" >
                 <p v-if="index==0">
                   <img :src="item.img_url" :alt="item.title" />
                 </p>
@@ -217,7 +222,7 @@
                 <div class="describe">{{item.desc}}</div>
               </a>
             </div>
-            <a href="/hairgeme.html" target="_blank">查看更多>></a>
+            <a href="/hairgeme.html" >查看更多>></a>
           </li>
         </ul>
       </div>
@@ -228,13 +233,13 @@
           <h2>常见问题</h2>
           <ul>
             <li v-for="(item,index) in faqData" :key="index">
-              <a :href="`/faq.html?id=${item.article_id}`" target="_blank">
+              <a :href="`/faq.html?id=${item.type_id}&parentid=${item.parent_type_id}`" >
                 <h2>{{item.title}}</h2>
                 <div>{{item.desc}}</div>
               </a>
             </li>
           </ul>
-          <a href="/faq.html" target="_blank">更多热门问题>></a>
+          <a href="/faqList.html" >更多热门问题>></a>
         </div>
       </div>
     </div>
@@ -248,10 +253,24 @@ export default {
   name: "Home",
   data() {
     return {
+      searchValue: "",
       ...datas
     };
   },
-  methods: {},
+  methods: {
+    searchAll() {
+      let the = this;
+      if (the.searchValue=='') {
+        this.$confirm('请输入搜索关键字', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning'
+        });
+        return false;
+      }
+
+      the.$router.push("/search.html?value=" + the.searchValue);
+    }
+  },
   mounted() {
     let the = this;
     http
@@ -297,7 +316,11 @@ export default {
       });
     //产品列表
     http
-      .fetchGet("/api/Home/IndexProducts")
+      .fetchGet("/api/Home/IndexProducts", {
+        args: {
+          IsIndexShow: true
+        }
+      })
       .then(data => {
         let datas = JSON.parse(data.data);
         if (datas.errcode) {
@@ -452,14 +475,16 @@ export default {
           sort: "sortorder asc,releasetime ",
           dir: "desc",
           NavCode: "Faq",
-          IsRelease: true
+          IsRelease: true,
+          IsHotRecommend:true,
         }
       })
       .then(data => {
         let datas = JSON.parse(data.data);
         if (datas.errcode) {
           datas.result.map((obj, index) => {
-            obj.desc = obj.desc=='' || obj.desc==null?'暂无回答':obj.desc;
+            obj.desc =
+              obj.desc == "" || obj.desc == null ? "暂无回答" : obj.desc;
             if (the.faqData.length <= 3) {
               the.faqData.push(obj);
             }
@@ -469,7 +494,7 @@ export default {
       .catch(err => {
         console.log(err);
       });
-      //搜索关键词
+    //搜索关键词
     http
       .fetchGet("/api/Article/Labels", {
         args: {

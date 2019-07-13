@@ -5,7 +5,7 @@
     <div id="homeSearch">
       <div class="l">
         <span>热门搜索关键词：</span>
-        <a :href="`/searchs.html?value=${item.name}`" v-for="(item,index) in searchData" :key="index" target="_blank">{{item.name}}</a>
+        <a :href="`/search.html?value=${item.name}`" v-for="(item,index) in searchData" :key="index" >{{item.name}}</a>
       </div>
       <div class="r">
         <p>
@@ -59,10 +59,10 @@
           </ul>
         </div>
         <div class="recommen">
-          <div class="title">推荐搭配</div>
+          <div class="title">相关推荐</div>
           <ul>
             <li v-for="item in recommenData" :key="item.article_id">
-              <a :href="`/articleDetails.html?id=${item.article_id}`" target="_blank">
+              <a :href="`/articleDetails.html?id=${item.article_id}&parentid=${parentid}`" >
                 <h2>{{item.title}}</h2>
                 <p>{{item.date}}</p>
               </a>
@@ -73,7 +73,7 @@
           <div class="title">热门标签</div>
           <ul class="labelContent">
             <li v-for="item in labelData" :key="item.id">
-              <a :href="`/searchs.html?value=${item.name}`" target="_blank">
+              <a :href="`/search.html?value=${item.name}`" >
                 <h2>{{item.name}}</h2>
               </a>
             </li>
@@ -85,7 +85,7 @@
       <h2>热门推荐</h2>
       <ul>
         <li v-for="item in articleData" :key="item.article_id">
-          <a :href="`/articleDetails.html?id=${item.article_id}`" target="_blank">
+          <a :href="`/articleDetails.html?id=${item.article_id}&parentid=${parentid}`" >
             <p class="listImg">
               <img :src="item.img_url" />
             </p>
@@ -137,14 +137,15 @@ export default {
       },
       recommenData: [],
       detailsBody: "",
-      labelData: []
+      labelData: [],
+      parentid:''
     };
   },
   methods: {},
   mounted() {
     let the = this;
     the.parentid = the.$route.query.parentid;
-    //文章列表
+    //文章详情
     http
       .fetchGet("/api/Article/ArticleDetail", {
         id: the.$route.query.id
@@ -167,16 +168,22 @@ export default {
           sort: "sortorder asc,releasetime",
           dir: "desc",
           IsRelease: true,
-          NavCode: the.navcodes[the.$route.query.parentid]
+          NavCode: the.navcodes[the.$route.query.parentid],
+          IsRecommend:true
         }
       })
       .then(data => {
         let datas = JSON.parse(data.data);
         if (datas.errcode) {
-          datas.result.map(obj => {
+          datas.result.products.map(obj => {
             obj.img_url = http.path + "/" + obj.img_url;
           });
-          the.recommenData = datas.result;
+          the.recommenData=[];
+          datas.result.products.forEach(function(value){
+            if(value.article_id != the.$route.query.id){
+              the.recommenData.push(value);
+            }
+          })
         }
       })
       .catch(err => {
@@ -187,21 +194,27 @@ export default {
       .fetchGet("/api/Article/Articles", {
         args: {
           start: 0,
-          limit: 4,
+          limit: 5,
           sort: "sortorder asc,Hottime",
           dir: "desc",
           IsRelease: true,
           NavCode: the.navcodes[the.$route.query.parentid],
-          IsHotRecommend:true
+          IsHotRecommend:true,
         }
       })
       .then(data => {
         let datas = JSON.parse(data.data);
         if (datas.errcode) {
-          datas.result.map(obj => {
+          datas.result.products.map(obj => {
             obj.img_url = http.path + "/" + obj.img_url;
           });
-          the.articleData = datas.result;
+          the.articleData=[];
+          datas.result.products.forEach(function(value){
+            if(value.article_id != the.$route.query.id){
+              the.articleData.push(value);
+            }
+          })
+          
         }
       })
       .catch(err => {

@@ -41,10 +41,10 @@
           <div class="content" v-html="detailsImgBody">{{detailsImgBody}}</div>
         </div>
         <div class="l">
-          <div class="title">推荐搭配</div>
+          <div class="title">相关推荐</div>
           <ul>
             <li v-for="item in recommenData" :key="item.article_id">
-              <a :href="`/productDetails.html?id=${item.article_id}`" target="_blank">
+              <a :href="`/productDetails.html?id=${item.article_id}`" >
                 <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
                 <h2>{{item.name}}</h2>
               </a>
@@ -169,16 +169,17 @@ export default {
           limit: 10,
           sort: "sortorder asc,releasetime",
           dir: "desc",
-          IsRelease: true
+          IsRelease: true,
+          IsRecommend:true
         }
       })
       .then(data => {
         let datas = JSON.parse(data.data);
         if (datas.errcode) {
-          datas.result.map(obj => {
+          datas.result.products.map(obj => {
             obj.img_url = http.path + "/" + obj.img_url;
           });
-          the.recommenData = datas.result;
+          the.recommenData = datas.result.products;
         }
       })
       .catch(err => {

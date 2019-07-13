@@ -444,3 +444,6 @@ div.productBody>div.multi div {
 .details div.bottom div.r div.content img{
   width:100%;
 }
+img{
+  max-width:100%;
+}

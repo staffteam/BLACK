@@ -4,7 +4,7 @@
     <div class="productList">
       <ul>
         <li v-for="item in productData" :key="item.product_id">
-          <a :href="`/productDetails.html?id=${item.product_id}`" target="_blank">
+          <a :href="`/productDetails.html?id=${item.product_id}`" >
             <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
             <div class="listContent">
               <h2>{{item.name}}</h2>
@@ -18,7 +18,15 @@
           </a>
         </li>
       </ul>
-      <el-pagination background layout="prev, pager, next" :total="10" :current-page="4"></el-pagination>
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="indexNum"
+        :page-size="pageSize"
+        layout="prev, pager, next"
+        :total="totalNum"
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -30,35 +38,53 @@ export default {
   data() {
     return {
       streamerUrl: require("@/assets/images/streamer_product.png"),
-      productData: []
+      productData: [],
+      totalNum: 0,
+      indexNum: 0,
+      pageSize: 6
     };
   },
-  methods: {},
+  methods: {
+    handleCurrentChange(e) {
+      let the = this;
+      the.productPage(e);
+    },
+    handleSizeChange(e) {
+      let the = this;
+      the.productPage(e);
+    },
+    productPage(e) {
+      let the = this;
+      e = e-1;
+      //产品列表
+      http
+        .fetchGet("/api/Article/Products", {
+          args: {
+            start: e,
+            limit: the.pageSize,
+            sort: "sortorder asc,releasetime",
+            dir: "desc",
+            IsRelease: true
+          }
+        })
+        .then(data => {
+          let datas = JSON.parse(data.data);
+          if (datas.errcode) {
+            datas.result.products.map(obj => {
+              obj.img_url = http.path + "/" + obj.img_url;
+            });
+            the.productData = datas.result.products;
+            the.totalNum = datas.result.total_count;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  },
   mounted() {
     let the = this;
-    //产品列表
-    http
-      .fetchGet("/api/Article/Products", {
-        args: {
-          start: 0,
-          limit: 10,
-          sort: "sortorder asc,releasetime",
-          dir: "desc",
-          IsRelease: true
-        }
-      })
-      .then(data => {
-        let datas = JSON.parse(data.data);
-        if (datas.errcode) {
-          datas.result.map(obj => {
-            obj.img_url = http.path + "/" + obj.img_url;
-          });
-          the.productData = datas.result;
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    the.productPage(1);
   }
 };
 </script>

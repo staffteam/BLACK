@@ -2,15 +2,15 @@
   <div id="about">
     <el-image class="streamer" :src="streamerUrl" fit="scale-down"></el-image>
     <div class="aboutTop">
-      <h2>如有疑问或者想咨询乐喜力丝产品，请联系我们</h2>
-      <p>If you have any questions or want to consult Lexillis products, please contact us.</p>
+      <h2>{{content}}</h2>
+      <p>{{content_en}}</p>
     </div>
     <div class="aboutBottom">
       <div class="l">
         <ul>
-            <h2>联系方式</h2>
+          <h2>联系方式</h2>
           <li v-for="(item,index) in aboutData" :key="index">
-            <a :href="item.url" >
+            <a :href="item.url">
               <p>
                 <img :src="item.imgUrl" />
               </p>
@@ -21,42 +21,73 @@
         </ul>
       </div>
       <div class="r">
-          <h2>官方微信号</h2>
-          <p class="weimg"><img :src="weimg" alt=""></p>
+        <h2>{{wechat}}</h2>
+        <p class="weimg">
+          <img :src="weimg" alt />
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import http from "@/http.js";
 export default {
   name: "articles",
   data() {
     return {
       streamerUrl: require("@/assets/images/streamer_about.png"),
-      aboutData:[
-          {
-              url:'tel:17512840813',
-              imgUrl:require("@/assets/images/icon_phone.png"),
-              text:'17512840813',
-              title:'热线电话'
-          },{
-              url:'mailto:lexilisi@sina.com',
-              imgUrl:require("@/assets/images/icon_email.png"),
-              text:'lexilisi@sina.com',
-              title:'电子邮箱'
-          },{
-              url:'javascript:',
-              imgUrl:require("@/assets/images/icon_wx.png"),
-              text:'微信：llxls2016',
-              title:'微信咨询'
-          },
+      aboutData: [
+        {
+          url: "tel:17512840813",
+          imgUrl: require("@/assets/images/icon_phone.png"),
+          text: "17512840813",
+          title: "热线电话"
+        },
+        {
+          url: "mailto:lexilisi@sina.com",
+          imgUrl: require("@/assets/images/icon_email.png"),
+          text: "lexilisi@sina.com",
+          title: "电子邮箱"
+        },
+        {
+          url: "javascript:",
+          imgUrl: require("@/assets/images/icon_wx.png"),
+          text: "微信：llxls2016",
+          title: "微信咨询"
+        }
       ],
       weimg: require("@/assets/images/code.png"),
+      content: "如有疑问或者想咨询乐喜力丝产品，请联系我们",
+      wechat:'官方微信号',
+      content_en:'If you have any questions or want to consult Lexillis products,please contact us.'
     };
   },
   methods: {},
-  mounted() {}
+  mounted() {
+    let the = this; 
+    //关于我们
+    http
+      .fetchGet("/api/Article/About")
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.weimg = http.path + "/" + datas.result.wechat_img_url;
+          the.content = datas.result.content;
+          the.content_en = datas.result.content_en;
+          the.aboutData[0].url = "tel:" + datas.result.tel;
+          the.aboutData[0].text = datas.result.tel;
+          the.aboutData[1].url = "mailto:" + datas.result.email;
+          the.aboutData[1].text = datas.result.email;
+          
+          the.email = datas.result.email;
+          the.wechat = datas.result.wechat || '官方微信号';
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 };
 </script>
 

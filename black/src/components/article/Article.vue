@@ -6,16 +6,16 @@
       <div class="l">
         <span>热门搜索关键词：</span>
         <a
-          :href="`/searchs.html?value=${item.name}`"
+          :href="`/search.html?value=${item.name}`"
           v-for="(item,index) in searchData"
           :key="index"
-          target="_blank"
+          
         >{{item.name}}</a>
       </div>
       <div class="r">
         <p>
-          <input type="search" />
-          <i class="el-icon-search"></i>
+          <input type="search" v-model="searchValue" />
+          <i class="el-icon-search" @click="searchAll"></i>
         </p>
       </div>
     </div>
@@ -25,7 +25,7 @@
           <li v-for="item in articleData" :key="item.article_id">
             <a
               :href="`/articleDetails.html?parentid=${parentid}&id=${item.article_id}`"
-              target="_blank"
+              
             >
               <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
               <div class="listContent">
@@ -44,7 +44,15 @@
             </a>
           </li>
         </ul>
-        <el-pagination background layout="prev, pager, next" :total="10" :current-page="4"></el-pagination>
+        <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="indexNum"
+          :page-size="pageSize"
+          layout="prev, pager, next"
+          :total="totalNum"
+        ></el-pagination>
       </div>
       <div class="r">
         <div class="list">
@@ -62,12 +70,12 @@
           </ul>
         </div>
         <div class="recommen">
-          <div class="title">推荐搭配</div>
+          <div class="title">相关推荐</div>
           <ul>
             <li v-for="item in recommenData" :key="item.article_id">
               <a
                 :href="`/articleDetails.html?parentid=${parentid}&id=${item.article_id}`"
-                target="_blank"
+                
               >
                 <h2>{{item.title}}</h2>
                 <p>{{item.date}}</p>
@@ -88,28 +96,7 @@ export default {
     return {
       parentid: "",
       streamerUrl: require("@/assets/images/streamer_article.png"),
-      searchData: [
-        {
-          title: "脱发",
-          url: "1"
-        },
-        {
-          title: "生发",
-          url: "2"
-        },
-        {
-          title: "头发",
-          url: "3"
-        },
-        {
-          title: "乐喜力丝",
-          url: "4"
-        },
-        {
-          title: "基因育发",
-          url: "5"
-        }
-      ],
+      searchData: [],
       articleData: [],
       articleNavData: [],
       articleNav: {
@@ -123,36 +110,67 @@ export default {
         143: "/media.html",
         144: "/faq.html"
       },
-      recommenData: []
+      recommenData: [],
+      totalNum: 0,
+      indexNum: 0,
+      pageSize: 6,
+      searchValue: ""
     };
   },
-  methods: {},
+  methods: {
+    searchAll() {
+      let the = this;
+      if (the.searchValue == "") {
+        this.$confirm("请输入搜索关键字", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return false;
+      }
+
+      the.$router.push("/search.html?value=" + the.searchValue);
+    },
+    handleCurrentChange(e) {
+      let the = this;
+      the.articlePage(e);
+    },
+    handleSizeChange(e) {
+      let the = this;
+      the.articlePage(e);
+    },
+    articlePage(e) {
+      let the = this;
+      e = e - 1;
+      //文章列表
+      http
+        .fetchGet("/api/Article/Articles", {
+          args: {
+            start: e,
+            limit: the.pageSize,
+            sort: "sortorder asc,releasetime",
+            dir: "desc",
+            IsRelease: true,
+            NavCode: "News"
+          }
+        })
+        .then(data => {
+          let datas = JSON.parse(data.data);
+          if (datas.errcode) {
+            datas.result.products.map(obj => {
+              obj.img_url = http.path + "/" + obj.img_url;
+            });
+            the.articleData = datas.result.products;
+            the.totalNum = datas.result.total_count;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  },
   mounted() {
     let the = this;
-    //文章列表
-    http
-      .fetchGet("/api/Article/Articles", {
-        args: {
-          start: 0,
-          limit: 10,
-          sort: "sortorder asc,releasetime",
-          dir: "desc",
-          IsRelease: true,
-          NavCode: "News"
-        }
-      })
-      .then(data => {
-        let datas = JSON.parse(data.data);
-        if (datas.errcode) {
-          datas.result.map(obj => {
-            obj.img_url = http.path + "/" + obj.img_url;
-          });
-          the.articleData = datas.result;
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    the.articlePage(1);
     //推荐搭配
     http
       .fetchGet("/api/Article/Articles", {
@@ -162,16 +180,17 @@ export default {
           sort: "sortorder asc,releasetime",
           dir: "desc",
           IsRelease: true,
-          NavCode: "News"
+          NavCode: "News",
+          IsRecommend:true,
         }
       })
       .then(data => {
         let datas = JSON.parse(data.data);
         if (datas.errcode) {
-          datas.result.map(obj => {
+          datas.result.products.map(obj => {
             obj.img_url = http.path + "/" + obj.img_url;
           });
-          the.recommenData = datas.result;
+          the.recommenData = datas.result.products;
         }
       })
       .catch(err => {

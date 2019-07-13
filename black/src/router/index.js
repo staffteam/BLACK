@@ -14,8 +14,10 @@ import Hairgeme from '@/components/hairgeme/Hairgeme'
 import Guide from '@/components/guide/Guide'
 import Welfafe from '@/components/welfafe/Welfafe'
 import Media from '@/components/media/Media'
-Vue.use(Router)
+import FaqList from '@/components/faq/FaqList'
+import FaqDetails from '@/components/faq/FaqDetails'
 
+Vue.use(Router)
 export default new Router({
   mode: 'history',
   routes: [
@@ -124,6 +126,20 @@ export default new Router({
       component: Media,
       meta: {
         title: '媒体报道'
+      }
+    }, {
+      path: '/faqList.html',
+      name: 'FaqList',
+      component: FaqList,
+      meta: {
+        title: '热门问题'
+      }
+    }, {
+      path: '/faqDetails.html',
+      name: 'FaqDetails',
+      component: FaqDetails,
+      meta: {
+        title: '问题详情'
       }
     }
   ]
