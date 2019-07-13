@@ -113,7 +113,7 @@
             <div class="swiper-container" id="newBanner">
               <div class="swiper-wrapper">
                 <div class="swiper-slide" v-for="(item,index) in newBannerData" :key="index">
-                  <a :href="`/article.html?id=${item.article_id}`">
+                  <a :href="`/articleDetails.html?parentid=84&id=${item.article_id}`">
                     <p>
                       <img :src="item.img_url" :alt="item.title" />
                     </p>
@@ -136,7 +136,7 @@
           <div class="r">
             <ul>
               <li v-for="(item,index) in newDataList" :key="item.id">
-                <a :href="`/article.html?id=${item.article_id}`" v-if="index==0" class="top">
+                <a :href="`/articleDetails.html?parentid=84&id=${item.article_id}`" v-if="index==0" class="top">
                   <h2>{{item.title}}</h2>
                   <div class="describe">{{item.desc}}</div>
                   <div class="bottom">
@@ -147,7 +147,7 @@
                     </p>
                   </div>
                 </a>
-                <a :href="`/article.html?id=${item.article_id}`" v-if="index!=0" class="list">
+                <a :href="`/articleDetails.html?parentid=84&id=${item.article_id}`" v-if="index!=0" class="list">
                   <div>
                     <h2>{{item.title}}</h2>
                     <span>{{item.date}}</span>
@@ -155,7 +155,7 @@
                 </a>
               </li>
             </ul>
-            <a href="/article.html  " >查看更多>></a>
+            <a href="/article.html" >查看更多>></a>
           </div>
         </div>
       </div>
@@ -195,7 +195,7 @@
           <li>
             <h2>脱发指南</h2>
             <div class="list" v-for="(item,index) in guideData1" :key="item.id">
-              <a :href="`/new.html?id=${item.article_id}`" >
+              <a :href="`/articleDetails.html?parentid=82&id=${item.article_id}`" >
                 <p v-if="index==0">
                   <img :src="item.img_url" :alt="item.title" />
                 </p>
@@ -211,7 +211,7 @@
           <li>
             <h2>基因育发</h2>
             <div class="list" v-for="(item,index) in guideData2" :key="item.id">
-              <a :href="`/new.html?id=${item.article_id}`" >
+              <a :href="`/articleDetails.html?parentid=81&id=${item.article_id}`" >
                 <p v-if="index==0">
                   <img :src="item.img_url" :alt="item.title" />
                 </p>

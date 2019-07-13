@@ -43,8 +43,8 @@
         <div class="l">
           <div class="title">相关推荐</div>
           <ul>
-            <li v-for="item in recommenData" :key="item.article_id">
-              <a :href="`/productDetails.html?id=${item.article_id}`" >
+            <li v-for="item in recommenData" :key="item.product_id">
+              <a :href="`/productDetails.html?id=${item.product_id}`" >
                 <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
                 <h2>{{item.name}}</h2>
               </a>
