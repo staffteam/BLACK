@@ -28,7 +28,7 @@
               <ul>
                 <li v-for="the in faqData" :key="the.article_id">
                   <a
-                    :href="`/faqDetails/${item.parent_type_id}/${item.type_id}/${item.article_id}.html`"
+                    :href="`/faqDetails/${the.parent_type_id}/${the.type_id}/${the.article_id}.html`"
                   >· {{the.title}}</a>
                 </li>
               </ul>

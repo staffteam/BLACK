@@ -28,8 +28,7 @@ export default new Router({
       meta: {
         title: '首页'
       }
-    },
-    {
+    }, {
       path: '/index',
       name: 'Home',
       component: Home,

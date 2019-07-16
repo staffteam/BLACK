@@ -146,10 +146,14 @@ export default {
       .catch(err => {
         console.log(err);
       });
+      let paramsId = this.$route.params.id.replace(/.html/g,'');
+      if(isNaN(Number(paramsId))){
+        return false;
+      }
     //产品详情
     http
       .fetchGet("/api/Article/ProductDetail", {
-        id: this.$route.params.id.replace(/.html/g,'')
+        id: paramsId
       })
       .then(data => {
         let datas = JSON.parse(data.data);
@@ -167,7 +171,6 @@ export default {
             'src="' + http.path + "/"
           );
           the.detailsTitle = datas.result.name;
-          console.log(datas.result);
           the.detailsBody = datas.result;
           let len = 0;
           if (window.innerWidth < 800) {

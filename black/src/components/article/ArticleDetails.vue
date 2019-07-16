@@ -165,6 +165,10 @@ export default {
   mounted() {
     let the = this;
     the.parentid = the.$route.params.parentid;
+    let  paramsId = the.$route.params.id.replace(/.html/g,'');
+    if(isNaN(Number(paramsId))){
+      return false;
+    }
     //seo
     http
       .fetchGet("/api/Home/MenuDetail", { id: 84 })

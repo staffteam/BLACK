@@ -227,10 +227,12 @@ export default {
     let the = this;
     let _id = "";
     let _id_ = "";
-    debugger;
     let ids = the.$route.params.id;
     let pids = the.$route.params.parentid;
     let articleid = the.$route.params.articleid.replace(/.html/g,'');
+    if(isNaN(Number(articleid))){
+      return false;
+    }
     //seo
     http
       .fetchGet("/api/Home/MenuDetail", { id: 144 })

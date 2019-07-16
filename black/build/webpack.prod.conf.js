@@ -57,24 +57,21 @@ const webpackConfig = merge(baseWebpackConfig, {
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
     new OptimizeCSSPlugin({
-      cssProcessorOptions: config.build.productionSourceMap ?
-        {
-          safe: true,
-          map: {
-            inline: false
-          }
-        } :
-        {
-          safe: true
+      cssProcessorOptions: config.build.productionSourceMap ? {
+        safe: true,
+        map: {
+          inline: false
         }
+      } : {
+        safe: true
+      }
     }),
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: process.env.NODE_ENV === 'testing' ?
-        'index.html' :
-        config.build.index,
+        'index.html' : config.build.index,
       template: 'index.html',
       inject: true,
       minify: {
@@ -95,7 +92,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       staticDir: path.join(__dirname, '../dist'),
 
       // 对应自己的路由文件，比如index有参数，就需要写成 /index/param1。
-      routes: ['/','index', '/product', '/productDetails/id', '/article', '/articleDetails/parentid/id', '/aboutus', '/search', '/faq', '/hairgeme', '/guide', '/welfafe', '/faqSearch', '/media', '/faqList', '/faqDetails/parentid/id/articleid'],
+      routes: ['/', '/index', '/product', '/productDetails/id', '/article', '/articleDetails/parentid/id', '/aboutus', '/search', '/faq', '/hairgeme', '/guide', '/welfafe', '/faqSearch', '/media', '/faqList', '/faqDetails/parentid/id/articleid'],
 
       // 这个很重要，如果没有配置这段，也不会进行预编译
       renderer: new Renderer({
