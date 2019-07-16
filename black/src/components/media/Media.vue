@@ -24,7 +24,7 @@
         <ul>
           <li v-for="item in articleData" :key="item.article_id">
             <a
-              :href="`/articleDetails?parentid=${parentid}&id=${item.article_id}`"
+              :href="`/articleDetails/${parentid}/${item.article_id}.html`"
               
             >
               <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
@@ -74,7 +74,7 @@
           <ul>
             <li v-for="item in recommenData" :key="item.article_id">
               <a
-                :href="`/articleDetails?parentid=${parentid}&id=${item.article_id}`"
+                :href="`/articleDetails/${parentid}/${item.article_id}.html`"
                 
               >
                 <h2>{{item.title}}</h2>
@@ -165,7 +165,7 @@ export default {
       http
         .fetchGet("/api/Article/Articles", {
           args: {
-            start: e,
+            start: e*the.pageSize,
             limit: the.pageSize,
             sort: "sortorder asc,releasetime",
             dir: "desc",

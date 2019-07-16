@@ -10,7 +10,7 @@ body {
   align-items: center; /*´¹Ö±¾ÓÖÐ*/
   justify-content: center; /*Ë®Æ½¾ÓÖÐ*/
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 227px);
   background: #ddd;
   padding-top:120px;
 }

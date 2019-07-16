@@ -39,7 +39,7 @@
       </div>
     </div>
     <!-- 首页列表1 -->
-    <div id="homeList1" :style="`background: url(${homeList1.imgurl}) no-repeat center;`">
+    <div id="homeList1" :style="isWap?'':`background: url(${homeList1.imgurl}) no-repeat center;`">
       <div class="content">
         <div class="r">
           <h2>{{homeList1.name}}</h2>
@@ -67,7 +67,7 @@
           <div v-html="homeList2.describe">{{homeList2.describe}}</div>
           <ul>
             <li v-for="item in homeList2.datalist" :key="item.product_id">
-              <a :href="`/productDetails?id=${item.product_id}`">
+              <a :href="`/productDetails/${item.product_id}.html`">
                 <div class="img">
                   <img :src="item.img_url" />
                 </div>
@@ -112,7 +112,7 @@
             <div class="swiper-container" id="newBanner">
               <div class="swiper-wrapper">
                 <div class="swiper-slide" v-for="(item,index) in newBannerData" :key="index">
-                  <a :href="`/articleDetails?parentid=84&id=${item.article_id}`">
+                  <a :href="`/articleDetails/84/${item.article_id}.html`">
                     <p>
                       <img :src="item.img_url" :alt="item.title" />
                     </p>
@@ -136,7 +136,7 @@
             <ul>
               <li v-for="(item,index) in newDataList" :key="item.id">
                 <a
-                  :href="`/articleDetails?parentid=84&id=${item.article_id}`"
+                  :href="`/articleDetails/84/${item.article_id}.html`"
                   v-if="index==0"
                   class="top"
                 >
@@ -151,7 +151,7 @@
                   </div>
                 </a>
                 <a
-                  :href="`/articleDetails?parentid=84&id=${item.article_id}`"
+                  :href="`/articleDetails/84/${item.article_id}.html`"
                   v-if="index!=0"
                   class="list"
                 >
@@ -202,7 +202,7 @@
           <li>
             <h2>脱发指南</h2>
             <div class="list" v-for="(item,index) in guideData1" :key="item.id">
-              <a :href="`/articleDetails?parentid=82&id=${item.article_id}`">
+              <a :href="`/articleDetails/82/${item.article_id}.html`">
                 <p v-if="index==0">
                   <img :src="item.img_url" :alt="item.title" />
                 </p>
@@ -218,7 +218,7 @@
           <li>
             <h2>基因育发</h2>
             <div class="list" v-for="(item,index) in guideData2" :key="item.id">
-              <a :href="`/articleDetails?parentid=81&id=${item.article_id}`">
+              <a :href="`/articleDetails/81/${item.article_id}.html`">
                 <p v-if="index==0">
                   <img :src="item.img_url" :alt="item.title" />
                 </p>
@@ -239,10 +239,10 @@
         <div class="r">
           <h2>常见问题</h2>
           <div class="faqBanner">
-            <div class="faqBannerList" :style="`top:${faqBannerTop}px;`" @mousemove="faqBannerMove" @mouseout="faqBannerOut" @mouseover="faqBannerMove" :data-top="faqBannerTop">
+            <div class="faqBannerList" :style="`transform:translateY(${faqBannerTop}px);`" @mousemove="faqBannerMove" @mouseout="faqBannerOut" @mouseover="faqBannerMove" :data-top="faqBannerTop">
               <ul>
                 <li v-for="(item,index) in faqData" :key="index">
-                  <a :href="`/faqDetails?articleid=${item.article_id}&id=${item.type_id}&parentid=${item.parent_type_id}`">
+                  <a :href="`/faqDetails/${item.parent_type_id}/${item.type_id}/${item.article_id}.html`">
                     <h2>{{item.title}}</h2>
                     <div>{{item.desc}}</div>
                   </a>
@@ -272,6 +272,7 @@ export default {
       },
       faqBannerTop: 0,
       setObj: {},
+      isWap:false,
       ...datas
     };
   },
@@ -327,12 +328,13 @@ export default {
             i--;
           }
           the.faqBannerTop = i;
-        }, 20);
+        }, 40);
       }
     }
   },
   mounted() {
     let the = this;
+    the.isWap = window.innerWidth <= 800;
     //首页关键字
     http
       .fetchGet("/api/Home/webinfo")
@@ -569,7 +571,7 @@ export default {
             }
           });
           let len = the.faqData.length;
-          if (len > 4) {
+          if (len > 4 && !the.isWap) {
             let i = 0;
             the.setObj = setInterval(function() {
               if (i == -95) {
@@ -587,7 +589,7 @@ export default {
                 i--;
               }
               the.faqBannerTop = i;
-            }, 20);
+            }, 40);
           }
         }
       })
@@ -650,7 +652,12 @@ div.el-carousel__mask {
   #homeBanner .swiper-button-content {
     display: none;
   }
-
+#homeBanner .swiper-button-content div button i,
+#homeList3 .content div.swiper-container .swiper-button-content div button i,
+#newContent .content div.new div.l .swiper-button-content > div button i,
+#newContent2 .content div.new2 .swiper-button-content > div button i {
+  font-size: 14px;
+}
   #homeBanner .swiper-pagination-bullet {
     width: 6px;
     height: 6px;

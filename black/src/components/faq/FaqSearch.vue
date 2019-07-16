@@ -51,7 +51,7 @@
           <ul>
             <li v-for="(item,index) in searchData" :key="index">
               <a
-                :href="`/faqDetails?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.id}`"
+                :href="`/faqDetails/${item.parent_type_id}/${item.type_id}/${item.id}.html`"
               >
                 <h2 v-html="item.title">{{item.title}}</h2>
                 <div v-html="item.desc">{{item.desc}}</div>
@@ -72,7 +72,7 @@
           <ul>
             <li v-for="(item,index) in faqListData" :key="index">
               <a
-                :href="`/faqDetails?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.article_id}`"
+                :href="`/faqDetails/${item.parent_type_id}/${item.type_id}/${item.article_id}.html`"
               >
                 <h2 v-html="item.title">{{item.title}}</h2>
                 <div>{{item.desc}}</div>
@@ -156,7 +156,7 @@ export default {
       //文章列表
       http
         .fetchGet("/api/Article/SearchFaq", {
-          args: { keyword: the.faqSearchValue, start: e, limit: the.pageSize }
+          args: { keyword: the.faqSearchValue, start: e*the.pageSize, limit: the.pageSize }
         })
         .then(data => {
           let datas = JSON.parse(data.data);

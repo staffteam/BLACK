@@ -4,7 +4,7 @@
     <div class="productList">
       <ul>
         <li v-for="item in productData" :key="item.product_id">
-          <a :href="`/productDetails?id=${item.product_id}`" >
+          <a :href="`/productDetails/${item.product_id}.html`">
             <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
             <div class="listContent">
               <h2>{{item.name}}</h2>
@@ -80,7 +80,7 @@ export default {
       http
         .fetchGet("/api/Article/Products", {
           args: {
-            start: e,
+            start: e*the.pageSize,
             limit: the.pageSize,
             sort: "sortorder asc,releasetime",
             dir: "desc",

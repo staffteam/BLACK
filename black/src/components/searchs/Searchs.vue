@@ -15,7 +15,7 @@
           <h2>关于“{{faqValue}}”，共找到{{totalNum}}条相关问题</h2>
           <ul>
             <li v-for="(item,index) in searchData" :key="index">
-              <a :href="`${searchType[item.navcode]}?id=${item.type_id?item.type_id:item.id}&parentid=${navcodes[item.navcode]?navcodes[item.navcode]:item.parent_type_id?item.parent_type_id:''}`">
+              <a :href="`${searchType[item.navcode]}${navcodes[item.navcode]?'/'+navcodes[item.navcode]:item.parent_type_id?'/'+item.parent_type_id:''}${item.type_id?'/'+item.type_id:'/'+item.id}${item.id?'/'+item.id:''}.html`">
                 <h2 v-html="item.title">{{item.title}}</h2>
                 <div
                   v-html="item.desc==''?item.title:item.desc"
@@ -66,7 +66,7 @@ export default {
         News: "/articleDetails",
         Hair: "/articleDetails",
         Welfare: "/articleDetails",
-        Faq: "/faq",
+        Faq: "/faqDetails",
         Guide: "/articleDetails",
         Media: "/articleDetails"
       },
@@ -95,7 +95,7 @@ export default {
       //文章列表
       http
         .fetchGet("/api/Article/Search", {
-          args: { keyword: the.faqSearchValue, start: e, limit: the.pageSize }
+          args: { keyword: the.faqSearchValue, start: e*the.pageSize, limit: the.pageSize }
         })
         .then(data => {
           let datas = JSON.parse(data.data);

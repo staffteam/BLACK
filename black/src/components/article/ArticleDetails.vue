@@ -33,11 +33,11 @@
           <div class="detailsBody" v-html="detailsData.content">{{detailsData.content}}</div>
           <div class="detailsNext">
             <a
-              :href="`/articleDetails?parentid=${parentid}&id=${detailsData.prev_article!=null?detailsData.prev_article.article_id:'javascript:'}`"
+              :href="`/articleDetails/${parentid}/${detailsData.prev_article!=null?detailsData.prev_article.article_id+'.html':'javascript:'}`"
               :class="detailsData.prev_article!=null?'':'not'"
             >上一页：{{detailsData.prev_article!=null?detailsData.prev_article.title:'没有了'}}</a>
             <a
-              :href="`/articleDetails?parentid=${parentid}&id=${detailsData.next_article!=null?detailsData.next_article.article_id:'javascript:'}`"
+              :href="`/articleDetails/${parentid}/${detailsData.next_article!=null?detailsData.next_article.article_id+'.html':'javascript:'}`"
               :class="detailsData.next_article!=null?'':'not'"
             >上一页：{{detailsData.next_article!=null?detailsData.next_article.title:'没有了'}}</a>
           </div>
@@ -62,7 +62,7 @@
           <div class="title">相关推荐</div>
           <ul>
             <li v-for="item in recommenData" :key="item.article_id">
-              <a :href="`/articleDetails?id=${item.article_id}&parentid=${parentid}`" >
+              <a :href="`/articleDetails/${parentid}/${item.article_id}.html`" >
                 <h2>{{item.title}}</h2>
                 <p>{{item.date}}</p>
               </a>
@@ -85,7 +85,7 @@
       <h2>热门推荐</h2>
       <ul>
         <li v-for="item in articleData" :key="item.article_id">
-          <a :href="`/articleDetails?id=${item.article_id}&parentid=${parentid}`" >
+          <a :href="`/articleDetails/${parentid}/${item.article_id}.html`" >
             <p class="listImg">
               <img :src="item.img_url" />
             </p>
@@ -164,7 +164,7 @@ export default {
   methods: {},
   mounted() {
     let the = this;
-    the.parentid = the.$route.query.parentid;
+    the.parentid = the.$route.params.parentid;
     //seo
     http
       .fetchGet("/api/Home/MenuDetail", { id: 84 })
@@ -185,7 +185,7 @@ export default {
     //文章详情
     http
       .fetchGet("/api/Article/ArticleDetail", {
-        id: the.$route.query.id
+        id: the.$route.params.id.replace(/.html/g,'')
       })
       .then(data => {
         let datas = JSON.parse(data.data);
@@ -205,7 +205,7 @@ export default {
           sort: "sortorder asc,releasetime",
           dir: "desc",
           IsRelease: true,
-          NavCode: the.navcodes[the.$route.query.parentid],
+          NavCode: the.navcodes[the.$route.params.parentid],
           IsRecommend:true
         }
       })
@@ -217,7 +217,7 @@ export default {
           });
           the.recommenData=[];
           datas.result.products.forEach(function(value){
-            if(value.article_id != the.$route.query.id){
+            if(value.article_id != the.$route.params.id.replace(/.html/g,'')){
               the.recommenData.push(value);
             }
           })
@@ -235,7 +235,7 @@ export default {
           sort: "sortorder asc,Hottime",
           dir: "desc",
           IsRelease: true,
-          NavCode: the.navcodes[the.$route.query.parentid],
+          NavCode: the.navcodes[the.$route.params.parentid],
           IsHotRecommend:true,
         }
       })
@@ -247,7 +247,7 @@ export default {
           });
           the.articleData=[];
           datas.result.products.forEach(function(value){
-            if(value.article_id != the.$route.query.id){
+            if(value.article_id != the.$route.params.id.replace(/.html/g,'')){
               the.articleData.push(value);
             }
           })
@@ -308,10 +308,10 @@ export default {
         let datas = JSON.parse(data.data);
         if (datas.errcode) {
           datas.result.map((obj, index) => {
-            if (the.$route.query.parentid == obj.menu_id) {
+            if (the.$route.params.parentid == obj.menu_id) {
               obj.on = "on";
             }
-            if (!the.$route.query.parentid) {
+            if (!the.$route.params.parentid) {
               obj.on = index == 0 ? "on" : "";
             }
           });

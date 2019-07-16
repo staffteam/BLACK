@@ -49,7 +49,7 @@
         <div class="searchContent" v-if="faqTitle==''">
           <ul>
             <li v-for="(item,index) in faqListData" :key="index">
-              <a :href="`/faqDetails?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.article_id}`">
+              <a :href="`/faqDetails/${item.parent_type_id}/${item.type_id}/${item.article_id}.html`">
                 <h2 v-html="item.title">{{item.title}}</h2>
                 <div>{{item.desc}}</div>
               </a>

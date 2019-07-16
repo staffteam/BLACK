@@ -75,7 +75,7 @@
           <div class="title">相关推荐</div>
           <ul>
             <li v-for="item in recommenData" :key="item.product_id">
-              <a :href="`/productDetails?id=${item.product_id}`">
+              <a :href="`/productDetails/${item.product_id}.html`">
                 <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
                 <h2>{{item.name}}</h2>
               </a>
@@ -149,7 +149,7 @@ export default {
     //产品详情
     http
       .fetchGet("/api/Article/ProductDetail", {
-        id: the.$route.query.id
+        id: this.$route.params.id.replace(/.html/g,'')
       })
       .then(data => {
         let datas = JSON.parse(data.data);

@@ -22,7 +22,7 @@
       <div class="l">
         <ul>
           <li v-for="item in articleData" :key="item.article_id">
-            <a :href="`/articleDetails?parentid=${parentid}&id=${item.article_id}`">
+            <a :href="`/articleDetails/${parentid}/${item.article_id}.html`">
               <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
               <div class="listContent">
                 <h2>{{item.title}}</h2>
@@ -69,7 +69,7 @@
           <div class="title">相关推荐</div>
           <ul>
             <li v-for="item in recommenData" :key="item.article_id">
-              <a :href="`/articleDetails?parentid=${parentid}&id=${item.article_id}`">
+              <a :href="`/articleDetails/${parentid}/${item.article_id}.html`">
                 <h2>{{item.title}}</h2>
                 <p>{{item.date}}</p>
               </a>
@@ -158,7 +158,7 @@ export default {
       http
         .fetchGet("/api/Article/Articles", {
           args: {
-            start: e,
+            start: e*the.pageSize,
             limit: the.pageSize,
             sort: "sortorder asc,releasetime",
             dir: "desc",

@@ -50,7 +50,7 @@
           <ul>
             <li v-for="(item,index) in faqListData" :key="index">
               <a
-                :href="`/faqDetails?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.article_id}`"
+                :href="`/faqDetails/${item.parent_type_id}/${item.type_id}/${item.article_id}.html`"
               >
                 <h2 v-html="item.title">{{item.title}}</h2>
                 <div>{{item.desc}}</div>
@@ -84,7 +84,7 @@
             <ul>
               <li v-for="(item,index) in linkData" :key="index">
                 <a
-                  :href="`/faqDetails?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.article_id}`"
+                  :href="`/faqDetails/${item.parent_type_id}/${item.type_id}/${item.article_id}.html`"
                 >
                   <h2>· {{item.title}}</h2>
                 </a>
@@ -227,8 +227,10 @@ export default {
     let the = this;
     let _id = "";
     let _id_ = "";
-    let ids = the.$route.query.id;
-    let pids = the.$route.query.parentid;
+    debugger;
+    let ids = the.$route.params.id;
+    let pids = the.$route.params.parentid;
+    let articleid = the.$route.params.articleid.replace(/.html/g,'');
     //seo
     http
       .fetchGet("/api/Home/MenuDetail", { id: 144 })
@@ -294,7 +296,7 @@ export default {
           //文章详情
           http
             .fetchGet("/api/article/faqdetail", {
-              id: the.$route.query.articleid
+              id: articleid
             })
             .then(data => {
               let datas = JSON.parse(data.data);
@@ -325,7 +327,7 @@ export default {
               if (datas.errcode) {
                 the.linkData = [];
                 datas.result.products.forEach(function(value) {
-                  if (value.article_id != the.$route.query.articleid) {
+                  if (value.article_id != articleid) {
                     the.linkData.push(value);
                   }
                 });

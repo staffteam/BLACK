@@ -95,7 +95,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       staticDir: path.join(__dirname, '../dist'),
 
       // 对应自己的路由文件，比如index有参数，就需要写成 /index/param1。
-      routes: ['/', '/index', '/product', '/productDetails', '/article', '/articleDetails', '/aboutus', '/search', '/faq', '/hairgeme', '/guide', '/welfafe', '/faqSearch', '/media', '/faqList', '/faqDetails'],
+      routes: ['/','index', '/product', '/productDetails/id', '/article', '/articleDetails/parentid/id', '/aboutus', '/search', '/faq', '/hairgeme', '/guide', '/welfafe', '/faqSearch', '/media', '/faqList', '/faqDetails/parentid/id/articleid'],
 
       // 这个很重要，如果没有配置这段，也不会进行预编译
       renderer: new Renderer({

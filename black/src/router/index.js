@@ -28,7 +28,8 @@ export default new Router({
       meta: {
         title: '首页'
       }
-    }, {
+    },
+    {
       path: '/index',
       name: 'Home',
       component: Home,
@@ -51,7 +52,7 @@ export default new Router({
         title: '产品介绍'
       }
     }, {
-      path: '/productDetails',
+      path: '/productDetails/:id',
       name: 'ProductDetails',
       component: ProductDetails,
       meta: {
@@ -65,7 +66,7 @@ export default new Router({
         title: '品牌动态'
       }
     }, {
-      path: '/articleDetails',
+      path: '/articleDetails/:parentid/:id',
       name: 'ArticleDetails',
       component: ArticleDetails,
       meta: {
@@ -135,7 +136,7 @@ export default new Router({
         title: '热门问题'
       }
     }, {
-      path: '/faqDetails',
+      path: '/faqDetails/:parentid/:id/:articleid',
       name: 'FaqDetails',
       component: FaqDetails,
       meta: {
