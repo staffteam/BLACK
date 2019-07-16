@@ -33,7 +33,38 @@
         </div>
         <div class="r">
           <h2>{{detailsTitle}}</h2>
-          <div class="content" v-html="detailsBody">{{detailsBody}}</div>
+          <div class="content">
+            <div class="productBody">
+              <div>
+                <h2>【产品名称】</h2>
+                <div>{{detailsTitle}}</div>
+              </div>
+              <div>
+                <h2>【产品类别】</h2>
+                <div v-html="detailsBody.category">{{detailsBody.category}}</div>
+              </div>
+              <div>
+                <h2>【产品规格】</h2>
+                <div v-html="detailsBody.size">{{detailsBody.size}}</div>
+              </div>
+              <div>
+                <h2>【产品功效】</h2>
+                <div v-html="detailsBody.function">{{detailsBody.function}}</div>
+              </div>
+              <div class="multi">
+                <h2>【产品特点】</h2>
+                <div v-html="detailsBody.feature">{{detailsBody.feature}}</div>
+              </div>
+              <div>
+                <h2>【适用人群】</h2>
+                <div v-html="detailsBody.apply_to">{{detailsBody.apply_to}}</div>
+              </div>
+              <div class="multi">
+                <h2>【使用方法】</h2>
+                <div v-html="detailsBody.usage">{{detailsBody.usage}}</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="bottom">
@@ -44,7 +75,7 @@
           <div class="title">相关推荐</div>
           <ul>
             <li v-for="item in recommenData" :key="item.product_id">
-              <a :href="`/productDetails?id=${item.product_id}`" >
+              <a :href="`/productDetails?id=${item.product_id}`">
                 <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
                 <h2>{{item.name}}</h2>
               </a>
@@ -62,13 +93,13 @@ export default {
   name: "product",
   data() {
     return {
-      streamerUrl: '',
+      streamerUrl: "",
       detailsBannerImg: "",
       detailsTitle: "",
       detailsBannerData: [],
       indexs: 0,
       lens: 0,
-      detailsBody: "",
+      detailsBody: {},
       recommenData: [],
       detailsImgBody: "",
       metadata: {
@@ -107,7 +138,9 @@ export default {
             seo_words: datas.result.seo_words,
             seo_desc: datas.result.seo_desc
           };
-          the.streamerUrl = datas.result.img_url?http.path + "/" + datas.result.img_url:require("@/assets/images/streamer_product.png");
+          the.streamerUrl = datas.result.img_url
+            ? http.path + "/" + datas.result.img_url
+            : require("@/assets/images/streamer_product.png");
         }
       })
       .catch(err => {
@@ -134,7 +167,8 @@ export default {
             'src="' + http.path + "/"
           );
           the.detailsTitle = datas.result.name;
-          the.detailsBody = datas.result.feature;
+          console.log(datas.result);
+          the.detailsBody = datas.result;
           let len = 0;
           if (window.innerWidth < 800) {
             len =
@@ -207,7 +241,7 @@ export default {
           sort: "sortorder asc,releasetime",
           dir: "desc",
           IsRelease: true,
-          IsRecommend:true
+          IsRecommend: true
         }
       })
       .then(data => {
