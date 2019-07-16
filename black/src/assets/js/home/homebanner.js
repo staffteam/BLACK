@@ -20,7 +20,7 @@ export default {
       }
     })
   },
-  homebanner2 () {
+  homebanner2 (the) {
     return new Swiper('#list3banner', {
       watchSlidesProgress: true,
       slidesPerView: 3,

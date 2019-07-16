@@ -4,7 +4,7 @@
     <div class="productList">
       <ul>
         <li v-for="item in productData" :key="item.product_id">
-          <a :href="`/productDetails.html?id=${item.product_id}`" >
+          <a :href="`/productDetails?id=${item.product_id}`" >
             <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
             <div class="listContent">
               <h2>{{item.name}}</h2>
@@ -37,11 +37,31 @@ export default {
   name: "product",
   data() {
     return {
-      streamerUrl: require("@/assets/images/streamer_product.png"),
+      streamerUrl: '',
       productData: [],
       totalNum: 0,
       indexNum: 0,
-      pageSize: 6
+      pageSize: 6,
+      metadata: {
+        name: "",
+        seo_words: "",
+        seo_desc: ""
+      }
+    };
+  },
+  metaInfo() {
+    return {
+      title: this.metadata.name,
+      meta: [
+        {
+          name: "keywords",
+          content: this.metadata.seo_words
+        },
+        {
+          name: "description",
+          content: this.metadata.seo_desc
+        }
+      ]
     };
   },
   methods: {
@@ -85,6 +105,23 @@ export default {
   mounted() {
     let the = this;
     the.productPage(1);
+    //seo
+    http
+      .fetchGet("/api/Home/MenuDetail", { id: 64 })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.metadata = {
+            name: datas.result.web_title,
+            seo_words: datas.result.seo_words,
+            seo_desc: datas.result.seo_desc
+          };
+          the.streamerUrl = datas.result.img_url?http.path + "/" + datas.result.img_url:require("@/assets/images/streamer_product.png");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>

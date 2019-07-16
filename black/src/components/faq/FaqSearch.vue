@@ -51,10 +51,10 @@
           <ul>
             <li v-for="(item,index) in searchData" :key="index">
               <a
-                :href="`faqDetails.html?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.id}`"
+                :href="`/faqDetails?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.id}`"
               >
                 <h2 v-html="item.title">{{item.title}}</h2>
-                <div>{{item.desc}}</div>
+                <div v-html="item.desc">{{item.desc}}</div>
               </a>
             </li>
           </ul>
@@ -72,7 +72,7 @@
           <ul>
             <li v-for="(item,index) in faqListData" :key="index">
               <a
-                :href="`faqDetails.html?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.article_id}`"
+                :href="`/faqDetails?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.article_id}`"
               >
                 <h2 v-html="item.title">{{item.title}}</h2>
                 <div>{{item.desc}}</div>
@@ -118,7 +118,27 @@ export default {
       indexNum: 0,
       pageSize: 6,
       searchData: [],
-      faqListData:[]
+      faqListData:[],
+      metadata: {
+        name: "",
+        seo_words: "",
+        seo_desc: ""
+      }
+    };
+  },
+  metaInfo() {
+    return {
+      title: this.metadata.name,
+      meta: [
+        {
+          name: "keywords",
+          content: this.metadata.seo_words
+        },
+        {
+          name: "description",
+          content: this.metadata.seo_desc
+        }
+      ]
     };
   },
   methods: {
@@ -223,7 +243,7 @@ export default {
         return false;
       }
       the.searchValue = the.faqSearchValue;
-      this.$router.push("/faqSearch.html?value=" + this.faqSearchValue);
+      this.$router.push("/faqSearch?value=" + this.faqSearchValue);
       the.faqPage(1);
     }
   },
@@ -233,6 +253,23 @@ export default {
     the.faqSearchValue = value;
     the.searchValue = value;
     the.faqPage(1);
+    //seo
+    http
+      .fetchGet("/api/Home/MenuDetail", { id: 144 })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.metadata = {
+            name: datas.result.web_title,
+            seo_words: datas.result.seo_words,
+            seo_desc: datas.result.seo_desc
+          };
+          the.streamerUrl = datas.result.img_url?http.path + "/" + datas.result.img_url:require("@/assets/images/streamer_faq.png");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
     //常见问题分类
     http
       .fetchGet("/api/Article/FaqCategorys")

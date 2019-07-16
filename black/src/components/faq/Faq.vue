@@ -49,7 +49,7 @@
         <div class="searchContent" v-if="faqTitle==''">
           <ul>
             <li v-for="(item,index) in faqListData" :key="index">
-              <a :href="`faqDetails.html?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.article_id}`">
+              <a :href="`/faqDetails?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.article_id}`">
                 <h2 v-html="item.title">{{item.title}}</h2>
                 <div>{{item.desc}}</div>
               </a>
@@ -77,7 +77,7 @@ export default {
   data() {
     return {
       isNavBtnShow: false,
-      streamerUrl: require("@/assets/images/streamer_faq.png"),
+      streamerUrl: '',
       faqNavData: [],
       weimg: require("@/assets/images/code.png"),
       linkData: [],
@@ -96,6 +96,26 @@ export default {
       faqListId: "",
       faqListPId: "",
       faqListData:[],
+      metadata: {
+        name: "",
+        seo_words: "",
+        seo_desc: ""
+      }
+    };
+  },
+  metaInfo() {
+    return {
+      title: this.metadata.name,
+      meta: [
+        {
+          name: "keywords",
+          content: this.metadata.seo_words
+        },
+        {
+          name: "description",
+          content: this.metadata.seo_desc
+        }
+      ]
     };
   },
   methods: {
@@ -172,7 +192,7 @@ export default {
         return false;
       }
       the.searchValue = the.faqSearchValue;
-      this.$router.push("/faqSearch.html?value=" + this.faqSearchValue);
+      this.$router.push("/faqSearch?value=" + this.faqSearchValue);
     }
   },
   mounted() {
@@ -181,6 +201,23 @@ export default {
     let _id_ = "";
     let ids = the.$route.query.id;
     let pids = the.$route.query.parentid;
+    //seo
+    http
+      .fetchGet("/api/Home/MenuDetail", { id: 144 })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.metadata = {
+            name: datas.result.web_title,
+            seo_words: datas.result.seo_words,
+            seo_desc: datas.result.seo_desc
+          };
+          the.streamerUrl = datas.result.img_url?http.path + "/" + datas.result.img_url:require("@/assets/images/streamer_faq.png");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
     //常见问题分类
     http
       .fetchGet("/api/Article/FaqCategorys")

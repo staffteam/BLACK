@@ -12,6 +12,9 @@ import QS from 'qs'
 Vue.prototype.qs = QS;
 Vue.config.productionTip = false
 
+import MetaInfo from 'vue-meta-info'
+ 
+Vue.use(MetaInfo)
 Vue.use(ElementUI, {
   size: 'small',
   zIndex: 3000
@@ -20,13 +23,13 @@ Vue.use(ElementUI, {
 Vue.component('black-head', Header)
 Vue.component('black-footer', Footer)
 
-router.beforeEach((to, from, next) => {
-  /* 路由发生变化修改页面title */
-  if (to.meta.title) {
-    document.title = to.meta.title
-  }
-  next()
-})
+// router.beforeEach((to, from, next) => {
+//   /* 路由发生变化修改页面title */
+//   if (to.meta.title) {
+//     document.title = to.meta.title
+//   }
+//   next()
+// })
 
 /* eslint-disable no-new */
 new Vue({
@@ -35,5 +38,9 @@ new Vue({
   components: {
     App
   },
-  template: '<App/>'
+  template: '<App/>',
+  /* 这句非常重要，否则预渲染将不会启动 */
+  mounted() {
+    document.dispatchEvent(new Event('render-event'))
+  }
 })

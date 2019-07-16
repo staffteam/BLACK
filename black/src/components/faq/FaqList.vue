@@ -28,7 +28,7 @@
               <ul>
                 <li v-for="the in faqData" :key="the.article_id">
                   <a
-                    :href="`faqDetails.html?id=${the.type_id}&parentid=${the.parent_type_id}&articleid=${the.article_id}`"
+                    :href="`/faqDetails?id=${the.type_id}&parentid=${the.parent_type_id}&articleid=${the.article_id}`"
                   >· {{the.title}}</a>
                 </li>
               </ul>
@@ -59,7 +59,27 @@ export default {
       searchValue: "",
       faqId: "",
       faqTheId: "",
-      faqData: []
+      faqData: [],
+      metadata: {
+        name: "",
+        seo_words: "",
+        seo_desc: ""
+      }
+    };
+  },
+  metaInfo() {
+    return {
+      title: this.metadata.name,
+      meta: [
+        {
+          name: "keywords",
+          content: this.metadata.seo_words
+        },
+        {
+          name: "description",
+          content: this.metadata.seo_desc
+        }
+      ]
     };
   },
   methods: {
@@ -73,7 +93,7 @@ export default {
         return false;
       }
       the.searchValue = the.faqSearchValue;
-      this.$router.push("/faqSearch.html?value=" + this.faqSearchValue);
+      this.$router.push("/faqSearch?value=" + this.faqSearchValue);
     },
     getFaqData(e) {
       let the = this;
@@ -109,6 +129,23 @@ export default {
   },
   mounted() {
     let the = this;
+    //seo
+    http
+      .fetchGet("/api/Home/MenuDetail", { id: 144 })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.metadata = {
+            name: datas.result.web_title,
+            seo_words: datas.result.seo_words,
+            seo_desc: datas.result.seo_desc
+          };
+          the.streamerUrl = datas.result.img_url?http.path + "/" + datas.result.img_url:require("@/assets/images/streamer_faq.png");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
     //分类
     http
       .fetchGet("/api/Article/FaqCategorys")

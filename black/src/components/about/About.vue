@@ -36,7 +36,7 @@ export default {
   name: "articles",
   data() {
     return {
-      streamerUrl: require("@/assets/images/streamer_about.png"),
+      streamerUrl: '',
       aboutData: [
         {
           url: "tel:17512840813",
@@ -60,12 +60,49 @@ export default {
       weimg: require("@/assets/images/code.png"),
       content: "如有疑问或者想咨询乐喜力丝产品，请联系我们",
       wechat:'官方微信号',
-      content_en:'If you have any questions or want to consult Lexillis products,please contact us.'
+      content_en:'If you have any questions or want to consult Lexillis products,please contact us.',
+      metadata: {
+        name: "",
+        seo_words: "",
+        seo_desc: ""
+      }
+    };
+  },
+  metaInfo() {
+    return {
+      title: this.metadata.name,
+      meta: [
+        {
+          name: "keywords",
+          content: this.metadata.seo_words
+        },
+        {
+          name: "description",
+          content: this.metadata.seo_desc
+        }
+      ]
     };
   },
   methods: {},
   mounted() {
-    let the = this; 
+    let the = this;
+    //seo
+    http
+      .fetchGet("/api/Home/MenuDetail", { id: 50 })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.metadata = {
+            name: datas.result.web_title,
+            seo_words: datas.result.seo_words,
+            seo_desc: datas.result.seo_desc
+          };
+         the.streamerUrl = datas.result.img_url?http.path + "/" + datas.result.img_url:require("@/assets/images/streamer_about.png");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      }); 
     //关于我们
     http
       .fetchGet("/api/Article/About")

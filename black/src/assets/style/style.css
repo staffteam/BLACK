@@ -447,3 +447,7 @@ div.productBody>div.multi div {
 img{
   max-width:100%;
 }
+
+.el-image{
+  display: block;
+}

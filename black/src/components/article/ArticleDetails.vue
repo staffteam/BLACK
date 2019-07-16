@@ -5,7 +5,7 @@
     <div id="homeSearch">
       <div class="l">
         <span>热门搜索关键词：</span>
-        <a :href="`/search.html?value=${item.name}`" v-for="(item,index) in searchData" :key="index" >{{item.name}}</a>
+        <a :href="`/search?value=${item.name}`" v-for="(item,index) in searchData" :key="index" >{{item.name}}</a>
       </div>
       <div class="r">
         <p>
@@ -33,11 +33,11 @@
           <div class="detailsBody" v-html="detailsData.content">{{detailsData.content}}</div>
           <div class="detailsNext">
             <a
-              :href="`/articleDetails.html?parentid=${parentid}&id=${detailsData.prev_article!=null?detailsData.prev_article.article_id:'javascript:'}`"
+              :href="`/articleDetails?parentid=${parentid}&id=${detailsData.prev_article!=null?detailsData.prev_article.article_id:'javascript:'}`"
               :class="detailsData.prev_article!=null?'':'not'"
             >上一页：{{detailsData.prev_article!=null?detailsData.prev_article.title:'没有了'}}</a>
             <a
-              :href="`/articleDetails.html?parentid=${parentid}&id=${detailsData.next_article!=null?detailsData.next_article.article_id:'javascript:'}`"
+              :href="`/articleDetails?parentid=${parentid}&id=${detailsData.next_article!=null?detailsData.next_article.article_id:'javascript:'}`"
               :class="detailsData.next_article!=null?'':'not'"
             >上一页：{{detailsData.next_article!=null?detailsData.next_article.title:'没有了'}}</a>
           </div>
@@ -62,7 +62,7 @@
           <div class="title">相关推荐</div>
           <ul>
             <li v-for="item in recommenData" :key="item.article_id">
-              <a :href="`/articleDetails.html?id=${item.article_id}&parentid=${parentid}`" >
+              <a :href="`/articleDetails?id=${item.article_id}&parentid=${parentid}`" >
                 <h2>{{item.title}}</h2>
                 <p>{{item.date}}</p>
               </a>
@@ -73,7 +73,7 @@
           <div class="title">热门标签</div>
           <ul class="labelContent">
             <li v-for="item in labelData" :key="item.id">
-              <a :href="`/search.html?value=${item.name}`" >
+              <a :href="`/search?value=${item.name}`" >
                 <h2>{{item.name}}</h2>
               </a>
             </li>
@@ -85,7 +85,7 @@
       <h2>热门推荐</h2>
       <ul>
         <li v-for="item in articleData" :key="item.article_id">
-          <a :href="`/articleDetails.html?id=${item.article_id}&parentid=${parentid}`" >
+          <a :href="`/articleDetails?id=${item.article_id}&parentid=${parentid}`" >
             <p class="listImg">
               <img :src="item.img_url" />
             </p>
@@ -111,22 +111,22 @@ export default {
   name: "articles",
   data() {
     return {
-      streamerUrl: require("@/assets/images/streamer_article.png"),
+      streamerUrl: '',
       searchData: [],
       parentid: "",
       detailsData: [],
       articleData: [],
       articleNavData: [],
       articleNav: {
-        0: "/index.html",
-        64: "/product.html",
-        84: "/article.html",
-        81: "/hairgeme.html",
-        82: "/guide.html",
-        80: "/welfafe.html",
-        50: "/aboutus.html",
-        143: "/media.html",
-        144: "/faq.html"
+        0: "/index",
+        64: "/product",
+        84: "/article",
+        81: "/hairgeme",
+        82: "/guide",
+        80: "/welfafe",
+        50: "/aboutus",
+        143: "/media",
+        144: "/faq"
       },
       navcodes: {
         "80": "Welfare",
@@ -138,13 +138,50 @@ export default {
       recommenData: [],
       detailsBody: "",
       labelData: [],
-      parentid:''
+      parentid:'',
+      metadata: {
+        name: "",
+        seo_words: "",
+        seo_desc: ""
+      }
+    };
+  },
+  metaInfo() {
+    return {
+      title: this.metadata.name,
+      meta: [
+        {
+          name: "keywords",
+          content: this.metadata.seo_words
+        },
+        {
+          name: "description",
+          content: this.metadata.seo_desc
+        }
+      ]
     };
   },
   methods: {},
   mounted() {
     let the = this;
     the.parentid = the.$route.query.parentid;
+    //seo
+    http
+      .fetchGet("/api/Home/MenuDetail", { id: 84 })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.metadata = {
+            name: datas.result.web_title,
+            seo_words: datas.result.seo_words,
+            seo_desc: datas.result.seo_desc
+          };
+         the.streamerUrl = datas.result.img_url?http.path + "/" + datas.result.img_url:require("@/assets/images/streamer_faq.png");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
     //文章详情
     http
       .fetchGet("/api/Article/ArticleDetail", {
@@ -159,7 +196,7 @@ export default {
       .catch(err => {
         console.log(err);
       });
-    //推荐搭配
+    //相关推荐
     http
       .fetchGet("/api/Article/Articles", {
         args: {

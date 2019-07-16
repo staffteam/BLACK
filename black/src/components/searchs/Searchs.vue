@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       isNavBtnShow: false,
-      streamerUrl: require("@/assets/images/streamer_faq.png"),
+      streamerUrl: require("@/assets/images/streamer_ss.jpg"),
       faqNavData: [],
       weimg: require("@/assets/images/code.png"),
       linkData: [],
@@ -62,13 +62,13 @@ export default {
       pageSize: 6,
       searchData: [],
       searchType: {
-        product: "/productDetails.html",
-        News: "/articleDetails.html",
-        Hair: "/articleDetails.html",
-        Welfare: "/articleDetails.html",
-        Faq: "/faq.html",
-        Guide: "/articleDetails.html",
-        Media: "/articleDetails.html"
+        product: "/productDetails",
+        News: "/articleDetails",
+        Hair: "/articleDetails",
+        Welfare: "/articleDetails",
+        Faq: "/faq",
+        Guide: "/articleDetails",
+        Media: "/articleDetails"
       },
       navcodes: {
         "Welfare":"80",
@@ -111,7 +111,6 @@ export default {
                 `<span>${the.faqSearchValue}</span>`
               );
             });
-            debugger;
             the.searchData = datas.result.search_results;
             the.totalNum = datas.result.total_count;
           }
@@ -130,7 +129,7 @@ export default {
         return false;
       }
       the.faqValue = the.faqSearchValue;
-      the.$router.push("/search.html?value=" + the.faqSearchValue);
+      the.$router.push("/search?value=" + the.faqSearchValue);
       the.faqPage(1);
     }
   },

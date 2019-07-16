@@ -6,7 +6,7 @@
           <el-image class="logo" :src="logoUrl" fit="scale-down"></el-image>
         </div>
         <div class="c">
-          <p>{{wordSize}}</p>
+          <p><a href="http://www.beian.gov.cn/" target="_blank">{{wordSize}}</a></p>
           <p>
             <a :href="`tel:${tel}`">热线电话：{{tel}}</a>
           </p>

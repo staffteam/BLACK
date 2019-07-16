@@ -44,7 +44,7 @@
           <div class="title">相关推荐</div>
           <ul>
             <li v-for="item in recommenData" :key="item.product_id">
-              <a :href="`/productDetails.html?id=${item.product_id}`" >
+              <a :href="`/productDetails?id=${item.product_id}`" >
                 <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
                 <h2>{{item.name}}</h2>
               </a>
@@ -62,7 +62,7 @@ export default {
   name: "product",
   data() {
     return {
-      streamerUrl: require("@/assets/images/streamer_product.png"),
+      streamerUrl: '',
       detailsBannerImg: "",
       detailsTitle: "",
       detailsBannerData: [],
@@ -70,12 +70,49 @@ export default {
       lens: 0,
       detailsBody: "",
       recommenData: [],
-      detailsImgBody: ""
+      detailsImgBody: "",
+      metadata: {
+        name: "",
+        seo_words: "",
+        seo_desc: ""
+      }
+    };
+  },
+  metaInfo() {
+    return {
+      title: this.metadata.name,
+      meta: [
+        {
+          name: "keywords",
+          content: this.metadata.seo_words
+        },
+        {
+          name: "description",
+          content: this.metadata.seo_desc
+        }
+      ]
     };
   },
   methods: {},
   mounted(obj) {
     let the = this;
+    //seo
+    http
+      .fetchGet("/api/Home/MenuDetail", { id: 64 })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.metadata = {
+            name: datas.result.web_title,
+            seo_words: datas.result.seo_words,
+            seo_desc: datas.result.seo_desc
+          };
+          the.streamerUrl = datas.result.img_url?http.path + "/" + datas.result.img_url:require("@/assets/images/streamer_product.png");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
     //产品详情
     http
       .fetchGet("/api/Article/ProductDetail", {
@@ -161,7 +198,7 @@ export default {
       .catch(err => {
         console.log(err);
       });
-    //推荐搭配
+    //相关推荐
     http
       .fetchGet("/api/Article/Products", {
         args: {

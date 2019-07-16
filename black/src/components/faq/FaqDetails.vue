@@ -46,7 +46,28 @@
             </li>
           </ul>
         </div>
-        <div class="r">
+        <div class="searchContent" v-if="faqTitle==''">
+          <ul>
+            <li v-for="(item,index) in faqListData" :key="index">
+              <a
+                :href="`/faqDetails?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.article_id}`"
+              >
+                <h2 v-html="item.title">{{item.title}}</h2>
+                <div>{{item.desc}}</div>
+              </a>
+            </li>
+          </ul>
+          <el-pagination
+            background
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="indexNum"
+            :page-size="pageSize"
+            layout="prev, pager, next"
+            :total="totalNum"
+          ></el-pagination>
+        </div>
+        <div class="r" v-if="faqTitle!=''">
           <div class="top">
             <h2>{{faqTitle}}</h2>
             <p>
@@ -62,7 +83,9 @@
             <h2>猜你感兴趣的问题</h2>
             <ul>
               <li v-for="(item,index) in linkData" :key="index">
-                <a :href="`faqDetails.html?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.article_id}`">
+                <a
+                  :href="`/faqDetails?id=${item.type_id}&parentid=${item.parent_type_id}&articleid=${item.article_id}`"
+                >
                   <h2>· {{item.title}}</h2>
                 </a>
               </li>
@@ -93,10 +116,44 @@ export default {
       faqSearchValue: "",
       searchValue: "",
       faqId: "",
-      faqTheId: ""
+      faqTheId: "",
+      totalNum: 0,
+      indexNum: 0,
+      pageSize: 6,
+      faqListId: "",
+      faqListPId: "",
+      faqListData: [],
+      metadata: {
+        name: "",
+        seo_words: "",
+        seo_desc: ""
+      }
+    };
+  },
+  metaInfo() {
+    return {
+      title: this.metadata.name,
+      meta: [
+        {
+          name: "keywords",
+          content: this.metadata.seo_words
+        },
+        {
+          name: "description",
+          content: this.metadata.seo_desc
+        }
+      ]
     };
   },
   methods: {
+    handleCurrentChange(e) {
+      let the = this;
+      the.faqPage(e);
+    },
+    handleSizeChange(e) {
+      let the = this;
+      the.faqPage(e);
+    },
     faqNavClick(e) {
       let the = this;
       let id = e.currentTarget.dataset.id;
@@ -127,7 +184,9 @@ export default {
         }
         return value;
       });
-      //文章详情
+      the.faqListId = id;
+      the.faqListPId = parentId;
+      //文章列表
       http
         .fetchGet("/api/Article/Faqs", {
           args: {
@@ -142,41 +201,9 @@ export default {
         .then(data => {
           let datas = JSON.parse(data.data);
           if (datas.errcode) {
-            let article_id = "";
-            datas.result.products.forEach(function(value) {
-              if (value.article_id == the.$route.query.articleid) {
-                the.faqTitle = value.title;
-                the.faqContent = value.desc;
-                the.faqDate = value.date;
-                the.faqStat = value.stat;
-                article_id = value.article_id;
-              }
-            });
-            //猜你喜欢
-            http
-              .fetchGet("/api/Article/Faqs", {
-                args: {
-                  sort: "sortorder asc,releasetime",
-                  dir: "desc",
-                  NavCode: "Faq",
-                  IsRelease: true,
-                  ParentTypeID: parentId
-                }
-              })
-              .then(data => {
-                let datas = JSON.parse(data.data);
-                if (datas.errcode) {
-                  the.linkData = [];
-                  datas.result.products.forEach(function(value) {
-                    if (value.article_id != article_id) {
-                      the.linkData.push(value);
-                    }
-                  });
-                }
-              })
-              .catch(err => {
-                console.log(err);
-              });
+            the.faqListData = datas.result.products;
+            the.totalNum = datas.result.total_count;
+            the.faqTitle = "";
           }
         })
         .catch(err => {
@@ -193,7 +220,7 @@ export default {
         return false;
       }
       the.searchValue = the.faqSearchValue;
-      this.$router.push("/faqSearch.html?value=" + this.faqSearchValue);
+      this.$router.push("/faqSearch?value=" + this.faqSearchValue);
     }
   },
   mounted() {
@@ -202,6 +229,25 @@ export default {
     let _id_ = "";
     let ids = the.$route.query.id;
     let pids = the.$route.query.parentid;
+    //seo
+    http
+      .fetchGet("/api/Home/MenuDetail", { id: 144 })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.metadata = {
+            name: datas.result.web_title,
+            seo_words: datas.result.seo_words,
+            seo_desc: datas.result.seo_desc
+          };
+          the.streamerUrl = datas.result.img_url
+            ? http.path + "/" + datas.result.img_url
+            : require("@/assets/images/streamer_faq.png");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
     //常见问题分类
     http
       .fetchGet("/api/Article/FaqCategorys")
@@ -247,54 +293,42 @@ export default {
           the.faqNavData = datas.result;
           //文章详情
           http
+            .fetchGet("/api/article/faqdetail", {
+              id: the.$route.query.articleid
+            })
+            .then(data => {
+              let datas = JSON.parse(data.data);
+              if (datas.errcode) {
+                the.faqTitle = datas.result.title;
+                the.faqContent = datas.result.content;
+                the.faqDate = datas.result.date;
+                the.faqStat = datas.result.stat;
+                article_id = datas.result.article_id;
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+          //猜你喜欢
+          http
             .fetchGet("/api/Article/Faqs", {
               args: {
                 sort: "sortorder asc,releasetime",
                 dir: "desc",
                 NavCode: "Faq",
                 IsRelease: true,
-                TypeID: ids || _id_,
                 ParentTypeID: pids || _id
               }
             })
             .then(data => {
               let datas = JSON.parse(data.data);
               if (datas.errcode) {
-                let article_id = "";
+                the.linkData = [];
                 datas.result.products.forEach(function(value) {
-                  if (value.article_id == the.$route.query.articleid) {
-                    the.faqTitle = value.title;
-                    the.faqContent = value.desc;
-                    the.faqDate = value.date;
-                    the.faqStat = value.stat;
-                    article_id = value.article_id;
+                  if (value.article_id != the.$route.query.articleid) {
+                    the.linkData.push(value);
                   }
                 });
-                //猜你喜欢
-                http
-                  .fetchGet("/api/Article/Faqs", {
-                    args: {
-                      sort: "sortorder asc,releasetime",
-                      dir: "desc",
-                      NavCode: "Faq",
-                      IsRelease: true,
-                      ParentTypeID: pids || _id
-                    }
-                  })
-                  .then(data => {
-                    let datas = JSON.parse(data.data);
-                    if (datas.errcode) {
-                      the.linkData = [];
-                      datas.result.products.forEach(function(value) {
-                        if (value.article_id != article_id) {
-                          the.linkData.push(value);
-                        }
-                      });
-                    }
-                  })
-                  .catch(err => {
-                    console.log(err);
-                  });
               }
             })
             .catch(err => {

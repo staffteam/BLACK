@@ -6,7 +6,7 @@
       <div class="l">
         <span>热门搜索关键词：</span>
         <a
-          :href="`/search.html?value=${item.name}`"
+          :href="`/search?value=${item.name}`"
           v-for="(item,index) in searchData"
           :key="index"
           
@@ -24,7 +24,7 @@
         <ul>
           <li v-for="item in articleData" :key="item.article_id">
             <a
-              :href="`/articleDetails.html?parentid=${parentid}&id=${item.article_id}`"
+              :href="`/articleDetails?parentid=${parentid}&id=${item.article_id}`"
               
             >
               <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
@@ -70,11 +70,11 @@
           </ul>
         </div>
         <div class="recommen">
-          <div class="title">推荐搭配</div>
+          <div class="title">相关推荐</div>
           <ul>
             <li v-for="item in recommenData" :key="item.article_id">
               <a
-                :href="`/articleDetails.html?parentid=${parentid}&id=${item.article_id}`"
+                :href="`/articleDetails?parentid=${parentid}&id=${item.article_id}`"
                 
               >
                 <h2>{{item.title}}</h2>
@@ -95,26 +95,46 @@ export default {
   data() {
     return {
       parentid: "",
-      streamerUrl: require("@/assets/images/streamer_article.png"),
+      streamerUrl: '',
       searchData: [],
       articleData: [],
       articleNavData: [],
       articleNav: {
-        0: "/index.html",
-        64: "/product.html",
-        84: "/article.html",
-        81: "/hairgeme.html",
-        82: "/guide.html",
-        80: "/welfafe.html",
-        50: "/aboutus.html",
-        143: "/media.html",
-        144: "/faq.html"
+        0: "/index",
+        64: "/product",
+        84: "/article",
+        81: "/hairgeme",
+        82: "/guide",
+        80: "/welfafe",
+        50: "/aboutus",
+        143: "/media",
+        144: "/faq"
       },
       recommenData: [],
       totalNum: 0,
       indexNum: 0,
       pageSize: 6,
       searchValue:'',
+      metadata: {
+        name: "",
+        seo_words: "",
+        seo_desc: ""
+      }
+    };
+  },
+  metaInfo() {
+    return {
+      title: this.metadata.name,
+      meta: [
+        {
+          name: "keywords",
+          content: this.metadata.seo_words
+        },
+        {
+          name: "description",
+          content: this.metadata.seo_desc
+        }
+      ]
     };
   },
   methods: {
@@ -128,7 +148,7 @@ export default {
         return false;
       }
 
-      the.$router.push("/search.html?value=" + the.searchValue);
+      the.$router.push("/search?value=" + the.searchValue);
     },
     handleCurrentChange(e) {
       let the = this;
@@ -171,7 +191,24 @@ export default {
   mounted() {
     let the = this;
     the.articlePage(1);
-    //推荐搭配
+    //seo
+    http
+      .fetchGet("/api/Home/MenuDetail", { id: 82 })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.metadata = {
+            name: datas.result.web_title,
+            seo_words: datas.result.seo_words,
+            seo_desc: datas.result.seo_desc
+          };
+          the.streamerUrl = datas.result.img_url?http.path + "/" + datas.result.img_url:require("@/assets/images/streamer_article.png");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    //相关推荐
     http
       .fetchGet("/api/Article/Articles", {
         args: {

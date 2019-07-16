@@ -29,7 +29,7 @@ export default new Router({
         title: '首页'
       }
     }, {
-      path: '/index.html',
+      path: '/index',
       name: 'Home',
       component: Home,
       meta: {
@@ -44,98 +44,98 @@ export default new Router({
         title: '抱歉，您访问的页面不存在'
       }
     }, {
-      path: '/product.html',
+      path: '/product',
       name: 'Product',
       component: Product,
       meta: {
         title: '产品介绍'
       }
     }, {
-      path: '/productDetails.html',
+      path: '/productDetails',
       name: 'ProductDetails',
       component: ProductDetails,
       meta: {
         title: '产品详情'
       }
     }, {
-      path: '/article.html',
+      path: '/article',
       name: 'article',
       component: Article,
       meta: {
         title: '品牌动态'
       }
     }, {
-      path: '/articleDetails.html',
+      path: '/articleDetails',
       name: 'ArticleDetails',
       component: ArticleDetails,
       meta: {
         title: '品牌动态'
       }
     }, {
-      path: '/aboutus.html',
+      path: '/aboutus',
       name: 'Aboutus',
       component: About,
       meta: {
         title: '关于我们'
       }
     }, {
-      path: '/search.html',
+      path: '/search',
       name: 'Searchs',
       component: Searchs,
       meta: {
         title: '搜索'
       }
     }, {
-      path: '/faq.html',
+      path: '/faq',
       name: 'Faq',
       component: Faq,
       meta: {
         title: '常见问题'
       }
     }, {
-      path: '/hairgeme.html',
+      path: '/hairgeme',
       name: 'Hairgeme',
       component: Hairgeme,
       meta: {
         title: '基因育发'
       }
     }, {
-      path: '/guide.html',
+      path: '/guide',
       name: 'Guide',
       component: Guide,
       meta: {
         title: '脱发指南'
       }
     }, {
-      path: '/welfafe.html',
+      path: '/welfafe',
       name: 'Welfafe',
       component: Welfafe,
       meta: {
         title: '粉丝福利'
       }
     }, {
-      path: '/faqSearch.html',
+      path: '/faqSearch',
       name: 'FaqSearch',
       component: FaqSearch,
       meta: {
         title: '常见问题搜索结果'
       }
     }, {
-      path: '/media.html',
+      path: '/media',
       name: 'Media',
       component: Media,
       meta: {
         title: '媒体报道'
       }
     }, {
-      path: '/faqList.html',
+      path: '/faqList',
       name: 'FaqList',
       component: FaqList,
       meta: {
         title: '热门问题'
       }
     }, {
-      path: '/faqDetails.html',
+      path: '/faqDetails',
       name: 'FaqDetails',
       component: FaqDetails,
       meta: {

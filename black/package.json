@@ -20,7 +20,9 @@
     "es6-promise": "^4.2.8",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
+    "prerender-spa-plugin": "^3.4.0",
     "vue": "^2.6.10",
+    "vue-meta-info": "^0.1.7",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {

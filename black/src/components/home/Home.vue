@@ -26,10 +26,9 @@
       <div class="l">
         <span>热门搜索关键词：</span>
         <a
-          :href="`/search.html?value=${item.name}`"
+          :href="`/search?value=${item.name}`"
           v-for="(item,index) in searchData"
           :key="index"
-          
         >{{item.name}}</a>
       </div>
       <div class="r">
@@ -68,12 +67,12 @@
           <div v-html="homeList2.describe">{{homeList2.describe}}</div>
           <ul>
             <li v-for="item in homeList2.datalist" :key="item.product_id">
-              <a :href="`/productDetails.html?id=${item.product_id}`">
+              <a :href="`/productDetails?id=${item.product_id}`">
                 <div class="img">
                   <img :src="item.img_url" />
                 </div>
-                <p>{{item.name}}</p>
-                <h2>{{item.function}}</h2>
+                <p>{{item.function}}</p>
+                <h2>{{item.name}}</h2>
                 <span>查看详情</span>
               </a>
             </li>
@@ -113,7 +112,7 @@
             <div class="swiper-container" id="newBanner">
               <div class="swiper-wrapper">
                 <div class="swiper-slide" v-for="(item,index) in newBannerData" :key="index">
-                  <a :href="`/articleDetails.html?parentid=84&id=${item.article_id}`">
+                  <a :href="`/articleDetails?parentid=84&id=${item.article_id}`">
                     <p>
                       <img :src="item.img_url" :alt="item.title" />
                     </p>
@@ -136,7 +135,11 @@
           <div class="r">
             <ul>
               <li v-for="(item,index) in newDataList" :key="item.id">
-                <a :href="`/articleDetails.html?parentid=84&id=${item.article_id}`" v-if="index==0" class="top">
+                <a
+                  :href="`/articleDetails?parentid=84&id=${item.article_id}`"
+                  v-if="index==0"
+                  class="top"
+                >
                   <h2>{{item.title}}</h2>
                   <div class="describe">{{item.desc}}</div>
                   <div class="bottom">
@@ -147,7 +150,11 @@
                     </p>
                   </div>
                 </a>
-                <a :href="`/articleDetails.html?parentid=84&id=${item.article_id}`" v-if="index!=0" class="list">
+                <a
+                  :href="`/articleDetails?parentid=84&id=${item.article_id}`"
+                  v-if="index!=0"
+                  class="list"
+                >
                   <div>
                     <h2>{{item.title}}</h2>
                     <span>{{item.date}}</span>
@@ -155,7 +162,7 @@
                 </a>
               </li>
             </ul>
-            <a href="/article.html" >查看更多>></a>
+            <a href="/article">查看更多>></a>
           </div>
         </div>
       </div>
@@ -195,7 +202,7 @@
           <li>
             <h2>脱发指南</h2>
             <div class="list" v-for="(item,index) in guideData1" :key="item.id">
-              <a :href="`/articleDetails.html?parentid=82&id=${item.article_id}`" >
+              <a :href="`/articleDetails?parentid=82&id=${item.article_id}`">
                 <p v-if="index==0">
                   <img :src="item.img_url" :alt="item.title" />
                 </p>
@@ -206,12 +213,12 @@
                 <div class="describe">{{item.desc}}</div>
               </a>
             </div>
-            <a href="/guide.html" >查看更多>></a>
+            <a href="/guide">查看更多>></a>
           </li>
           <li>
             <h2>基因育发</h2>
             <div class="list" v-for="(item,index) in guideData2" :key="item.id">
-              <a :href="`/articleDetails.html?parentid=81&id=${item.article_id}`" >
+              <a :href="`/articleDetails?parentid=81&id=${item.article_id}`">
                 <p v-if="index==0">
                   <img :src="item.img_url" :alt="item.title" />
                 </p>
@@ -222,7 +229,7 @@
                 <div class="describe">{{item.desc}}</div>
               </a>
             </div>
-            <a href="/hairgeme.html" >查看更多>></a>
+            <a href="/hairgeme">查看更多>></a>
           </li>
         </ul>
       </div>
@@ -231,15 +238,19 @@
       <div class="content">
         <div class="r">
           <h2>常见问题</h2>
-          <ul>
-            <li v-for="(item,index) in faqData" :key="index">
-              <a :href="`/faq.html?id=${item.type_id}&parentid=${item.parent_type_id}`" >
-                <h2>{{item.title}}</h2>
-                <div>{{item.desc}}</div>
-              </a>
-            </li>
-          </ul>
-          <a href="/faqList.html" >更多热门问题>></a>
+          <div class="faqBanner">
+            <div class="faqBannerList" :style="`top:${faqBannerTop}px;`" @mousemove="faqBannerMove" @mouseout="faqBannerOut" @mouseover="faqBannerMove" :data-top="faqBannerTop">
+              <ul>
+                <li v-for="(item,index) in faqData" :key="index">
+                  <a :href="`/faqDetails?articleid=${item.article_id}&id=${item.type_id}&parentid=${item.parent_type_id}`">
+                    <h2>{{item.title}}</h2>
+                    <div>{{item.desc}}</div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <a href="/faqList">更多热门问题>></a>
         </div>
       </div>
     </div>
@@ -254,33 +265,98 @@ export default {
   data() {
     return {
       searchValue: "",
+      metadata: {
+        name: "",
+        seo_words: "",
+        seo_desc: ""
+      },
+      faqBannerTop: 0,
+      setObj: {},
       ...datas
+    };
+  },
+  metaInfo() {
+    return {
+      title: this.metadata.name,
+      meta: [
+        {
+          name: "keywords",
+          content: this.metadata.seo_words
+        },
+        {
+          name: "description",
+          content: this.metadata.seo_desc
+        }
+      ]
     };
   },
   methods: {
     searchAll() {
       let the = this;
-      if (the.searchValue=='') {
-        this.$confirm('请输入搜索关键字', '提示', {
-          confirmButtonText: '确定',
-          type: 'warning'
+      if (the.searchValue == "") {
+        this.$confirm("请输入搜索关键字", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
         });
         return false;
       }
 
-      the.$router.push("/search.html?value=" + the.searchValue);
+      the.$router.push("/search?value=" + the.searchValue);
+    },
+    faqBannerMove() {
+      clearInterval(this.setObj);
+    },
+    faqBannerOut() {
+      let the = this;
+      let len = the.faqData.length;
+      if (len > 4) {
+        let i = the.faqBannerTop;
+        the.setObj = setInterval(function() {
+          if (i == -95) {
+            i = 0;
+            let _data = [];
+            the.faqData.forEach(function(value, index) {
+              if (index > 1) {
+                _data.push(value);
+              }
+            });
+            _data.push(the.faqData[0]);
+            _data.push(the.faqData[1]);
+            the.faqData = _data;
+          } else {
+            i--;
+          }
+          the.faqBannerTop = i;
+        }, 20);
+      }
     }
   },
   mounted() {
     let the = this;
+    //首页关键字
+    http
+      .fetchGet("/api/Home/webinfo")
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.metadata = {
+            name: datas.result.name,
+            seo_words: datas.result.seo_words,
+            seo_desc: datas.result.seo_desc
+          };
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
     http
       .fetchGet("/api/Home/IndexBanner", {
         args: {
           start: 0,
-          limit: 1, //每页记录数
+          limit: 5, //每页记录数
           sort: "sortorder asc,articleid", //排序字段
           dir: "desc", //升序or降序
-          navcode: "banner" //内容编码
+          NavCode: "banner" //内容编码
         }
       })
       .then(data => {
@@ -292,7 +368,9 @@ export default {
           });
           the.bannerData = [...datas.result];
           //顶部轮播
-          banner.homebanner();
+          setTimeout(function(){
+            banner.homebanner();
+          },100);
         }
       })
       .catch(err => {
@@ -348,7 +426,7 @@ export default {
           });
           setTimeout(function() {
             //专利证书
-            banner.homebanner2();
+            banner.homebanner2(the);
           }, 100);
         }
       })
@@ -360,7 +438,7 @@ export default {
       .fetchGet("/api/Home/IndexNews", {
         args: {
           start: 0,
-          limit: 1,
+          limit: 6,
           sort: "sortorder asc,releasetime",
           dir: "desc",
           NavCode: "News",
@@ -376,6 +454,7 @@ export default {
               obj.img_url != null ? http.path + "/" + obj.img_url : "";
             if (index <= 2) {
               the.newBannerData.push(obj);
+              the.newDataList.push(obj);
             } else {
               the.newDataList.push(obj);
             }
@@ -418,7 +497,7 @@ export default {
       .fetchGet("/api/Home/IndexGuideOrHair", {
         args: {
           start: 0,
-          limit: 1,
+          limit: 3,
           sort: "sortorder asc,releasetime",
           dir: "desc",
           NavCode: "Guide",
@@ -445,7 +524,7 @@ export default {
       .fetchGet("/api/Home/IndexGuideOrHair", {
         args: {
           start: 0,
-          limit: 1,
+          limit: 3,
           sort: "sortorder asc,releasetime",
           dir: "desc",
           NavCode: "Hair",
@@ -476,7 +555,7 @@ export default {
           dir: "desc",
           NavCode: "Faq",
           IsRelease: true,
-          IsHotRecommend:true,
+          IsHotRecommend: true
         }
       })
       .then(data => {
@@ -485,10 +564,31 @@ export default {
           datas.result.map((obj, index) => {
             obj.desc =
               obj.desc == "" || obj.desc == null ? "暂无回答" : obj.desc;
-            if (the.faqData.length <= 3) {
+            if (the.faqData.length <= 9) {
               the.faqData.push(obj);
             }
           });
+          let len = the.faqData.length;
+          if (len > 4) {
+            let i = 0;
+            the.setObj = setInterval(function() {
+              if (i == -95) {
+                i = 0;
+                let _data = [];
+                the.faqData.forEach(function(value, index) {
+                  if (index > 1) {
+                    _data.push(value);
+                  }
+                });
+                _data.push(the.faqData[0]);
+                _data.push(the.faqData[1]);
+                the.faqData = _data;
+              } else {
+                i--;
+              }
+              the.faqBannerTop = i;
+            }, 20);
+          }
         }
       })
       .catch(err => {
