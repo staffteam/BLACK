@@ -87,7 +87,7 @@
         <li v-for="item in articleData" :key="item.article_id">
           <a :href="`/articleDetails/${parentid}/${item.article_id}.html`" >
             <p class="listImg">
-              <img :src="item.img_url" />
+              <img :src="item.img_url"  :alt="item.img_alt" />
             </p>
             <div class="listContent">
               <h2>{{item.title}}</h2>

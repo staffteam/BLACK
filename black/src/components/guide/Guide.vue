@@ -27,7 +27,7 @@
               :href="`/articleDetails/${parentid}/${item.article_id}.html`"
               
             >
-              <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
+              <el-image class="listImg" :src="item.img_url" :alt="item.img_alt" fit="scale-down"></el-image>
               <div class="listContent">
                 <h2>{{item.title}}</h2>
                 <p>

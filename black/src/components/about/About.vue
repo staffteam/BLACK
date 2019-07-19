@@ -12,7 +12,7 @@
           <li v-for="(item,index) in aboutData" :key="index">
             <a :href="item.url">
               <p>
-                <img :src="item.imgUrl" />
+                <img :src="item.imgUrl" :alt="item.img_alt" />
               </p>
               <h2>{{item.title}}</h2>
               <span>{{item.text}}</span>
@@ -23,7 +23,7 @@
       <div class="r">
         <h2>{{wechat}}</h2>
         <p class="weimg">
-          <img :src="weimg" alt />
+          <img :src="weimg" />
         </p>
       </div>
     </div>

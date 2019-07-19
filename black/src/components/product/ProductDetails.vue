@@ -15,7 +15,7 @@
                   :data-index="index"
                 >
                   <p>
-                    <img :src="item.img_url" />
+                    <img :src="item.img_url"  :alt="item.img_alt" />
                   </p>
                 </div>
               </div>
@@ -76,7 +76,7 @@
           <ul>
             <li v-for="item in recommenData" :key="item.product_id">
               <a :href="`/productDetails/${item.product_id}.html`">
-                <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
+                <el-image class="listImg" :src="item.img_url"  :alt="item.img_alt" fit="scale-down"></el-image>
                 <h2>{{item.name}}</h2>
               </a>
             </li>

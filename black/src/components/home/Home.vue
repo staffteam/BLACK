@@ -5,7 +5,7 @@
       <div class="swiper-wrapper">
         <div class="swiper-slide" v-for="(item,index) in bannerData" :key="index">
           <p>
-            <img :src="item.img_url" />
+            <img :src="item.img_url" :alt="item.img_alt" />
           </p>
         </div>
       </div>
@@ -49,7 +49,7 @@
               <a href="javascript:">
                 <div>
                   <div class="img">
-                    <img :src="item.img_url" />
+                    <img :src="item.img_url" :alt="item.img_alt" />
                   </div>
                   <p>{{item.title}}</p>
                 </div>
@@ -69,7 +69,7 @@
             <li v-for="item in homeList2.datalist" :key="item.product_id">
               <a :href="`/productDetails/${item.product_id}.html`">
                 <div class="img">
-                  <img :src="item.img_url" />
+                  <img :src="item.img_url" :alt="item.img_alt" />
                 </div>
                 <p>{{item.function}}</p>
                 <h2>{{item.name}}</h2>
@@ -88,7 +88,7 @@
           <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="(item,index) in homeList3.datalist" :key="index">
               <p>
-                <img :src="item.img_url" :alt="item.title" />
+                <img :src="item.img_url" :alt="item.img_alt" />
               </p>
             </div>
           </div>
@@ -114,7 +114,7 @@
                 <div class="swiper-slide" v-for="(item,index) in newBannerData" :key="index">
                   <a :href="`/articleDetails/84/${item.article_id}.html`">
                     <p>
-                      <img :src="item.img_url" :alt="item.title" />
+                      <img :src="item.img_url" :alt="item.img_alt" />
                     </p>
                   </a>
                 </div>
@@ -135,11 +135,7 @@
           <div class="r">
             <ul>
               <li v-for="(item,index) in newDataList" :key="item.id">
-                <a
-                  :href="`/articleDetails/84/${item.article_id}.html`"
-                  v-if="index==0"
-                  class="top"
-                >
+                <a :href="`/articleDetails/84/${item.article_id}.html`" v-if="index==0" class="top">
                   <h2>{{item.title}}</h2>
                   <div class="describe">{{item.desc}}</div>
                   <div class="bottom">
@@ -176,7 +172,7 @@
               <div class="swiper-slide" v-for="(item,index) in newBannerData2" :key="index">
                 <a href="javascript:">
                   <p>
-                    <img :src="item.img_url" :alt="item.title" />
+                    <img :src="item.img_url" :alt="item.img_alt" />
                   </p>
                   <h2>{{item.title}}</h2>
                   <div>{{item.desc}}</div>
@@ -204,7 +200,7 @@
             <div class="list" v-for="(item,index) in guideData1" :key="item.id">
               <a :href="`/articleDetails/82/${item.article_id}.html`">
                 <p v-if="index==0">
-                  <img :src="item.img_url" :alt="item.title" />
+                  <img :src="item.img_url" :alt="item.img_alt" />
                 </p>
                 <h2>
                   <i class="el-icon-arrow-right"></i>
@@ -220,7 +216,7 @@
             <div class="list" v-for="(item,index) in guideData2" :key="item.id">
               <a :href="`/articleDetails/81/${item.article_id}.html`">
                 <p v-if="index==0">
-                  <img :src="item.img_url" :alt="item.title" />
+                  <img :src="item.img_url" :alt="item.img_alt" />
                 </p>
                 <h2>
                   <i class="el-icon-arrow-right"></i>
@@ -239,10 +235,19 @@
         <div class="r">
           <h2>常见问题</h2>
           <div class="faqBanner">
-            <div class="faqBannerList" :style="`transform:translateY(${faqBannerTop}px);`" @mousemove="faqBannerMove" @mouseout="faqBannerOut" @mouseover="faqBannerMove" :data-top="faqBannerTop">
+            <div
+              class="faqBannerList"
+              :style="`transform:translateY(${faqBannerTop}px);`"
+              @mousemove="faqBannerMove"
+              @mouseout="faqBannerOut"
+              @mouseover="faqBannerMove"
+              :data-top="faqBannerTop"
+            >
               <ul>
                 <li v-for="(item,index) in faqData" :key="index">
-                  <a :href="`/faqDetails/${item.parent_type_id}/${item.type_id}/${item.article_id}.html`">
+                  <a
+                    :href="`/faqDetails/${item.parent_type_id}/${item.type_id}/${item.article_id}.html`"
+                  >
                     <h2>{{item.title}}</h2>
                     <div>{{item.desc}}</div>
                   </a>
@@ -254,6 +259,23 @@
         </div>
       </div>
     </div>
+    <div class="leftNav">
+      <ul>
+        <li
+          v-for="(item,index) in leftNavData"
+          :key="index"
+          :data-name="item.name"
+          :class="item.on"
+          @click="navThis(item.name)"
+        >
+          <p v-html="item.content">{{item.content}}</p>
+        </li>
+      </ul>
+    </div>
+    <div class="activityWin" v-show="activityWin.img_url!=null" >
+      <img :src="activityWin.img_url" :alt="activityWin.img_alt" />
+      <span @click="activityWin.img_url=null"><i class="el-icon-circle-close"></i></span>
+    </div>
   </div>
 </template>
 <script>
@@ -264,15 +286,25 @@ export default {
   name: "Home",
   data() {
     return {
+      thisNav: "",
       searchValue: "",
       metadata: {
         name: "",
         seo_words: "",
         seo_desc: ""
       },
+      leftNavData: [
+        { name: "homeList1", content: "产品<br/>优势", on: "" },
+        { name: "homeList2", content: "产品<br/>系列", on: "" },
+        { name: "homeList3", content: "专利<br/>证书", on: "" },
+        { name: "newContent", content: "资讯<br/>中心", on: "" },
+        { name: "guide", content: "脱发<br/>指南", on: "" },
+        { name: "faq", content: "常见<br/>问题", on: "" }
+      ],
       faqBannerTop: 0,
       setObj: {},
-      isWap:false,
+      isWap: false,
+      activityWin: {},
       ...datas
     };
   },
@@ -292,6 +324,16 @@ export default {
     };
   },
   methods: {
+    rNavShow() {
+      let the = this;
+      the.show = true;
+    },
+    rNavHide() {
+      let the = this;
+      setTimeout(function() {
+        the.show = false;
+      }, 50);
+    },
     searchAll() {
       let the = this;
       if (the.searchValue == "") {
@@ -330,11 +372,131 @@ export default {
           the.faqBannerTop = i;
         }, 40);
       }
+    },
+    scrollNav() {
+      let the = this;
+      let navarr = [
+        "homeList1",
+        "homeList2",
+        "homeList3",
+        "newContent",
+        "guide",
+        "faq"
+      ];
+      let isNull = true;
+      navarr.forEach((item, index) => {
+        if (
+          window.scrollY > window[item].offsetTop - window.innerHeight / 2 &&
+          window.scrollY < window[item].offsetTop + window[item].scrollHeight
+        ) {
+          isNull = !isNull;
+          the.leftNavData.map((value, key) => {
+            value.on = key == index ? "on" : "";
+          });
+        }
+      });
+      if (
+        window.scrollY <
+        window["homeList1"].offsetTop - window.innerHeight / 2
+      ) {
+        the.leftNavData.map((value, key) => {
+          value.on = "";
+        });
+        the.thisNav = "";
+      }
+    },
+    navThis(e) {
+      let tops = window.scrollY;
+      let the = this;
+      if (the.thisNav == e) return;
+      let i = tops > window[e].offsetTop - 100;
+      the.thisNav = e;
+      let sets = setInterval(() => {
+        if (
+          (i && tops < window[e].offsetTop - 100) ||
+          (!i && tops > window[e].offsetTop - 100)
+        ) {
+          clearInterval(sets);
+        }
+        if (
+          (i && tops - window[e].offsetTop > 1500) ||
+          (!i && window[e].offsetTop - tops > 1500)
+        ) {
+          tops = i ? tops - 30 : tops + 30;
+        } else if (
+          (i && tops - window[e].offsetTop > 1000) ||
+          (!i && window[e].offsetTop - tops > 1000)
+        ) {
+          tops = i ? tops - 20 : tops + 20;
+        } else if (
+          (i && tops - window[e].offsetTop > 500) ||
+          (!i && window[e].offsetTop - tops > 500)
+        ) {
+          tops = i ? tops - 12 : tops + 12;
+        } else {
+          tops = i ? tops - 8 : tops + 8;
+        }
+
+        the.__getPageScrollY(tops);
+      }, 5);
+    },
+    __getPageScrollY(top) {
+      if (top || Number(top) == 0) {
+        //设置垂直滚动值
+        if (self.pageYOffset) {
+          self.pageYOffset = Number(top);
+        }
+        if (
+          document.documentElement != undefined &&
+          document.documentElement.scrollTop != undefined
+        ) {
+          // Explorer 6 Strict
+          document.documentElement.scrollTop = Number(top);
+        }
+        if (document.body != undefined) {
+          // all other Explorers
+          document.body.scrollTop = Number(top);
+        }
+        return true;
+      } else {
+        //获取垂直滚动值
+        var yScroll;
+        if (self.pageYOffset) {
+          yScroll = self.pageYOffset;
+        } else if (
+          document.documentElement &&
+          document.documentElement.scrollTop
+        ) {
+          // Explorer 6 Strict
+          yScroll = document.documentElement.scrollTop;
+        } else if (document.body) {
+          // all other Explorers
+          yScroll = document.body.scrollTop;
+        }
+        return yScroll;
+      }
     }
+  },
+  beforeDestroy() {
+    let the = this;
   },
   mounted() {
     let the = this;
     the.isWap = window.innerWidth <= 800;
+    window.addEventListener("scroll", the.scrollNav);
+    //首页关键字
+    http
+      .fetchGet("/api/Home/Activity")
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.img_url = datas.result.img_url!=null?http.path + "/" + datas.result.img_url:null;
+          the.activityWin = datas.result;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
     //首页关键字
     http
       .fetchGet("/api/Home/webinfo")
@@ -370,9 +532,9 @@ export default {
           });
           the.bannerData = [...datas.result];
           //顶部轮播
-          setTimeout(function(){
+          setTimeout(function() {
             banner.homebanner();
-          },100);
+          }, 100);
         }
       })
       .catch(err => {
@@ -390,6 +552,7 @@ export default {
           });
           the.homeList1 = datas.result;
         }
+        the.scrollNav();
       })
       .catch(err => {
         console.log(err);
@@ -652,12 +815,12 @@ div.el-carousel__mask {
   #homeBanner .swiper-button-content {
     display: none;
   }
-#homeBanner .swiper-button-content div button i,
-#homeList3 .content div.swiper-container .swiper-button-content div button i,
-#newContent .content div.new div.l .swiper-button-content > div button i,
-#newContent2 .content div.new2 .swiper-button-content > div button i {
-  font-size: 14px;
-}
+  #homeBanner .swiper-button-content div button i,
+  #homeList3 .content div.swiper-container .swiper-button-content div button i,
+  #newContent .content div.new div.l .swiper-button-content > div button i,
+  #newContent2 .content div.new2 .swiper-button-content > div button i {
+    font-size: 14px;
+  }
   #homeBanner .swiper-pagination-bullet {
     width: 6px;
     height: 6px;

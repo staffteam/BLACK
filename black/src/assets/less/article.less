@@ -99,7 +99,7 @@
       .detailsBody {
         padding: 20px 0;
         line-height: 1.5;
-
+        min-height: 600px;
         p {
           margin: 5px 0;
         }
@@ -112,15 +112,12 @@
       overflow: hidden;
 
       a {
-        max-width: 45%;
-        float: left;
         padding: 0 2%;
         display: block;
         font-size: 14px;
         font-weight: 400;
         color: #333333;
         line-height: 39px;
-        border: 1px solid #DBDBDB;
         .line();
         &.not {
           border: 1px solid #DBDBDB;
@@ -133,7 +130,6 @@
         }
 
         &:last-child {
-          float: right;
         }
 
         &:hover {
@@ -435,6 +431,11 @@
           }
         }
       }
+      .content{
+        .detailsBody{
+          min-height: auto;
+        }
+      }
     }
 
     div.r {
@@ -464,7 +465,7 @@
       float:none;
       width:95.5%;
       max-width:95.5%;
-      margin-top:20px;
+      margin-top:10px;
     }
   }
   .recommen ul.labelContent{

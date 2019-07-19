@@ -346,7 +346,7 @@
 
           button {
             .back(color;
-              rgba(0,0,0,0.4));
+              rgba(0, 0, 0, 0.4));
             border: 0px;
             .cover(43px);
             .size(25px);
@@ -366,7 +366,7 @@
 
           img {
             height: 100%;
-            max-width:none;
+            max-width: none;
             position: relative;
             left: 50%;
             transform: translateX(-50%);
@@ -443,7 +443,7 @@
 
             button {
               .back(color;
-              rgba(0,0,0,0.4));
+                rgba(0, 0, 0, 0.4));
               border: 0px;
               .cover(43px);
               .size(25px);
@@ -676,7 +676,7 @@
 
           button {
             .back(color;
-              rgba(0,0,0,0.4));
+              rgba(0, 0, 0, 0.4));
             border: 0px;
             .cover(43px);
             .size(25px);
@@ -802,21 +802,26 @@
         line-height: 42px;
         text-align: center;
       }
+
       div.faqBanner {
         height: 190px;
         margin-top: 35px;
         overflow: hidden;
       }
-      div.faqBanner div.faqBannerList{
+
+      div.faqBanner div.faqBannerList {
         position: relative;
-        top:0;
+        top: 0;
       }
+
       div.faqBanner ul {
         overflow: hidden;
+
         li {
           float: left;
           width: 400px;
-          margin:20px 12.5px 0 12.5px;
+          margin: 20px 12.5px 0 12.5px;
+
           h2 {
             .size(18px);
             .weight(600);
@@ -859,7 +864,80 @@
   }
 }
 
+.leftNav {
+  width: 65px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  position: fixed;
+  left: 25px;
+  top: 15%;
+  z-index: 9999;
+  overflow: hidden;
+
+  ul {
+    li {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(153, 153, 153, 1);
+      line-height: 1.5;
+      text-align: center;
+      cursor: pointer;
+
+      p {
+        width: 30px;
+        margin: 0 auto;
+        border-bottom: 1px solid rgba(216, 216, 216, 1);
+        padding: 10px 0;
+      }
+
+      &.on,
+      &:hover {
+        background: rgba(210, 170, 120, 1);
+        color: white;
+      }
+
+      &:last-child {
+        p {
+          border-bottom: 0px;
+        }
+      }
+    }
+  }
+}
+
+.activityWin{
+  background-color: rgba(0,0,0,0.4);
+  position: fixed;
+  top:0;
+  left:0;
+  bottom:0;
+  right:0;
+  z-index: 99999999;
+  img{
+    max-width:90%;
+    max-height: 90%;
+    position: relative;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+  }
+  span{
+    position: absolute;
+    top:5%;
+    right:2%;
+    i{
+      color:white;
+      font-size:30px;
+      cursor: pointer;
+    }
+  }
+}
+
 @media (max-width: 799px) {
+  .leftNav {
+    display: none;
+  }
   #homeSearch {
     height: auto;
     padding: 10px 0;
@@ -1153,6 +1231,7 @@
             position: relative;
             left: 50%;
             transform: translateX(-50%);
+
             img {
               width: 100%;
             }
@@ -1429,7 +1508,8 @@
               .cover(30px);
               .size(14px);
               color: white;
-              i{
+
+              i {
                 .size(14px);
               }
             }
@@ -1554,18 +1634,21 @@
           line-height: 20px;
           text-align: center;
         }
-        div.faqBanner{
+
+        div.faqBanner {
           height: auto;
-          div.faqBannerList{
+
+          div.faqBannerList {
             ul {
               margin-top: 10px;
-    
+
               li {
                 float: none;
                 width: 100%;
                 margin-right: 0;
                 margin-top: 15px;
-                margin-left:0;
+                margin-left: 0;
+
                 h2 {
                   .size(15px);
                   .weight(600);
@@ -1576,7 +1659,7 @@
                   color: rgba(210, 170, 120, 1);
                   line-height: 25px;
                 }
-    
+
                 div {
                   margin-top: 10px;
                   .back(url; url('../images/icon_answer.png') no-repeat left top);
@@ -1593,7 +1676,7 @@
             }
           }
         }
-        
+
 
         &>a {
           .size(14px);

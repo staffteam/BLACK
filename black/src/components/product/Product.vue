@@ -5,7 +5,7 @@
       <ul>
         <li v-for="item in productData" :key="item.product_id">
           <a :href="`/productDetails/${item.product_id}.html`">
-            <el-image class="listImg" :src="item.img_url" fit="scale-down"></el-image>
+            <el-image class="listImg" :src="item.img_url" :alt="item.img_alt" fit="scale-down"></el-image>
             <div class="listContent">
               <h2>{{item.name}}</h2>
               <div v-html="item.function">
