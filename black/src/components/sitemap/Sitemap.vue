@@ -1,7 +1,14 @@
 <template>
-  <div class="webmap">
-    <div class="webmapHeight"></div>
-    <el-row class="webmapContent">
+  <div class="sitemap">
+    <div class="sitemapHeight"></div>
+    <el-row class="sitemapContent">
+      <el-col :span="webW" :offset="webL">
+        <el-divider>网站栏目</el-divider>
+        <span v-for="(item,index) in navData" :key="index">
+          <a :href="navList[item.menu_id]" target="_blank">{{item.name}}</a>
+        </span>
+        <el-divider></el-divider>
+      </el-col>
       <el-col :span="webW" :offset="webL">
         <el-divider>产品列表</el-divider>
         <span v-for="item in productData" :key="item.product_id">
@@ -44,6 +51,13 @@
         </span>
         <el-divider></el-divider>
       </el-col>
+      <el-col :span="webW" :offset="webL" class="top20">
+        <el-divider>常见问题</el-divider>
+        <span v-for="item in faqData" :key="item.article_id">
+          <a :href="`/faqDetails/${item.parent_type_id}/${item.type_id}/${item.article_id}.html`" target="_blank">{{item.title}}</a>
+        </span>
+        <el-divider></el-divider>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -51,7 +65,7 @@
 <script>
 import http from "@/http.js";
 export default {
-  name: "webmap",
+  name: "sitemap",
   data() {
     return {
       productData: [],
@@ -61,13 +75,41 @@ export default {
       articleData3: [],
       articleData4: [],
       webW: 12,
-      webL: 6
+      webL: 6,
+      navList: {
+        0: "/index",
+        64: "/product",
+        84: "/article",
+        81: "/hairgeme",
+        82: "/guide",
+        80: "/welfafe",
+        50: "/aboutus",
+        143: "/media",
+        144: "/faq"
+      },
+      navData: [],
+      faqData: []
     };
   },
   mounted() {
     let the = this;
     the.webW = window.innerWidth > 800 ? 12 : 22;
     the.webL = window.innerWidth > 800 ? 6 : 1;
+    http
+      .fetchGet("/api/Home/Menu")
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.logoUrl = http.path + "/" + JSON.parse(data.data).result.logo_url;
+          the.navData = [
+            { menu_id: 0, name: "首页", name_en: "HOME" },
+            ...JSON.parse(data.data).result.menus
+          ];
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
     //产品列表
     http
       .fetchGet("/api/Article/Products", {
@@ -193,6 +235,25 @@ export default {
       .catch(err => {
         console.log(err);
       });
+    //常见问题
+    http
+      .fetchGet("/api/Article/Faqs", {
+        args: {
+          sort: "sortorder asc,releasetime",
+          dir: "desc",
+          NavCode: "Faq",
+          IsRelease: true,
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          the.faqData = datas.result.products;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   methods: {}
 };
@@ -201,27 +262,27 @@ export default {
 .top20 {
   margin-top: 20px;
 }
-.webmapHeight {
+.sitemapHeight {
   height: 100px;
 }
-.webmapContent {
+.sitemapContent {
   padding: 100px 0;
 }
 @media (max-width: 800px) {
-  .webmapHeight {
+  .sitemapHeight {
     height: 0;
   }
-  .webmapContent {
+  .sitemapContent {
     padding: 20px 0;
   }
 }
-.webmapContent span a {
+.sitemapContent span a {
   display: block;
   font-size: 16px;
   line-height: 25px;
   padding: 5px 0;
 }
-.webmapContent span a:hover {
+.sitemapContent span a:hover {
   color: #409eff;
 }
 .el-divider--horizontal {

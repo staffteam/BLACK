@@ -15,6 +15,9 @@
           <p>
             <a :href="`mailto:${email}`">邮 箱：{{email}}</a>
           </p>
+          <p>
+            <a :href="`/sitemap`">网站地图</a>
+          </p>
         </div>
         <div class="r">
           <el-image class="wechart" :src="wechart" fit="scale-down"></el-image>

@@ -16,7 +16,7 @@ import Welfafe from '@/components/welfafe/Welfafe'
 import Media from '@/components/media/Media'
 import FaqList from '@/components/faq/FaqList'
 import FaqDetails from '@/components/faq/FaqDetails'
-import WebMap from '@/components/webmap/WebMap'
+import Sitemap from '@/components/sitemap/Sitemap'
 
 Vue.use(Router)
 export default new Router({
@@ -143,9 +143,9 @@ export default new Router({
         title: '问题详情'
       }
     }, {
-      path: '/webmap',
-      name: 'WebMap',
-      component: WebMap,
+      path: '/sitemap',
+      name: 'Sitemap',
+      component: Sitemap,
       meta: {
         title: '网站地图'
       }
