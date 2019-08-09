@@ -25,10 +25,14 @@
         </div>
       </div>
     </div>
-    <el-backtop>
+    <el-backtop v-if="!isWap">
       <el-image class="topImg" :src="topUrl" fit="scale-down"></el-image>
     </el-backtop>
+    <div class="wapTop" v-if="isWap" @click="wapTop">
+      <el-image class="topImg" :src="topUrl" fit="scale-down"></el-image>
+    </div>
     <div class="rightNav">
+      <p class="moveBtn">联系我们</p>
       <ul>
         <li class="w">
           <p>
@@ -38,7 +42,7 @@
           <div>
             <div>
               <p>
-                <img :src="rNavWcode" alt />
+                <img :src="rNavWcode2" alt />
               </p>
               <h2>扫描客户微信二维码</h2>
             </div>
@@ -77,6 +81,8 @@
 
 <script>
 import http from "@/http.js";
+import $ from "jquery";
+let timer = null;
 export default {
   name: "footers",
   data() {
@@ -91,11 +97,39 @@ export default {
       rNavT: require("@/assets/images/icon_tel.png"),
       rNavWcode: "",
       rNavTcode: "",
+      rNavWcode2: "",
+      isWap: false
     };
   },
-  methods: {},
+  methods: {
+    wapTop() {
+      $("body,html").animate(
+        {
+          scrollTop: 0
+        },
+        500
+      );
+    }
+  },
   mounted() {
     let the = this;
+    the.isWap = window.innerWidth < 800;
+    $(window).on("scroll", () => {
+      if ($(window).scrollTop() > $(window).height()) {
+        $(".wapTop").show();
+      }
+    });
+    $(".moveBtn").hover(function() {
+      $(".rightNav").css({ transform: "translateY(-50%) translateX(0%)" });
+      $(".moveBtn").css({'opacity':'0'});
+    });
+    $(".rightNav").hover(
+      function() {},
+      function() {
+        $(".rightNav").css({ transform: "translateY(-50%) translateX(100%)" });
+        $(".moveBtn").css({'opacity':'1'});
+      }
+    );
     //关于我们
     http
       .fetchGet("/api/Home/webinfo")
@@ -108,6 +142,8 @@ export default {
           the.wordSize = datas.result.copyright + " | " + datas.result.filing;
           the.logoUrl = http.path + "/" + JSON.parse(data.data).result.logo_url;
           the.rNavWcode = http.path + "/" + datas.result.wechat_img_url;
+          the.rNavWcode2 =
+            http.path + "/" + datas.result.wechat_service_img_url;
           the.rNavTcode = datas.result.tel;
         }
       })

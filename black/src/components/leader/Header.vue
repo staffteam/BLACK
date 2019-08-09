@@ -3,7 +3,7 @@
     <div id="headers" :class="isNav?'on':'off'">
       <el-row class="black-head">
         <p class="logo">
-          <img :src="logoUrl" alt />
+         <a href="/"> <img :src="logoUrl" alt /></a>
         </p>
         <div v-if="isWap" id="wapBtn" :class="isNav?'on':'off'" @click="wapNavBtn">
           <p class="on">
@@ -46,9 +46,9 @@ export default {
         0: "/index",
         64: "/product",
         84: "/article",
-        81: "/hairgeme",
+        81: "/hairgene",
         82: "/guide",
-        80: "/welfafe",
+        80: "/welfare",
         50: "/aboutus",
         143: "/media",
         144: "/faq"

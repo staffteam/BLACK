@@ -1,6 +1,14 @@
 <template>
   <div id="articles">
     <el-image class="streamer" :src="streamerUrl" fit="scale-down"></el-image>
+    <div class="crumbs">
+      <div class="content">
+        <p>
+          <a href="/"><i class="el-icon-s-home"></i> 首页</a>
+        </p>
+        <p>粉丝福利</p>
+      </div>
+    </div>
     <!-- 搜索 -->
     <div id="homeSearch">
       <div class="l">
@@ -95,7 +103,7 @@ export default {
   data() {
     return {
       parentid: "",
-      streamerUrl: "",
+      streamerUrl: '',
       searchData: [],
       articleData: [],
       articleNavData: [],
@@ -103,9 +111,9 @@ export default {
         0: "/index",
         64: "/product",
         84: "/article",
-        81: "/hairgeme",
+        81: "/hairgene",
         82: "/guide",
-        80: "/welfafe",
+        80: "/welfare",
         50: "/aboutus",
         143: "/media",
         144: "/faq"
@@ -170,7 +178,7 @@ export default {
             sort: "sortorder asc,releasetime",
             dir: "desc",
             IsRelease: true,
-            NavCode: "Hair"
+            NavCode: "Welfare"
           }
         })
         .then(data => {
@@ -193,7 +201,7 @@ export default {
     the.articlePage(1);
     //seo
     http
-      .fetchGet("/api/Home/MenuDetail", { id: 81 })
+      .fetchGet("/api/Home/MenuDetail", { id: 80 })
       .then(data => {
         let datas = JSON.parse(data.data);
         if (datas.errcode) {
@@ -217,7 +225,7 @@ export default {
           sort: "sortorder asc,releasetime",
           dir: "desc",
           IsRelease: true,
-          NavCode: "Hair",
+          NavCode: "Welfare",
           IsRecommend:true
         }
       })
@@ -245,7 +253,7 @@ export default {
               obj.on = "on";
               the.parentid = the.$route.query.id;
             }
-            if (!the.$route.query.id && obj.menu_id == 81) {
+            if (!the.$route.query.id && obj.menu_id == 80) {
               obj.on = "on";
               the.parentid = obj.menu_id;
             } else {
@@ -263,7 +271,7 @@ export default {
       .fetchGet("/api/Article/Labels", {
         args: {
           start: 0,
-          limit: 5,
+          limit: 7,
           sort: "sortorder asc,hotsearchtime",
           dir: "desc",
           TypeCode: "Label",

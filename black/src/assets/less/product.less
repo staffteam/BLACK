@@ -1,5 +1,7 @@
 @import '../less/puls.less';
-
+.el-pagination{
+  margin:15px 15px 35px 15px;
+}
 .productList {
   width: 1260px;
   margin: 0 auto;
@@ -20,8 +22,9 @@
       }
 
       &:hover {
-        background: rgba(0, 0, 0, 0.2);
-
+        .listImg{
+          background: rgba(0, 0, 0, 0.2);
+        }
         .listContent {
           background: black;
 
@@ -43,6 +46,7 @@
       .listImg {
         width: 100%;
         height: 372px;
+        background-color: #f8f8f8;
       }
 
       .listContent {
@@ -278,6 +282,9 @@
 }
 
 @media (max-width: 799px) {
+  .el-pagination{
+    margin:0 0 10px 0;
+  }
   .productList {
     padding: 0 0;
     width: 90%;

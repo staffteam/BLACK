@@ -1,6 +1,18 @@
 <template>
   <div id="productDetails">
     <el-image class="streamer" :src="streamerUrl" fit="scale-down"></el-image>
+    <div class="crumbs">
+      <div class="content">
+        <p>
+          <a href="/">
+            <i class="el-icon-s-home"></i> 首页
+          </a>
+        </p>
+        <p>
+          <a href="/product">产品介绍</a>
+        </p>
+      </div>
+    </div>
     <div class="details">
       <div class="top">
         <div class="l">
@@ -15,7 +27,7 @@
                   :data-index="index"
                 >
                   <p>
-                    <img :src="item.img_url"  :alt="item.img_alt" />
+                    <img :src="item.img_url" :alt="item.img_alt" />
                   </p>
                 </div>
               </div>
@@ -76,7 +88,7 @@
           <ul>
             <li v-for="item in recommenData" :key="item.product_id">
               <a :href="`/productDetails/${item.product_id}.html`">
-                <el-image class="listImg" :src="item.img_url"  :alt="item.img_alt" fit="scale-down"></el-image>
+                <el-image class="listImg" :src="item.img_url" :alt="item.img_alt" fit="scale-down"></el-image>
                 <h2>{{item.name}}</h2>
               </a>
             </li>
@@ -127,29 +139,7 @@ export default {
   methods: {},
   mounted(obj) {
     let the = this;
-    //seo
-    http
-      .fetchGet("/api/Home/MenuDetail", { id: 64 })
-      .then(data => {
-        let datas = JSON.parse(data.data);
-        if (datas.errcode) {
-          the.metadata = {
-            name: datas.result.web_title,
-            seo_words: datas.result.seo_words,
-            seo_desc: datas.result.seo_desc
-          };
-          the.streamerUrl = datas.result.img_url
-            ? http.path + "/" + datas.result.img_url
-            : require("@/assets/images/streamer_product.png");
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-      let paramsId = this.$route.params.id.replace(/.html/g,'');
-      if(isNaN(Number(paramsId))){
-        return false;
-      }
+    let paramsId = this.$route.params.id.replace(/.html/g, "");
     //产品详情
     http
       .fetchGet("/api/Article/ProductDetail", {
@@ -171,6 +161,28 @@ export default {
             'src="' + http.path + "/"
           );
           the.detailsTitle = datas.result.name;
+          //seo
+          http
+            .fetchGet("/api/Home/MenuDetail", { id: 64 })
+            .then(data => {
+              let datas = JSON.parse(data.data);
+              if (datas.errcode) {
+                the.metadata = {
+                  name: the.detailsTitle + "-" + datas.result.web_title,
+                  seo_words: datas.result.seo_words,
+                  seo_desc: datas.result.seo_desc
+                };
+                the.streamerUrl = datas.result.img_url
+                  ? http.path + "/" + datas.result.img_url
+                  : require("@/assets/images/streamer_product.png");
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+          if (isNaN(Number(paramsId))) {
+            return false;
+          }
           the.detailsBody = datas.result;
           let len = 0;
           if (window.innerWidth < 800) {

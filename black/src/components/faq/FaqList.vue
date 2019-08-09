@@ -9,6 +9,14 @@
         </p>
       </div>
     </div>
+    <div class="crumbs">
+      <div class="content">
+        <p>
+          <a href="/"><i class="el-icon-s-home"></i> 首页</a>
+        </p>
+        <p>常见问题</p>
+      </div>
+    </div>
     <div class="faqContent">
       <div class="rd">
         <div class="content">

@@ -32,7 +32,7 @@ export default {
     describe: '这是防脱生发领域公认的一次革命性的重大突破，已经获得美国、欧盟、中国等多个国家的多项国际专利。',
     datalist: []
   },
-  newTitle: '资讯中心',
+  newTitle: '粉丝福利',
   newBannerData: [],
   newDataList: [],
   newTitle2: '新闻报道',

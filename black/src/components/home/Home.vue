@@ -1,7 +1,13 @@
 <template>
   <div id="home">
+    <div class="fluid_container" v-if="!isWap">
+      <div class="camera_wrap camera_azure_skin" id="camera_wrap_1">
+        <div :data-src="item.img_url" v-for="(item,index) in bannerData" :key="index"></div>
+      </div>
+    </div>
+    <!-- .fluid_container -->
     <!-- 首页轮播 -->
-    <div class="swiper-container" id="homeBanner">
+    <div class="swiper-container" id="homeBanner" v-if="isWap">
       <div class="swiper-wrapper">
         <div class="swiper-slide" v-for="(item,index) in bannerData" :key="index">
           <p>
@@ -63,20 +69,42 @@
     <div id="homeList2">
       <div class="content">
         <div class="l">
-          <h2>{{homeList2.title}}</h2>
-          <div v-html="homeList2.describe">{{homeList2.describe}}</div>
-          <ul>
-            <li v-for="item in homeList2.datalist" :key="item.product_id">
-              <a :href="`/productDetails/${item.product_id}.html`">
-                <div class="img">
-                  <img :src="item.img_url" :alt="item.img_alt" />
+          <h2 v-if="isWap">乐喜力丝全系列呈现</h2>
+          <div class="no1" v-if="!isWap && homeList2.datalist.length>0">
+            <a :href="`/productDetails/${homeList2.datalist[0].product_id}.html`">
+              <div class="img">
+                <img :src="homeList2.datalist[0].img_url" :alt="homeList2.datalist[0].img_alt" />
+              </div>
+              <p>{{homeList2.datalist[0].function}}</p>
+              <h2>{{homeList2.datalist[0].name}}</h2>
+              <span>查看详情</span>
+            </a>
+          </div>
+          <div class="swiper-container" id="homeList2Banner">
+            <div class="swiper-wrapper">
+              <template v-for="(item,index) in homeList2.datalist">
+                <div class="swiper-slide" v-if="(index>0 && !isWap) || isWap" :key="item.product_id">
+                  <a :href="`/productDetails/${item.product_id}.html`">
+                    <div class="img">
+                      <img :src="item.img_url" :alt="item.img_alt" />
+                    </div>
+                    <p>{{item.function}}</p>
+                    <h2>{{item.name}}</h2>
+                    <span>查看详情</span>
+                  </a>
                 </div>
-                <p>{{item.function}}</p>
-                <h2>{{item.name}}</h2>
-                <span>查看详情</span>
-              </a>
-            </li>
-          </ul>
+              </template>
+            </div>
+            <!-- 如果需要导航按钮 -->
+            <div class="swiper-button-content">
+              <div class="swiper-button-prev z">
+                <el-button icon="el-icon-arrow-left" circle></el-button>
+              </div>
+              <div class="swiper-button-next z">
+                <el-button icon="el-icon-arrow-right" circle></el-button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -86,7 +114,7 @@
         <div class="describe" v-html="homeList3.describe">{{homeList3.describe}}</div>
         <div class="swiper-container" id="list3banner">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="(item,index) in homeList3.datalist" :key="index">
+            <div class="swiper-slide" v-for="(item,index) in homeList3.datalist" :data-index="index" :key="index">
               <p>
                 <img :src="item.img_url" :alt="item.img_alt" />
               </p>
@@ -116,6 +144,7 @@
                     <p>
                       <img :src="item.img_url" :alt="item.img_alt" />
                     </p>
+                    <h2>{{item.img_alt}}</h2>
                   </a>
                 </div>
               </div>
@@ -135,7 +164,7 @@
           <div class="r">
             <ul>
               <li v-for="(item,index) in newDataList" :key="item.id">
-                <a :href="`/articleDetails/84/${item.article_id}.html`" v-if="index==0" class="top">
+                <a :href="`/articleDetails/80/${item.article_id}.html`" v-if="false" class="top">
                   <h2>{{item.title}}</h2>
                   <div class="describe">{{item.desc}}</div>
                   <div class="bottom">
@@ -146,11 +175,7 @@
                     </p>
                   </div>
                 </a>
-                <a
-                  :href="`/articleDetails/84/${item.article_id}.html`"
-                  v-if="index!=0"
-                  class="list"
-                >
+                <a :href="`/articleDetails/80/${item.article_id}.html`" class="list">
                   <div>
                     <h2>{{item.title}}</h2>
                     <span>{{item.date}}</span>
@@ -158,7 +183,7 @@
                 </a>
               </li>
             </ul>
-            <a href="/article">查看更多>></a>
+            <a href="/welfare">查看更多>></a>
           </div>
         </div>
       </div>
@@ -170,7 +195,7 @@
           <div class="swiper-container" id="newBanner2">
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="(item,index) in newBannerData2" :key="index">
-                <a href="javascript:">
+                <a :href="item.link_url?item.link_url:'javascript:'">
                   <p>
                     <img :src="item.img_url" :alt="item.img_alt" />
                   </p>
@@ -200,7 +225,9 @@
             <div class="list" v-for="(item,index) in guideData1" :key="item.id">
               <a :href="`/articleDetails/82/${item.article_id}.html`">
                 <p v-if="index==0">
-                  <img :src="item.img_url" :alt="item.img_alt" />
+                  <span>
+                    <img :src="item.img_url" :alt="item.img_alt" />
+                  </span>
                 </p>
                 <h2>
                   <i class="el-icon-arrow-right"></i>
@@ -216,7 +243,9 @@
             <div class="list" v-for="(item,index) in guideData2" :key="item.id">
               <a :href="`/articleDetails/81/${item.article_id}.html`">
                 <p v-if="index==0">
-                  <img :src="item.img_url" :alt="item.img_alt" />
+                  <span>
+                    <img :src="item.img_url" :alt="item.img_alt" />
+                  </span>
                 </p>
                 <h2>
                   <i class="el-icon-arrow-right"></i>
@@ -225,7 +254,7 @@
                 <div class="describe">{{item.desc}}</div>
               </a>
             </div>
-            <a href="/hairgeme">查看更多>></a>
+            <a href="/hairgene">查看更多>></a>
           </li>
         </ul>
       </div>
@@ -272,9 +301,16 @@
         </li>
       </ul>
     </div>
-    <div class="activityWin" v-show="activityWin.img_url!=null" >
-      <img :src="activityWin.img_url" :alt="activityWin.img_alt" />
-      <span @click="activityWin.img_url=null"><i class="el-icon-circle-close"></i></span>
+    <div class="activityWin" v-show="activityWin.img_url!=null">
+      <div>
+        <span @click="activityWin.img_url=null">
+          {{activityWin.item}}s后关闭
+          <i class="el-icon-circle-close"></i>
+        </span>
+        <a :href="activityWin.link_url">
+          <img :src="activityWin.img_url" :alt="activityWin.img_alt" />
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -375,6 +411,22 @@ export default {
     },
     scrollNav() {
       let the = this;
+      if (
+        $(".leftNav").length == 1 &&
+        $("body,html").scrollTop() > $(window).height() / 2 &&
+        jQuery(".leftNav").css("opacity") == "0"
+      ) {
+        $(".leftNav").show();
+        $(".leftNav").animate({ opacity: "1" }, 300);
+      } else if (
+        $(".leftNav").length == 1 &&
+        $("body,html").scrollTop() < $(window).height() / 2 &&
+        $(".leftNav").css("opacity") == "1"
+      ) {
+        $(".leftNav").animate({ opacity: "0" }, 300, () => {
+          $(".leftNav").hide();
+        });
+      }
       let navarr = [
         "homeList1",
         "homeList2",
@@ -483,15 +535,30 @@ export default {
   mounted() {
     let the = this;
     the.isWap = window.innerWidth <= 800;
-    window.addEventListener("scroll", the.scrollNav);
-    //首页关键字
+    if (!the.isWap) {
+      $(window).on("scroll", the.scrollNav);
+    }
+    //首页活动
     http
       .fetchGet("/api/Home/Activity")
       .then(data => {
         let datas = JSON.parse(data.data);
         if (datas.errcode) {
-          datas.result.img_url = datas.result.img_url!=null?http.path + "/" + datas.result.img_url:null;
+          datas.result.img_url =
+            datas.result.img_url != null
+              ? http.path + "/" + datas.result.img_url
+              : null;
           the.activityWin = datas.result;
+          let i = +datas.result.time;
+          let set_ = setInterval(() => {
+            i--;
+            if (i == -1) {
+              clearInterval(set_);
+              the.activityWin.img_url = null;
+            } else {
+              the.activityWin.item = i + 1;
+            }
+          }, 1000);
         }
       })
       .catch(err => {
@@ -531,9 +598,23 @@ export default {
             return value;
           });
           the.bannerData = [...datas.result];
+
           //顶部轮播
           setTimeout(function() {
-            banner.homebanner();
+            if (window.innerWidth > 800) {
+              let h_ = window.innerWidth * 0.415;
+              jQuery("#camera_wrap_1").camera({
+                height: h_ + "px",
+                thumbnails: false,
+                hover: true,
+                time: 5000,
+                transPeriod: 1000
+              });
+              $(".camera_prev").html('<i class="el-icon-arrow-left"></i>');
+              $(".camera_next").html('<i class="el-icon-arrow-right"></i>');
+            } else {
+              banner.homebanner();
+            }
           }, 100);
         }
       })
@@ -552,7 +633,9 @@ export default {
           });
           the.homeList1 = datas.result;
         }
-        the.scrollNav();
+        if (!the.isWap) {
+          the.scrollNav();
+        }
       })
       .catch(err => {
         console.log(err);
@@ -571,6 +654,10 @@ export default {
             obj.img_url = http.path + "/" + obj.img_url;
           });
           the.homeList2.datalist = datas.result;
+          setTimeout(function() {
+            //产品列表
+            banner.homebanner5(the);
+          }, 100);
         }
       })
       .catch(err => {
@@ -598,7 +685,36 @@ export default {
       .catch(err => {
         console.log(err);
       });
-    //资讯中心
+    //粉丝福利
+    http
+      .fetchGet("/api/home/indexbanner", {
+        args: {
+          start: 0,
+          limit: 3,
+          sort: "sortorder asc,articleid",
+          dir: "desc",
+          NavCode: "newsbanner"
+        }
+      })
+      .then(data => {
+        let datas = JSON.parse(data.data);
+        if (datas.errcode) {
+          datas.result.map((obj, index) => {
+            obj.img_url =
+              obj.img_url != null ? http.path + "/" + obj.img_url : "";
+            if (index <= 5) {
+              the.newBannerData.push(obj);
+            }
+          });
+          //新闻轮播
+          setTimeout(function() {
+            banner.homebanner3();
+          }, 100);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
     http
       .fetchGet("/api/Home/IndexNews", {
         args: {
@@ -606,7 +722,7 @@ export default {
           limit: 6,
           sort: "sortorder asc,releasetime",
           dir: "desc",
-          NavCode: "News",
+          NavCode: "Welfare",
           IsIndexShow: true,
           IsRelease: true
         }
@@ -617,17 +733,10 @@ export default {
           datas.result.map((obj, index) => {
             obj.img_url =
               obj.img_url != null ? http.path + "/" + obj.img_url : "";
-            if (index <= 2) {
-              the.newBannerData.push(obj);
-              the.newDataList.push(obj);
-            } else {
+            if (index <= 7) {
               the.newDataList.push(obj);
             }
           });
-          //新闻轮播
-          setTimeout(function() {
-            banner.homebanner3();
-          }, 100);
         }
       })
       .catch(err => {
@@ -729,8 +838,14 @@ export default {
           datas.result.map((obj, index) => {
             obj.desc =
               obj.desc == "" || obj.desc == null ? "暂无回答" : obj.desc;
-            if (the.faqData.length <= 9) {
-              the.faqData.push(obj);
+            if (datas.result.length % 2 == 0) {
+              if (the.faqData.length <= 9) {
+                the.faqData.push(obj);
+              }
+            } else {
+              if (the.faqData.length <= 9 && index < datas.result.length - 1) {
+                the.faqData.push(obj);
+              }
             }
           });
           let len = the.faqData.length;
@@ -764,7 +879,7 @@ export default {
       .fetchGet("/api/Article/Labels", {
         args: {
           start: 0,
-          limit: 5,
+          limit: 7,
           sort: "sortorder asc,hotsearchtime",
           dir: "desc",
           TypeCode: "Label",
@@ -785,6 +900,7 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less" src="../../assets/less/home.less"></style>
+
 <style>
 div.el-carousel__mask {
   background-color: rgba(0, 0, 0, 0);
@@ -807,7 +923,8 @@ div.el-carousel__mask {
 #homeBanner .swiper-button-content div button i,
 #homeList3 .content div.swiper-container .swiper-button-content div button i,
 #newContent .content div.new div.l .swiper-button-content > div button i,
-#newContent2 .content div.new2 .swiper-button-content > div button i {
+#newContent2 .content div.new2 .swiper-button-content > div button i,
+#homeList2Banner > div button i {
   font-size: 25px;
 }
 
@@ -818,7 +935,8 @@ div.el-carousel__mask {
   #homeBanner .swiper-button-content div button i,
   #homeList3 .content div.swiper-container .swiper-button-content div button i,
   #newContent .content div.new div.l .swiper-button-content > div button i,
-  #newContent2 .content div.new2 .swiper-button-content > div button i {
+  #newContent2 .content div.new2 .swiper-button-content > div button i,
+  #homeList2Banner > div button i {
     font-size: 14px;
   }
   #homeBanner .swiper-pagination-bullet {

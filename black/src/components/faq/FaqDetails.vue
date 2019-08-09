@@ -9,6 +9,18 @@
         </p>
       </div>
     </div>
+    <div class="crumbs">
+      <div class="content">
+        <p>
+          <a href="/">
+            <i class="el-icon-s-home"></i> 首页
+          </a>
+        </p>
+        <p>
+          <a href="/faq">常见问题</a>
+        </p>
+      </div>
+    </div>
     <div class="faqContent">
       <div class="content">
         <div
@@ -229,29 +241,10 @@ export default {
     let _id_ = "";
     let ids = the.$route.params.id;
     let pids = the.$route.params.parentid;
-    let articleid = the.$route.params.articleid.replace(/.html/g,'');
-    if(isNaN(Number(articleid))){
+    let articleid = the.$route.params.articleid.replace(/.html/g, "");
+    if (isNaN(Number(articleid))) {
       return false;
     }
-    //seo
-    http
-      .fetchGet("/api/Home/MenuDetail", { id: 144 })
-      .then(data => {
-        let datas = JSON.parse(data.data);
-        if (datas.errcode) {
-          the.metadata = {
-            name: datas.result.web_title,
-            seo_words: datas.result.seo_words,
-            seo_desc: datas.result.seo_desc
-          };
-          the.streamerUrl = datas.result.img_url
-            ? http.path + "/" + datas.result.img_url
-            : require("@/assets/images/streamer_faq.png");
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
     //常见问题分类
     http
       .fetchGet("/api/Article/FaqCategorys")
@@ -307,7 +300,26 @@ export default {
                 the.faqContent = datas.result.content;
                 the.faqDate = datas.result.date;
                 the.faqStat = datas.result.stat;
-                article_id = datas.result.article_id;
+                articleid = datas.result.article_id;
+                //seo
+                http
+                  .fetchGet("/api/Home/MenuDetail", { id: 144 })
+                  .then(data => {
+                    let datas = JSON.parse(data.data);
+                    if (datas.errcode) {
+                      the.metadata = {
+                        name: the.faqTitle + "-" + datas.result.web_title,
+                        seo_words: datas.result.seo_words,
+                        seo_desc: datas.result.seo_desc
+                      };
+                      the.streamerUrl = datas.result.img_url
+                        ? http.path + "/" + datas.result.img_url
+                        : require("@/assets/images/streamer_faq.png");
+                    }
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
               }
             })
             .catch(err => {

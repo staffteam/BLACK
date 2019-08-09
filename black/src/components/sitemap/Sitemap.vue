@@ -80,9 +80,9 @@ export default {
         0: "/index",
         64: "/product",
         84: "/article",
-        81: "/hairgeme",
+        81: "/hairgene",
         82: "/guide",
-        80: "/welfafe",
+        80: "/welfare",
         50: "/aboutus",
         143: "/media",
         144: "/faq"

@@ -10,9 +10,9 @@ import About from '@/components/about/About'
 import Searchs from '@/components/searchs/Searchs'
 import Faq from '@/components/faq/Faq'
 import FaqSearch from '@/components/faq/FaqSearch'
-import Hairgeme from '@/components/hairgeme/Hairgeme'
+import Hairgene from '@/components/hairgene/Hairgene'
 import Guide from '@/components/guide/Guide'
-import Welfafe from '@/components/welfafe/Welfafe'
+import Welfare from '@/components/welfare/Welfare'
 import Media from '@/components/media/Media'
 import FaqList from '@/components/faq/FaqList'
 import FaqDetails from '@/components/faq/FaqDetails'
@@ -94,9 +94,9 @@ export default new Router({
         title: '常见问题'
       }
     }, {
-      path: '/hairgeme',
-      name: 'Hairgeme',
-      component: Hairgeme,
+      path: '/hairgene',
+      name: 'Hairgene',
+      component: Hairgene,
       meta: {
         title: '基因育发'
       }
@@ -108,9 +108,9 @@ export default new Router({
         title: '脱发指南'
       }
     }, {
-      path: '/welfafe',
-      name: 'Welfafe',
-      component: Welfafe,
+      path: '/welfare',
+      name: 'Welfare',
+      component: Welfare,
       meta: {
         title: '粉丝福利'
       }

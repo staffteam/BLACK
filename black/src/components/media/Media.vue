@@ -19,6 +19,14 @@
         </p>
       </div>
     </div>
+    <div class="crumbs">
+      <div class="content">
+        <p>
+          <a href="/"><i class="el-icon-s-home"></i> 首页</a>
+        </p>
+        <p>媒体报道</p>
+      </div>
+    </div>
     <div class="articlelist">
       <div class="l">
         <ul>
@@ -103,9 +111,9 @@ export default {
         0: "/index",
         64: "/product",
         84: "/article",
-        81: "/hairgeme",
+        81: "/hairgene",
         82: "/guide",
-        80: "/welfafe",
+        80: "/welfare",
         50: "/aboutus",
         143: "/media",
         144: "/faq"
@@ -263,7 +271,7 @@ export default {
       .fetchGet("/api/Article/Labels", {
         args: {
           start: 0,
-          limit: 5,
+          limit: 7,
           sort: "sortorder asc,hotsearchtime",
           dir: "desc",
           TypeCode: "Label",

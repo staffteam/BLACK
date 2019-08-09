@@ -1,6 +1,14 @@
 <template>
   <div id="about">
     <el-image class="streamer" :src="streamerUrl" fit="scale-down"></el-image>
+    <div class="crumbs">
+      <div class="content">
+        <p>
+          <a href="/"><i class="el-icon-s-home"></i> 首页</a>
+        </p>
+        <p>关于我们</p>
+      </div>
+    </div>
     <div class="aboutTop">
       <h2>{{content}}</h2>
       <p>{{content_en}}</p>

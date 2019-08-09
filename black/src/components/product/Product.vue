@@ -1,6 +1,14 @@
 <template>
   <div id="product">
     <el-image class="streamer" :src="streamerUrl" fit="scale-down"></el-image>
+    <div class="crumbs">
+      <div class="content">
+        <p>
+          <a href="/"><i class="el-icon-s-home"></i> 首页</a>
+        </p>
+        <p>产品介绍</p>
+      </div>
+    </div>
     <div class="productList">
       <ul>
         <li v-for="item in productData" :key="item.product_id">
@@ -37,7 +45,7 @@ export default {
   name: "product",
   data() {
     return {
-      streamerUrl: '',
+      streamerUrl: "",
       productData: [],
       totalNum: 0,
       indexNum: 0,
@@ -75,12 +83,12 @@ export default {
     },
     productPage(e) {
       let the = this;
-      e = e-1;
+      e = e - 1;
       //产品列表
       http
         .fetchGet("/api/Article/Products", {
           args: {
-            start: e*the.pageSize,
+            start: e * the.pageSize,
             limit: the.pageSize,
             sort: "sortorder asc,releasetime",
             dir: "desc",
@@ -116,7 +124,9 @@ export default {
             seo_words: datas.result.seo_words,
             seo_desc: datas.result.seo_desc
           };
-          the.streamerUrl = datas.result.img_url?http.path + "/" + datas.result.img_url:require("@/assets/images/streamer_product.png");
+          the.streamerUrl = datas.result.img_url
+            ? http.path + "/" + datas.result.img_url
+            : require("@/assets/images/streamer_product.png");
         }
       })
       .catch(err => {
