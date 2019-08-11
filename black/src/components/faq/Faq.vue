@@ -81,11 +81,11 @@
 <script>
 import http from "@/http.js";
 export default {
-  name: "articles",
+  name: "Faq",
   data() {
     return {
       isNavBtnShow: false,
-      streamerUrl: '',
+      streamerUrl: require("@/assets/images/streamer_faq.png"),
       faqNavData: [],
       weimg: require("@/assets/images/code.png"),
       linkData: [],

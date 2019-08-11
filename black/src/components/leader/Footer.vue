@@ -81,7 +81,6 @@
 
 <script>
 import http from "@/http.js";
-import $ from "jquery";
 let timer = null;
 export default {
   name: "footers",

@@ -16,7 +16,7 @@
     <div class="details">
       <div class="top">
         <div class="l">
-          <el-image class="detailsImg" :src="detailsBannerImg" fit="scale-down"></el-image>
+          <el-image class="detailsImg" v-if="detailsBannerImg!=''" :src="detailsBannerImg" fit="scale-down"></el-image>
           <div class="detailsLeft">
             <div class="swiper-container" id="detailsBanner">
               <div class="swiper-wrapper">
@@ -102,10 +102,10 @@
 <script>
 import http from "@/http.js";
 export default {
-  name: "product",
+  name: "productDetails",
   data() {
     return {
-      streamerUrl: "",
+      streamerUrl: require("@/assets/images/streamer_product.png"),
       detailsBannerImg: "",
       detailsTitle: "",
       detailsBannerData: [],

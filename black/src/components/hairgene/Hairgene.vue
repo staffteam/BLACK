@@ -99,11 +99,11 @@
 <script>
 import http from "@/http.js";
 export default {
-  name: "articles",
+  name: "Hairgene",
   data() {
     return {
       parentid: "",
-      streamerUrl: "",
+      streamerUrl: require("@/assets/images/banner_yf.png"),
       searchData: [],
       articleData: [],
       articleNavData: [],

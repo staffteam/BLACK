@@ -99,11 +99,11 @@
 <script>
 import http from "@/http.js";
 export default {
-  name: "articles",
+  name: "Guide",
   data() {
     return {
       parentid: "",
-      streamerUrl: '',
+      streamerUrl: require("@/assets/images/banner_zn.png"),
       searchData: [],
       articleData: [],
       articleNavData: [],

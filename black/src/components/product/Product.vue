@@ -1,6 +1,6 @@
 <template>
   <div id="product">
-    <el-image class="streamer" :src="streamerUrl" fit="scale-down"></el-image>
+    <el-image class="streamer" v-if="streamerUrl!=''" :src="streamerUrl" fit="scale-down"></el-image>
     <div class="crumbs">
       <div class="content">
         <p>
@@ -45,7 +45,7 @@ export default {
   name: "product",
   data() {
     return {
-      streamerUrl: "",
+      streamerUrl: require("@/assets/images/streamer_product.png"),
       productData: [],
       totalNum: 0,
       indexNum: 0,

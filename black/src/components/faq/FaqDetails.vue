@@ -112,7 +112,7 @@
 <script>
 import http from "@/http.js";
 export default {
-  name: "articles",
+  name: "FaqDetails",
   data() {
     return {
       isNavBtnShow: false,

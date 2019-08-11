@@ -41,10 +41,10 @@
 <script>
 import http from "@/http.js";
 export default {
-  name: "articles",
+  name: "About",
   data() {
     return {
-      streamerUrl: '',
+      streamerUrl: require("@/assets/images/streamer_about.png"),
       aboutData: [
         {
           url: "tel:17512840813",

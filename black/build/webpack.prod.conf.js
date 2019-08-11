@@ -13,7 +13,8 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const PrerenderSPAPlugin = require('prerender-spa-plugin')
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 
-const datas = require('./routes');
+const datas = require('./data.json');
+console.log(datas.router);
 const env = process.env.NODE_ENV === 'testing' ?
   require('../config/test.env') :
   require('../config/prod.env')
@@ -93,11 +94,11 @@ const webpackConfig = merge(baseWebpackConfig, {
       staticDir: path.join(__dirname, '../dist'),
 
       // 对应自己的路由文件，比如index有参数，就需要写成 /index/param1。
-      routes: datas._routes_,
-      postProcess (renderedRoute) {
+      routes: datas.router,
+      postProcess(renderedRoute) {
         // Remove /index.html from the output path if the dir name ends with a .html file extension.
         // For example: /dist/dir/special.html/index.html -> /dist/dir/special.html
-        if (renderedRoute.route.endsWith('.html')) {
+        if (renderedRoute.route && renderedRoute.route.endsWith && renderedRoute.route.endsWith('.html')) {
           renderedRoute.outputPath = path.join(__dirname, '../dist', renderedRoute.route)
         }
 
@@ -105,7 +106,13 @@ const webpackConfig = merge(baseWebpackConfig, {
       },
       // 这个很重要，如果没有配置这段，也不会进行预编译
       renderer: new PrerenderSPAPlugin.PuppeteerRenderer({ //这样写renderAfterTime生效了
-        renderAfterTime: 8000
+        inject: {
+          foo: 'bar'
+        },
+        headless: false,
+        // 在 main.js 中 document.dispatchEvent(new Event('render-event'))，两者的事件名称要对应上。
+        headless: false,
+        renderAfterTime:16000,
       })
     }),
     // keep module.id stable when vendor modules does not change

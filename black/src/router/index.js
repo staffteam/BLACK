@@ -24,7 +24,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
+      name: 'index',
       component: Home,
       meta: {
         title: '首页'

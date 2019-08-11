@@ -99,7 +99,7 @@ export default {
   data() {
     return {
       parentid: "",
-      streamerUrl: '',
+      streamerUrl: require("@/assets/images/streamer_article.png"),
       searchData: [],
       articleData: [],
       articleNavData: [],

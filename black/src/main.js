@@ -40,7 +40,7 @@ new Vue({
   },
   template: '<App/>',
   /* 这句非常重要，否则预渲染将不会启动 */
-  mounted() {
+  mounted () {
     document.dispatchEvent(new Event('render-event'))
   }
 })

@@ -123,10 +123,10 @@
 <script>
 import http from "@/http.js";
 export default {
-  name: "articles",
+  name: "ArticleDetails",
   data() {
     return {
-      streamerUrl: "",
+      streamerUrl: require("@/assets/images/streamer_article.png"),
       searchData: [],
       parentid: "",
       detailsData: [],
