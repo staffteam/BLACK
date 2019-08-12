@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-axios.defaults.timeout = 20000; //响应时间
+axios.defaults.timeout = 300000; //响应时间
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'; //配置请求头
 axios.defaults.baseURL = ''; //配置接口地址
 
