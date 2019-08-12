@@ -140,7 +140,7 @@
             <div class="swiper-container" id="newBanner">
               <div class="swiper-wrapper">
                 <div class="swiper-slide" v-for="(item,index) in newBannerData" :key="index">
-                  <a :href="`/articleDetails/84/${item.article_id}.html`">
+                  <a :href="item.link_url">
                     <p>
                       <img :src="item.img_url" :alt="item.img_alt" />
                     </p>
@@ -163,8 +163,8 @@
           </div>
           <div class="r">
             <ul>
-              <li v-for="(item,index) in newDataList" :key="item.id">
-                <a :href="`/articleDetails/80/${item.article_id}.html`" v-if="false" class="top">
+              <li v-for="item in newDataList" :key="item.article_id">
+                <a :href="item.link_url?item.link_url:`/articleDetails/80/${item.article_id}.html`" v-if="false" class="top">
                   <h2>{{item.title}}</h2>
                   <div class="describe">{{item.desc}}</div>
                   <div class="bottom">
@@ -333,7 +333,7 @@ export default {
         { name: "homeList1", content: "产品<br/>优势", on: "" },
         { name: "homeList2", content: "产品<br/>系列", on: "" },
         { name: "homeList3", content: "专利<br/>证书", on: "" },
-        { name: "newContent", content: "资讯<br/>中心", on: "" },
+        { name: "newContent", content: "粉丝<br/>福利", on: "" },
         { name: "guide", content: "脱发<br/>指南", on: "" },
         { name: "faq", content: "常见<br/>问题", on: "" }
       ],

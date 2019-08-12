@@ -86,31 +86,6 @@ const webpackConfig = merge(baseWebpackConfig, {
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
-    // 在vue-cli生成的文件的基础上，只有下面这个才是我们要配置的
-    new PrerenderSPAPlugin({
-      // 生成文件的路径，也可以与webpakc打包的一致。
-      // 下面这句话非常重要！！！
-      // 这个目录只能有一级，如果目录层次大于一级，在生成的时候不会有任何错误提示，在预渲染的时候只会卡着不动。
-      staticDir: path.join(__dirname, '../dist'),
-
-      // 对应自己的路由文件，比如index有参数，就需要写成 /index/param1。
-      routes: datas.router,
-      postProcess(renderedRoute) {
-        // Remove /index.html from the output path if the dir name ends with a .html file extension.
-        // For example: /dist/dir/special.html/index.html -> /dist/dir/special.html
-        if (renderedRoute.route && renderedRoute.route.endsWith && renderedRoute.route.endsWith('.html')) {
-          renderedRoute.outputPath = path.join(__dirname, '../dist', renderedRoute.route)
-        }
-
-        return renderedRoute
-      },
-      // 这个很重要，如果没有配置这段，也不会进行预编译
-      renderer: new PrerenderSPAPlugin.PuppeteerRenderer({ //这样写renderAfterTime生效了
-        ignoreJSErrors: true,
-        phantomOptions: '--web-security=false',
-        renderAfterTime:16000,
-      })
-    }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
     // enable scope hoisting
@@ -144,7 +119,32 @@ const webpackConfig = merge(baseWebpackConfig, {
       children: true,
       minChunks: 3
     }),
+    // 在vue-cli生成的文件的基础上，只有下面这个才是我们要配置的
+    new PrerenderSPAPlugin({
+      // 生成文件的路径，也可以与webpakc打包的一致。
+      // 下面这句话非常重要！！！
+      // 这个目录只能有一级，如果目录层次大于一级，在生成的时候不会有任何错误提示，在预渲染的时候只会卡着不动。
+      staticDir: path.join(__dirname, '../dist'),
 
+      // 对应自己的路由文件，比如index有参数，就需要写成 /index/param1。
+      routes: datas.router,
+      postProcess(renderedRoute) {
+        // Remove /index.html from the output path if the dir name ends with a .html file extension.
+        // For example: /dist/dir/special.html/index.html -> /dist/dir/special.html
+        if (renderedRoute.route && renderedRoute.route.endsWith && renderedRoute.route.endsWith('.html')) {
+          renderedRoute.outputPath = path.join(__dirname, '../dist', renderedRoute.route)
+        }
+
+        return renderedRoute
+      },
+      // 这个很重要，如果没有配置这段，也不会进行预编译
+      renderer: new PrerenderSPAPlugin.PuppeteerRenderer({ //这样写renderAfterTime生效了
+        inject: {
+          foo: 'bar'
+        },
+        renderAfterTime:16000,
+      })
+    }),
     // copy custom static assets
     new CopyWebpackPlugin([{
       from: path.resolve(__dirname, '../static'),
