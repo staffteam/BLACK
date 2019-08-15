@@ -22,11 +22,13 @@
     "jquery": "^3.4.1",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
+    "module": "^1.2.5",
     "prerender-spa-plugin": "^3.4.0",
     "puppeteer": "^1.19.0",
     "vue": "^2.6.10",
     "vue-meta-info": "^0.1.7",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-server-renderer": "^2.6.10"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

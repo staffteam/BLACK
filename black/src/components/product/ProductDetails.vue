@@ -46,8 +46,8 @@
         <div class="r">
           <h2>{{detailsTitle}}</h2>
           <div class="content">
-            <div class="productBody">
-              <div>
+            <div class="productBody" v-html="detailsBody.Feature">
+              <!-- <div>
                 <h2>【产品名称】</h2>
                 <div>{{detailsTitle}}</div>
               </div>
@@ -74,7 +74,8 @@
               <div class="multi">
                 <h2>【使用方法】</h2>
                 <div v-html="detailsBody.usage">{{detailsBody.usage}}</div>
-              </div>
+              </div> -->
+
             </div>
           </div>
         </div>

@@ -82,8 +82,8 @@
           </div>
           <div class="swiper-container" id="homeList2Banner">
             <div class="swiper-wrapper">
-              <template v-for="(item,index) in homeList2.datalist">
-                <div class="swiper-slide" v-if="(index>0 && !isWap) || isWap" :key="item.product_id">
+              <template v-for="item in homeList2.datalist">
+                <div class="swiper-slide" :key="item.product_id">
                   <a :href="`/productDetails/${item.product_id}.html`">
                     <div class="img">
                       <img :src="item.img_url" :alt="item.img_alt" />
