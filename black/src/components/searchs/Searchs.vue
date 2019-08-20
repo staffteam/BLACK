@@ -1,7 +1,7 @@
-<template>
+﻿<template>
   <div id="about">
     <div class="faqHead">
-      <el-image class="streamer" :src="streamerUrl" fit="scale-down"></el-image>
+      <div><img :src="streamerUrl"></div>
       <div class="faqSearch">
         <input type="search" v-model="faqSearchValue" name id placeholder="输问题关键词，如基因育发" />
         <p @click="faqSearch">
@@ -15,11 +15,12 @@
           <h2>关于“{{faqValue}}”，共找到{{totalNum}}条相关问题</h2>
           <ul>
             <li v-for="(item,index) in searchData" :key="index">
-              <a :href="`${searchType[item.navcode]}${navcodes[item.navcode]?'/'+navcodes[item.navcode]:item.parent_type_id?'/'+item.parent_type_id:''}${item.type_id?'/'+item.type_id:'/'+item.id}${item.id && item.type_id?'/'+item.id:''}.html`">
+              <a
+                :href="`${searchType[item.navcode]}${navcodes[item.navcode]?'/'+navcodes[item.navcode]:item.parent_type_id?'/'+item.parent_type_id:''}${item.type_id?'/'+item.type_id:'/'+item.id}${item.id && item.type_id?'/'+item.id:''}.html`"
+              >
                 <h2 v-html="item.title">{{item.title}}</h2>
-                <div
-                  v-html="item.desc==''?item.title:item.desc"
-                >{{item.desc==''?item.title:item.desc}}</div>
+                <div v-html="item.function" v-if="item.navcode=='product'"></div>
+                <div v-html="item.desc" v-else></div>
               </a>
             </li>
           </ul>
@@ -68,14 +69,14 @@ export default {
         Welfare: "/articleDetails",
         Faq: "/faqDetails",
         Guide: "/articleDetails",
-        Media: "/articleDetails"
+        MediaNews: "/articleDetails"
       },
       navcodes: {
-        "Welfare":"80",
-        "Hair": "81",
-        "Guide": "82",
-        "News": "84",
-        "MediaNews" : "143"
+        Welfare: "80",
+        Hair: "81",
+        Guide: "82",
+        News: "84",
+        MediaNews: "143"
       },
       faqValue: ""
     };
@@ -95,7 +96,11 @@ export default {
       //文章列表
       http
         .fetchGet("/api/Article/Search", {
-          args: { keyword: the.faqSearchValue, start: e*the.pageSize, limit: the.pageSize }
+          args: {
+            keyword: the.faqSearchValue,
+            start: e * the.pageSize,
+            limit: the.pageSize
+          }
         })
         .then(data => {
           let datas = JSON.parse(data.data);
@@ -121,10 +126,10 @@ export default {
     },
     faqSearch() {
       let the = this;
-      if (the.faqSearchValue=='') {
-        this.$confirm('请输入搜索关键字', '提示', {
-          confirmButtonText: '确定',
-          type: 'warning'
+      if (the.faqSearchValue == "") {
+        this.$confirm("请输入搜索关键字", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
         });
         return false;
       }

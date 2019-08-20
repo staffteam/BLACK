@@ -1,7 +1,9 @@
 <template>
   <div id="about">
     <div class="faqHead">
-      <el-image class="streamer" :src="streamerUrl" fit="scale-down"></el-image>
+      <div>
+        <img :src="streamerUrl" />
+      </div>
       <div class="faqSearch">
         <input type="search" v-model="faqSearchValue" name id placeholder="输问题关键词，如基因育发" />
         <p @click="faqSearch">
@@ -13,7 +15,7 @@
       <div class="content">
         <p>
           <a href="/">
-            <i class="el-icon-s-home"></i> 首页
+            <i class="iconfont">&#xe629;</i> 首页
           </a>
         </p>
         <p>
@@ -301,6 +303,8 @@ export default {
                 the.faqDate = datas.result.date;
                 the.faqStat = datas.result.stat;
                 articleid = datas.result.article_id;
+                the.detailsTitle = datas.result.name;
+                the.seo_words = datas.result.seo_words;
                 //seo
                 http
                   .fetchGet("/api/Home/MenuDetail", { id: 144 })
@@ -309,8 +313,8 @@ export default {
                     if (datas.errcode) {
                       the.metadata = {
                         name: the.faqTitle + "-" + datas.result.web_title,
-                        seo_words: datas.result.seo_words,
-                        seo_desc: datas.result.seo_desc
+                        seo_words: the.seo_words,
+                        seo_desc: the.seo_desc
                       };
                       the.streamerUrl = datas.result.img_url
                         ? http.path + "/" + datas.result.img_url

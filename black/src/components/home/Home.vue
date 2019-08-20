@@ -20,10 +20,10 @@
       <!-- 如果需要导航按钮 -->
       <div class="swiper-button-content">
         <div class="swiper-button-prev a">
-          <el-button icon="el-icon-arrow-left" circle></el-button>
+          <button><i class="iconfont icon-left">&#xe630;</i></button>
         </div>
         <div class="swiper-button-next a">
-          <el-button icon="el-icon-arrow-right" circle></el-button>
+          <button><i class="iconfont icon-right">&#xe604;</i></button>
         </div>
       </div>
     </div>
@@ -98,10 +98,10 @@
             <!-- 如果需要导航按钮 -->
             <div class="swiper-button-content">
               <div class="swiper-button-prev z">
-                <el-button icon="el-icon-arrow-left" circle></el-button>
+                <button><i class="iconfont icon-left">&#xe630;</i></button>
               </div>
               <div class="swiper-button-next z">
-                <el-button icon="el-icon-arrow-right" circle></el-button>
+                <button><i class="iconfont icon-right">&#xe604;</i></button>
               </div>
             </div>
           </div>
@@ -123,10 +123,10 @@
           <!-- 如果需要导航按钮 -->
           <div class="swiper-button-content">
             <div class="swiper-button-prev b">
-              <el-button icon="el-icon-arrow-left" circle></el-button>
+              <button><i class="iconfont icon-left">&#xe630;</i></button>
             </div>
             <div class="swiper-button-next b">
-              <el-button icon="el-icon-arrow-right" circle></el-button>
+              <button><i class="iconfont icon-right">&#xe604;</i></button>
             </div>
           </div>
         </div>
@@ -153,10 +153,10 @@
               <!-- 如果需要导航按钮 -->
               <div class="swiper-button-content">
                 <div class="swiper-button-prev c">
-                  <el-button icon="el-icon-arrow-left" circle></el-button>
+                  <button><i class="iconfont icon-left">&#xe630;</i></button>
                 </div>
                 <div class="swiper-button-next c">
-                  <el-button icon="el-icon-arrow-right" circle></el-button>
+                  <button><i class="iconfont icon-right">&#xe604;</i></button>
                 </div>
               </div>
             </div>
@@ -208,10 +208,10 @@
           <!-- 如果需要导航按钮 -->
           <div class="swiper-button-content">
             <div class="swiper-button-prev d">
-              <el-button icon="el-icon-arrow-left" circle></el-button>
+              <button><i class="iconfont icon-left">&#xe630;</i></button>
             </div>
             <div class="swiper-button-next d">
-              <el-button icon="el-icon-arrow-right" circle></el-button>
+              <button><i class="iconfont icon-right">&#xe604;</i></button>
             </div>
           </div>
         </div>
@@ -412,19 +412,19 @@ export default {
     scrollNav() {
       let the = this;
       if (
-        $(".leftNav").length == 1 &&
-        $("body,html").scrollTop() > $(window).height() / 2 &&
+        jQuery(".leftNav").length == 1 &&
+        jQuery(window).scrollTop() > $(window).height() / 2 &&
         jQuery(".leftNav").css("opacity") == "0"
       ) {
-        $(".leftNav").show();
-        $(".leftNav").animate({ opacity: "1" }, 300);
+        jQuery(".leftNav").show();
+        jQuery(".leftNav").animate({ opacity: "1" }, 300);
       } else if (
-        $(".leftNav").length == 1 &&
-        $("body,html").scrollTop() < $(window).height() / 2 &&
-        $(".leftNav").css("opacity") == "1"
+        jQuery(".leftNav").length == 1 &&
+        jQuery(window).scrollTop() < $(window).height() / 2 &&
+        jQuery(".leftNav").css("opacity") == "1"
       ) {
-        $(".leftNav").animate({ opacity: "0" }, 300, () => {
-          $(".leftNav").hide();
+        jQuery(".leftNav").animate({ opacity: "0" }, 300, () => {
+          jQuery(".leftNav").hide();
         });
       }
       let navarr = [
@@ -438,8 +438,8 @@ export default {
       let isNull = true;
       navarr.forEach((item, index) => {
         if (
-          window.scrollY > window[item].offsetTop - window.innerHeight / 2 &&
-          window.scrollY < window[item].offsetTop + window[item].scrollHeight
+          window.pageYOffset > window[item].offsetTop - window.innerHeight / 2 &&
+          window.pageYOffset < window[item].offsetTop + window[item].scrollHeight
         ) {
           isNull = !isNull;
           the.leftNavData.map((value, key) => {
@@ -448,7 +448,7 @@ export default {
         }
       });
       if (
-        window.scrollY <
+        window.pageYOffset <
         window["homeList1"].offsetTop - window.innerHeight / 2
       ) {
         the.leftNavData.map((value, key) => {
@@ -458,41 +458,16 @@ export default {
       }
     },
     navThis(e) {
-      let tops = window.scrollY;
+      let tops = window.pageYOffset;
       let the = this;
       if (the.thisNav == e) return;
-      let i = tops > window[e].offsetTop - 100;
+      let i = tops > window[e].scrollTop - 100;
       the.thisNav = e;
-      let sets = setInterval(() => {
-        if (
-          (i && tops < window[e].offsetTop - 100) ||
-          (!i && tops > window[e].offsetTop - 100)
-        ) {
-          clearInterval(sets);
-        }
-        if (
-          (i && tops - window[e].offsetTop > 1500) ||
-          (!i && window[e].offsetTop - tops > 1500)
-        ) {
-          tops = i ? tops - 30 : tops + 30;
-        } else if (
-          (i && tops - window[e].offsetTop > 1000) ||
-          (!i && window[e].offsetTop - tops > 1000)
-        ) {
-          tops = i ? tops - 20 : tops + 20;
-        } else if (
-          (i && tops - window[e].offsetTop > 500) ||
-          (!i && window[e].offsetTop - tops > 500)
-        ) {
-          tops = i ? tops - 12 : tops + 12;
-        } else {
-          tops = i ? tops - 8 : tops + 8;
-        }
-
-        the.__getPageScrollY(tops);
-      }, 5);
+      jQuery('body,html').animate({scrollTop:$('#'+e).offset().top-100},500);
+      console.log(e);
     },
     __getPageScrollY(top) {
+      var self = this;
       if (top || Number(top) == 0) {
         //设置垂直滚动值
         if (self.pageYOffset) {
@@ -610,8 +585,8 @@ export default {
                 time: 5000,
                 transPeriod: 1000
               });
-              $(".camera_prev").html('<i class="el-icon-arrow-left"></i>');
-              $(".camera_next").html('<i class="el-icon-arrow-right"></i>');
+              jQuery(".camera_prev").html('<i class="el-icon-arrow-left"></i>');
+              jQuery(".camera_next").html('<i class="el-icon-arrow-right"></i>');
             } else {
               banner.homebanner();
             }
@@ -925,7 +900,7 @@ div.el-carousel__mask {
 #newContent .content div.new div.l .swiper-button-content > div button i,
 #newContent2 .content div.new2 .swiper-button-content > div button i,
 #homeList2Banner > div button i {
-  font-size: 25px;
+  font-size: 23px;
 }
 
 @media (max-width: 799px) {

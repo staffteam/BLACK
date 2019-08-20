@@ -1,7 +1,7 @@
 <template>
   <div id="about">
     <div class="faqHead">
-      <el-image class="streamer" :src="streamerUrl" fit="scale-down"></el-image>
+      <div><img :src="streamerUrl"></div>
       <div class="faqSearch">
         <input type="search" v-model="faqSearchValue" name id placeholder="输问题关键词，如基因育发" />
         <p @click="faqSearch">
@@ -12,7 +12,7 @@
     <div class="crumbs">
       <div class="content">
         <p>
-          <a href="/"><i class="el-icon-s-home"></i> 首页</a>
+          <a href="/"><i class="iconfont">&#xe629;</i> 首页</a>
         </p>
         <p>常见问题</p>
       </div>

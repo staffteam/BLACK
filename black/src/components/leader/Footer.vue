@@ -3,17 +3,15 @@
     <div class="grid-content bg-purple-dark">
       <div class="content">
         <div class="l">
-          <el-image class="logo" :src="logoUrl" fit="scale-down"></el-image>
+          <p class="logo" ><img :src="logoUrl"></p>
         </div>
         <div class="c">
+          <p v-html="wordSize"></p>
           <p>
-            <a href="http://www.beian.gov.cn/" target="_blank">{{wordSize}}</a>
+            热线电话：{{tel}}
           </p>
           <p>
-            <a :href="`tel:${tel}`">热线电话：{{tel}}</a>
-          </p>
-          <p>
-            <a :href="`mailto:${email}`">邮 箱：{{email}}</a>
+            邮 箱：{{email}}
           </p>
           <p>
             <a :href="`/sitemap`">网站地图</a>
@@ -126,7 +124,7 @@ export default {
           the.wechart = http.path + "/" + datas.result.wechat_img_url;
           the.tel = datas.result.tel;
           the.email = datas.result.email;
-          the.wordSize = datas.result.copyright + " | " + datas.result.filing;
+          the.wordSize = `${datas.result.copyright} | <a href="http://www.beian.gov.cn/" target="_blank" style="color:#999999;">${datas.result.filing}</a>` ;
           the.logoUrl = http.path + "/" + JSON.parse(data.data).result.logo_url;
           the.rNavWcode =  `<img src="${http.path + "/" + datas.result.wechat_img_url}" />`;
           the.rNavWcode2 = `<img src="${http.path + "/" + datas.result.wechat_service_img_url}" />`;

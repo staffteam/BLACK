@@ -415,7 +415,7 @@ div.productBody {
 
 div.productBody>div {
   overflow: hidden;
-  margin:10px 0;
+  margin: 10px 0;
   line-height: 1.5;
 }
 
@@ -435,22 +435,46 @@ div.productBody>div.multi h2 {
 
 div.productBody>div.multi div {
   display: block;
-  margin-top:10px;
+  margin-top: 10px;
 }
 
-.details div.bottom div.r div.content p{
-  margin:5px 0;
-}
-.details div.bottom div.r div.content img{
-  width:100%;
-}
-img{
-  max-width:100%;
+.details div.bottom div.r div.content p {
+  margin: 5px 0;
 }
 
-.el-image{
+.details div.bottom div.r div.content img {
+  width: 100%;
+}
+
+img {
+  max-width: 100%;
+}
+
+.el-image {
   display: block;
 }
+
 .el-pagination.is-background .el-pager li:not(.disabled).active {
   background-color: #333333;
+}
+
+@font-face {
+  font-family: 'iconfont';
+  /* project id 1358445 */
+  src: url('//at.alicdn.com/t/font_1358445_wapp3yl8loh.eot');
+  src: url('//at.alicdn.com/t/font_1358445_wapp3yl8loh.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_1358445_wapp3yl8loh.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_1358445_wapp3yl8loh.woff') format('woff'),
+    url('//at.alicdn.com/t/font_1358445_wapp3yl8loh.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_1358445_wapp3yl8loh.svg#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 500;
 }

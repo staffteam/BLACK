@@ -1,6 +1,8 @@
 <template>
   <div id="articles">
-    <el-image class="streamer" :src="streamerUrl" fit="scale-down"></el-image>
+    <div>
+      <img :src="streamerUrl" />
+    </div>
     <!-- 搜索 -->
     <div id="homeSearch">
       <div class="l">
@@ -22,7 +24,7 @@
       <div class="content">
         <p>
           <a href="/">
-            <i class="el-icon-s-home"></i> 首页
+            <i class="iconfont">&#xe629;</i> 首页
           </a>
         </p>
         <p>
@@ -132,7 +134,7 @@ export default {
       detailsData: [],
       articleData: [],
       articleNavData: [],
-      isWap:false,
+      isWap: false,
       articleNav: {
         0: "/index",
         64: "/product",
@@ -160,6 +162,8 @@ export default {
         seo_words: "",
         seo_desc: ""
       },
+      seo_words:"",
+      seo_desc:"",
       detailsNav: "",
       detailsNavLink: "",
       keywords: "",
@@ -198,7 +202,7 @@ export default {
     let the = this;
     the.parentid = the.$route.params.parentid;
     let paramsId = the.$route.params.id.replace(/.html/g, "");
-    the.isWap = window.innerWidth<800;
+    the.isWap = window.innerWidth < 800;
     if (isNaN(Number(paramsId))) {
       return false;
     }
@@ -211,6 +215,14 @@ export default {
         let datas = JSON.parse(data.data);
         if (datas.errcode) {
           the.detailsData = datas.result;
+          var srcTop = new RegExp('src="\\/', "g");
+          the.detailsData.content = the.detailsData.content.replace(
+            srcTop,
+            'src="' + http.path + "/"
+          );
+          the.seo_words=datas.result.seo_words;
+          the.seo_desc= datas.result.seo_desc;
+          the.keywords = datas.result.seo_words;
           //seo
           http
             .fetchGet("/api/Home/MenuDetail", { id: the.parentid })
@@ -219,10 +231,9 @@ export default {
               if (datas.errcode) {
                 the.metadata = {
                   name: the.detailsData.title + "-" + datas.result.web_title,
-                  seo_words: datas.result.seo_words,
-                  seo_desc: datas.result.seo_desc
+                  seo_words: the.seo_words,
+                  seo_desc: the.seo_desc
                 };
-                the.keywords = datas.result.seo_words;
                 the.streamerUrl = datas.result.img_url
                   ? http.path + "/" + datas.result.img_url
                   : require("@/assets/images/streamer_faq.png");

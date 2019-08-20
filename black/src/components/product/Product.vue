@@ -4,7 +4,7 @@
     <div class="crumbs">
       <div class="content">
         <p>
-          <a href="/"><i class="el-icon-s-home"></i> 首页</a>
+          <a href="/"><i class="iconfont">&#xe629;</i> 首页</a>
         </p>
         <p>产品介绍</p>
       </div>

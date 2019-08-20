@@ -1,0 +1,221 @@
+html {
+  overflow-x: hidden;
+}
+@media (min-width: 800px) {
+  body {
+    min-width: 1200px;
+  }
+  * {
+    font-size: 14px;
+  }
+  #headers {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 70px;
+    z-index: 9999;
+    padding: 14px 0;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  #headers .el-row.black-head {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  #headers .el-row.black-head .logo {
+    width: 330px;
+    height: 70px;
+    float: left;
+  }
+  #headers .el-row.black-head ul.nav {
+    overflow: hidden;
+    float: right;
+    margin-top: 15px;
+  }
+  #headers .el-row.black-head ul.nav li {
+    float: left;
+    margin-right: 30px;
+    text-align: center;
+  }
+  #headers .el-row.black-head ul.nav li:last-child {
+    margin-right: 0;
+  }
+  #headers .el-row.black-head ul.nav li a {
+    color: white;
+  }
+  #headers .el-row.black-head ul.nav li a h2 {
+    font-size: 16px;
+    line-height: 25px;
+    font-weight: 500;
+  }
+  #headers .el-row.black-head ul.nav li a p {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+.el-breadcrumb {
+  width: 1200px;
+  margin: 0 auto;
+  height: 60px;
+  line-height: 60px;
+}
+.crumbs {
+  width: 1200px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+.crumbs .content {
+  display: inline-block;
+  height: 40px;
+}
+.crumbs .content p {
+  min-width: 84px;
+  padding: 0 18px;
+  margin-left: 10px;
+  line-height: 40px;
+  margin-left: -10px;
+  float: left;
+  text-align: center;
+  background: url(../images/icon_navs_back.png) left;
+  background-size: 100%  auto;
+  font-size: 16px;
+  text-indent: 5px;
+  color: #888888;
+}
+.crumbs .content p i {
+  font-size: 20px;
+  position: relative;
+  top: 1px;
+  color: #888888;
+}
+.crumbs .content p a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+  color: #888888;
+}
+.crumbs .content p > a:hover {
+  color: #d2aa78;
+}
+.crumbs .content p > a:hover i {
+  color: #d2aa78;
+}
+.crumbs .content p:first-child {
+  margin-left: 0;
+  text-indent: 0;
+}
+@media (max-width: 799px) {
+  .el-breadcrumb {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .wapHeight {
+    height: 45px;
+    background-color: black;
+  }
+  body {
+    position: relative;
+    transition: 0.5s left;
+    left: 0;
+  }
+  #headers {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 95%;
+    height: 35px;
+    transition: 0.5s left;
+    z-index: 9999;
+    padding: 5px 2.5%;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  #headers.on {
+    left: 0;
+  }
+  #headers.off {
+    left: -150px;
+  }
+  #headers .el-row.black-head {
+    margin: 0 auto;
+    text-align: center;
+  }
+  #headers .el-row.black-head .logo {
+    height: 35px;
+  }
+  #headers .el-row.black-head .logo img {
+    height: 100%;
+  }
+  #headers .el-row.black-head #wapBtn {
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  #headers .el-row.black-head #wapBtn.on p.on {
+    display: block;
+  }
+  #headers .el-row.black-head #wapBtn.on p.off {
+    display: none;
+  }
+  #headers .el-row.black-head #wapBtn.off p.on {
+    display: none;
+  }
+  #headers .el-row.black-head #wapBtn.off p.off {
+    display: block;
+  }
+  #headers .el-row.black-head #wapBtn p.on {
+    height: 27px;
+    margin-top: 4px;
+  }
+  #headers .el-row.black-head #wapBtn p.on i {
+    display: block;
+    line-height: 9px;
+    height: 9px;
+    font-size: 30px;
+    color: white;
+  }
+  #headers .el-row.black-head #wapBtn p.off {
+    font-size: 35px;
+    color: white;
+    line-height: 35px;
+    text-align: center;
+  }
+  #headers .el-row.black-head div.wapnav {
+    position: fixed;
+    right: -150px;
+    top: 0;
+    transition: 0.5s right;
+    width: 150px;
+    background-color: black;
+    height: 100vh;
+  }
+  #headers .el-row.black-head div.wapnav.on {
+    right: -150px;
+  }
+  #headers .el-row.black-head div.wapnav.off {
+    right: 0;
+  }
+  #headers .el-row.black-head div.wapnav .navLogo {
+    width: 90%;
+    padding: 30px 0;
+  }
+  #headers .el-row.black-head div.wapnav ul.nav li {
+    border-bottom: 1px solid #f5f5f5;
+    text-align: center;
+    padding: 7px 5px;
+  }
+  #headers .el-row.black-head div.wapnav ul.nav li a {
+    color: #f5f5f5;
+  }
+  #headers .el-row.black-head div.wapnav ul.nav li a h2 {
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 500;
+  }
+  #headers .el-row.black-head div.wapnav ul.nav li a p {
+    font-size: 12px;
+    line-height: 16px;
+  }
+}

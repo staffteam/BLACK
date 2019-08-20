@@ -1,11 +1,13 @@
-<template>
+﻿<template>
   <div id="productDetails">
-    <el-image class="streamer" :src="streamerUrl" fit="scale-down"></el-image>
+    <div>
+      <img :src="streamerUrl" />
+    </div>
     <div class="crumbs">
       <div class="content">
         <p>
           <a href="/">
-            <i class="el-icon-s-home"></i> 首页
+            <i class="iconfont">&#xe629;</i> 首页
           </a>
         </p>
         <p>
@@ -16,7 +18,12 @@
     <div class="details">
       <div class="top">
         <div class="l">
-          <el-image class="detailsImg" v-if="detailsBannerImg!=''" :src="detailsBannerImg" fit="scale-down"></el-image>
+          <el-image
+            class="detailsImg"
+            v-if="detailsBannerImg!=''"
+            :src="detailsBannerImg"
+            fit="scale-down"
+          ></el-image>
           <div class="detailsLeft">
             <div class="swiper-container" id="detailsBanner">
               <div class="swiper-wrapper">
@@ -46,7 +53,7 @@
         <div class="r">
           <h2>{{detailsTitle}}</h2>
           <div class="content">
-            <div class="productBody" v-html="detailsBody.Feature">
+            <div class="productBody" v-html="detailsBody.feature">
               <!-- <div>
                 <h2>【产品名称】</h2>
                 <div>{{detailsTitle}}</div>
@@ -74,8 +81,7 @@
               <div class="multi">
                 <h2>【使用方法】</h2>
                 <div v-html="detailsBody.usage">{{detailsBody.usage}}</div>
-              </div> -->
-
+              </div>-->
             </div>
           </div>
         </div>
@@ -119,7 +125,9 @@ export default {
         name: "",
         seo_words: "",
         seo_desc: ""
-      }
+      },
+      seo_words: "",
+      seo_desc: ""
     };
   },
   metaInfo() {
@@ -162,6 +170,8 @@ export default {
             'src="' + http.path + "/"
           );
           the.detailsTitle = datas.result.name;
+          the.seo_words = datas.result.seo_words;
+          the.seo_desc = datas.result.seo_desc;
           //seo
           http
             .fetchGet("/api/Home/MenuDetail", { id: 64 })
@@ -170,8 +180,8 @@ export default {
               if (datas.errcode) {
                 the.metadata = {
                   name: the.detailsTitle + "-" + datas.result.web_title,
-                  seo_words: datas.result.seo_words,
-                  seo_desc: datas.result.seo_desc
+                  seo_words: the.seo_words,
+                  seo_desc: the.seo_desc
                 };
                 the.streamerUrl = datas.result.img_url
                   ? http.path + "/" + datas.result.img_url

@@ -1,12 +1,13 @@
-import axios from 'axios'
+﻿import axios from 'axios'
 import qs from 'qs'
 
 axios.defaults.timeout = 300000;                        //响应时间
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';        //配置请求头
 axios.defaults.baseURL = '';   //配置接口地址
 
-let path = 'http://ht.lexilisi.com';
+let paths = 'http://ht.lexilisi.com';
 
+let path = 'http://www.lexilisi.com';
 //POST传参序列化(添加请求拦截器)
 axios.interceptors.request.use((config) => {
     //在发送请求之前做某件事
@@ -34,7 +35,7 @@ axios.interceptors.response.use((res) =>{
 //返回一个Promise(发送post请求)
 export function fetchPost(url, params) {
     return new Promise((resolve, reject) => {
-        axios.post(path+url, params)
+        axios.post(paths+url, params)
             .then(response => {
                 resolve(response);
             }, err => {
@@ -48,7 +49,7 @@ export function fetchPost(url, params) {
 ////返回一个Promise(发送get请求)
 export function fetchGet(url, param) {
     return new Promise((resolve, reject) => {
-        axios.get(path+url, {params: param})
+        axios.get(paths+url, {params: param})
             .then(response => {
                 resolve(response)
             }, err => {

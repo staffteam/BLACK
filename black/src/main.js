@@ -11,7 +11,8 @@ Vue.prototype.$axios = axios;
 import QS from 'qs'
 Vue.prototype.qs = QS;
 Vue.config.productionTip = false
-
+import promise from 'es6-promise'
+promise.polyfill();
 import MetaInfo from 'vue-meta-info'
  
 Vue.use(MetaInfo)
@@ -19,7 +20,7 @@ Vue.use(ElementUI, {
   size: 'small',
   zIndex: 3000
 })
-
+import 'element-ui/lib/theme-chalk/index.css';
 Vue.component('black-head', Header)
 Vue.component('black-footer', Footer)
 

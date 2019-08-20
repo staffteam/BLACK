@@ -1,10 +1,10 @@
 <template>
   <div id="articles">
-    <el-image class="streamer" :src="streamerUrl" fit="scale-down"></el-image>
+    <div><img :src="streamerUrl"></div>
     <div class="crumbs">
       <div class="content">
         <p>
-          <a href="/"><i class="el-icon-s-home"></i> 首页</a>
+          <a href="/"><i class="iconfont">&#xe629;</i> 首页</a>
         </p>
         <p>基因育发</p>
       </div>
